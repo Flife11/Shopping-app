@@ -30,7 +30,7 @@ app.use((err, req, res, next) => {
     res.status(500).send('Something broke!');
 })
 
-// Initialize database
+// Initialize database and start server
 db.initDatabase().then(() => {
     app.listen(port, () => console.log(`Server is running at http://${host}:${port}`));
 }).catch(err => {

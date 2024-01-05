@@ -13,6 +13,6 @@
     "pg-promise": "^11.5.4"
   },
   "scripts": {
-    "start": "nodemon ./Main/server.js"
+    "start": "nodemon ./Payment/server.js"
   }
 }
