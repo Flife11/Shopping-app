@@ -29,15 +29,15 @@ const adminRouter = require('./routers/admin.r.js');
 
 
 // Setting up routers and views
-app.use('/account', (req, res, next) => {
-    app.set('views', './Main/views/account');
-    next();
-}, accountRouter);
-
 app.use('/admin', (req, res, next) => {
     app.set('views', './Main/views/admin');
     next();
 }, adminRouter);
+
+app.use('/account', (req, res, next) => {
+    app.set('views', './Main/views/client');
+    next();
+}, accountRouter);
 
 app.use('/', (req, res, next) => {
     app.set('views', './Main/views/client');
