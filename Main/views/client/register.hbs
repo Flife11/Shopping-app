@@ -25,7 +25,8 @@
         </div>
 
         {{!-- Right side --}}
-        <div style="width: 70%;height:100% ;background-color:white" class="d-flex flex-column align-items-center justify-content-center;">
+        <div style="width: 70%;height:100% ;background-color:white"
+            class="d-flex flex-column align-items-center justify-content-center;">
 
             {{!-- Header --}}
             <div class="d-flex">
@@ -34,34 +35,33 @@
             </div>
 
             {{!-- Form --}}
-            <form style="width: 50%;" action="/account/register" method="post"> {{!-- Nhớ sửa chỗ này lại thành AJAX --}}
+            <form style="width: 50%;" action="/account/register" method="post"> {{!-- Nhớ sửa chỗ này lại thành AJAX
+                --}}
                 <div class="form-floating mb-2">
                     <input type="text" class="form-control" id="username" name="username" placeholder="user1"
-                        style="border-radius: 100px">
+                        style="border-radius: 100px" required>
                     <label for="username" class="text-body-tertiary">Username</label>
                 </div>
                 <div class="form-floating mb-2">
                     <input type="password" class="form-control" id="password" name="password" placeholder="123"
-                        style="border-radius: 100px">
+                        style="border-radius: 100px" required>
                     <label for="password" class="text-body-tertiary">Password</label>
                 </div>
                 <div class="form-floating mb-2">
-                    <input type="password" class="form-control" id="password" name="password" placeholder="123"
-                        style="border-radius: 100px">
-                    <label for="password" class="text-body-tertiary">Enter your password again</label>
+                    <input type="password" class="form-control" id="retypepassword" name="retypepassword" placeholder="123"
+                        style="border-radius: 100px" required>
+                    <label for="retypepassword" class="text-body-tertiary">Enter your password again</label>
                 </div>
                 <div class="form-floating mb-2">
                     <input type="text" class="form-control" id="name" name="name" placeholder="user1"
-                        style="border-radius: 100px">
+                        style="border-radius: 100px" required>
                     <label for="name" class="text-body-tertiary">Fullname</label>
                 </div>
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="email" name="email" placeholder="abd@demo.com"
-                        style="border-radius: 100px">
+                        style="border-radius: 100px" required>
                     <label for="email" class="text-body-tertiary">Email</label>
                 </div>
-                
-
 
                 <button class="btn mb-5"
                     style="background-image:linear-gradient(to right,#91d1de,#2a6792);color:white;width:100%;border-radius: 100px">
@@ -76,3 +76,6 @@
     </div>
 
 </div>
+
+{{> notification_success}}
+{{> notification_failure}}
