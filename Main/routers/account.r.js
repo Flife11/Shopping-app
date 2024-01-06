@@ -7,7 +7,7 @@ router.get('/login', accountController.getLogin);
 router.get('/register', accountController.getRegister);
 
 //router.post('/login', accountController.postLogin);
-//router.post('/register', accountController.postRegister);
+router.post('/register', accountController.postRegister);
 
 
 // Authenticated routes (require login)
