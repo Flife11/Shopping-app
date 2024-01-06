@@ -35,8 +35,7 @@
             </div>
 
             {{!-- Form --}}
-            <form style="width: 50%;" action="/account/register" method="post"> {{!-- Nhớ sửa chỗ này lại thành AJAX
-                --}}
+            <form id="signupForm" style="width: 50%;"> {{!-- Nhớ sửa chỗ này lại thành AJAX --}}
                 <div class="form-floating mb-2">
                     <input type="text" class="form-control" id="username" name="username" placeholder="user1"
                         style="border-radius: 100px" required>
@@ -79,3 +78,25 @@
 
 {{> notification_success}}
 {{> notification_failure}}
+
+<script>
+     $("#signupForm").on("submit", async function (e) {
+        e.preventDefault();
+
+        let data = $(this).serializeArray().reduce((obj, field) => ({ ...obj, [field.name]: field.value }), {});
+        const res = await fetch(`/account/register`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
+
+        const resData = await res.json();
+        if(res.ok) {
+            
+        } else {
+            
+        }
+    });
+</script>
