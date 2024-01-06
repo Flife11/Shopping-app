@@ -16,14 +16,33 @@ app.set('views', './Main/views');
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
 
-app.use('/image', express.static(__dirname + "/public/image"));
+app.use('/public', express.static(__dirname + "/public"));
 
 const port = process.env.PORT | 3000;
 const host = process.env.HOST || 'localhost';
 
-// Require routers
 
-// Setting up routers (use)
+// Require routers
+const accountRouter = require('./routers/account.r.js');
+const clientRouter = require('./routers/client.r.js');
+const adminRouter = require('./routers/admin.r.js');
+
+
+// Setting up routers and views
+app.use('/account', (req, res, next) => {
+    app.set('views', './Main/views/account');
+    next();
+}, accountRouter);
+
+app.use('/admin', (req, res, next) => {
+    app.set('views', './Main/views/admin');
+    next();
+}, adminRouter);
+
+app.use('/', (req, res, next) => {
+    app.set('views', './Main/views/client');
+    next();
+}, clientRouter);
 
 // Setting up error handler
 app.use((err, req, res, next) => {
