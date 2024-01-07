@@ -11,17 +11,24 @@ module.exports = {
         try {
             const { username, password, retypepassword, email, name } = req.body;
 
-            // Check if username contains only letters and numbers
-            const regex = /^[a-zA-Z0-9]+$/;
+            // Check if username contains only letters, numbers, underscore and dot
+            const regex = /^[a-zA-Z0-9_.]+$/;
             if (!regex.test(username)) {
-                return res.status(400).json({ message: 'Username must contain only letters and numbers!' });
+                return res.status(401).json({ message: 'Username must contain only letters and numbers!' });
             }
-
+            
             // Check if username existed
             const existedUser = await userModel.getUser(username);
             if (existedUser) {
                 return res.status(401).json({ message: 'Username already exists, please choose another username!' });
             }
+
+            // Check if email is valid
+            const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!regexEmail.test(email)) {
+                return res.status(403).json({ message: 'Email is invalid!' });
+            }
+
 
             // Check if password and retypepassword match
             if (password !== retypepassword) {
