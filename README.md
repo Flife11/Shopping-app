@@ -7,3 +7,8 @@
 - Hiển thị failure noti:  
   `$('#failureNotificationText').text('test')`  
   `$('#failureNotificationModal').css('display', '');`
+
+- Error code (register):
++ 401: username error
++ 402: password error
++ 403: email error
