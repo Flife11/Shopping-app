@@ -6,39 +6,38 @@ const accountController = require('../controllers/account.c.js');
 // Free routes
 // TODO: Xử lý nếu login rồi thì quay về '/account'
 
-router.use((req, res, next) => {
-    if (req.isAuthenticated()) {
-        return res.redirect("/account");
-    }
-    next();
-});
-
 router.get('/login', accountController.getLogin);
 router.get('/register', accountController.getRegister);
 
 router.post('/register', accountController.postRegister);
 router.post('/login', (req, res, next) => {
-    passport.authenticate('myStrategy', (err, user) => {
+    passport.authenticate('myStrategy', (err, user, info) => {
         if (err) {
-            return res.status(500).json({ message: 'Internal Server Error' });
+            return next(err); // Handle error
         }
-
         if (!user) {
-            return res.status(404).json({ message: 'Wrong username or password!' });
+            // Render view if authentication fails
+            return res.render('login', { title: 'Login', error: info });
         }
+        req.logIn(user, (err) => {
+            if (err) {
+                return next(err);
+            }
+            // Handle remember me
+            if (req.body.rememberme) {
+                req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000;
+            } else {
+                req.session.cookie.expires = false;
+            }
 
-        // Authorization 
-        let role = user.role;
-        let redirectUrl = '';
-        if (role === 'admin') {
-            redirectUrl = '/admin';
-        }
-        else if (role === 'client') {
-            redirectUrl = '/';
-        }
-        
-        // Send success response
-        return res.status(200).json({ message: 'Authentication successfully',redirectUrl: redirectUrl });
+            // Redirect based on role
+            let role = req.session.passport.user.role;
+            if (role == "admin") {
+                res.redirect("/admin");
+            } else if (role == "client") {
+                res.redirect("/account");
+            }
+        });
     })(req, res, next);
 });
 
@@ -46,16 +45,11 @@ router.post('/login', (req, res, next) => {
 
 // Authenticated routes (require login)
 // Ví dụ: xem profile, sửa profile, xem orders, chi tiết orders, thanh toán,...
-router.use((req, res, next) => {
-    if (!req.isAuthenticated()) {
-        return res.redirect("/account/login");
-    }
-    next();
-});
+//  TODO: Xử lý nếu chưa login thì quay về '/account/login'
 router.get('/', (req, res) => {
     res.send('Trang chu cua account')
 });
 
-//  TODO: Xử lý nếu chưa login thì quay về '/account/login'
+
 
 module.exports = router;
