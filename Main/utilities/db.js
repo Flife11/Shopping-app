@@ -15,6 +15,53 @@ const connectionString = {
 
 const db = pgp(connectionString);
 module.exports = {
+    // tbName: tên của bảng
+    // getCol: mảng các cột cần lấy giá trị ví dụ: ['id', 'name']
+    // condition: điều kiện where nếu có ví dụ 'where id=1'
+    get: async (tbName, getCol, condition='') => {
+        let dbcn = null;
+        try {            
+            dbcn = await db.connect();
+            const query = `SELECT ${getCol.join()} FROM "${tbName}" ${condition}'`;
+            const data = await db.any(query);
+            return data;
+        } catch (error) {
+            throw error
+        } finally {
+            dbcn.done();
+        }
+    },
+    // tbName: tên của bảng
+    // colName: mảng các cột sẽ thêm giá trị ví dụ: ['id', 'name']
+    // data: mảng các giá trị sẽ được thêm mỗi giá trị là một object với key giống với tên cột
+    insert: async (tbName, colName, data) => {
+        try {
+            const query = pgp.helpers.insert(data, colName, tbName);
+            const d = await db.query(query + 'RETURNING id');
+            return d;
+        } catch (error) {
+            throw error
+        }
+    },
+
+    // tbName: tên của bảng
+    // colName: mảng các cột sẽ cập nhật giá trị ví dụ: ['id', 'name']
+    // data: mảng các giá trị sẽ được thêm mỗi giá trị là một object với key giống với tên cột
+    // condition: điều kiện where nếu có ví dụ 'where id=1'
+    update: async function(tbName, colName, data, condition) {
+        let dbcn = null;
+        try {
+            dbcn = await db.connect();
+            const query = pgp.helpers.update(data, colName, tbName);
+            const d = await db.query(query + ` ${condition}`);
+            return d;
+        } catch (error) {
+            throw error
+        } finally {
+            dbcn.done();
+        }
+    },
+    
     initDatabase: async function(){
         try {
             // Kiểm tra xem database đã tồn tại chưa    
