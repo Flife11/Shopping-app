@@ -2,6 +2,8 @@
 require("dotenv").config();
 const express = require("express");
 const { engine } = require('express-handlebars');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
 
 // Require custom modules
 const db = require('./utilities/db');
@@ -13,6 +15,18 @@ app.engine('.hbs', engine({ extname: '.hbs' }));
 app.set('view engine', '.hbs');
 app.set('views', './Main/views');
 
+app.use(
+    session({
+        resave: false,
+        saveUninitialized: true,
+        secret: process.env.JWT_SECRET,
+        cookie: { secure: false },
+    }),
+);
+
+require('./middleware/passport')(app);
+
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
 
@@ -46,6 +60,7 @@ app.use('/', (req, res, next) => {
 
 // Setting up error handler
 app.use((err, req, res, next) => {
+    console.log(err)
     res.status(500).send('Something broke!');
 })
 
