@@ -46,8 +46,9 @@ router.post('/login', (req, res, next) => {
 // Authenticated routes (require login)
 // Ví dụ: xem profile, sửa profile, xem orders, chi tiết orders, thanh toán,...
 //  TODO: Xử lý nếu chưa login thì quay về '/account/login'
+// TODO: Tạo middleware quản lý: đã login? chưa login? là admin? là client? và import vào admin lẫn client để bảo vệ routing
 router.get('/', (req, res) => {
-    res.send('Trang chu cua account')
+    res.send('Trang chu cua account') //xoa cho nay
 });
 
 
