@@ -12,16 +12,16 @@ const userModel = require('../models/user.m');
 // Start here
 
 passport.serializeUser((user, done) => {
-    done(null, user.username);
+    done(null, { username: user.username, role: user.role });
 });
-passport.deserializeUser(async (username, done) => {
-    
-    const user = await userModel.getUser(username);
-    console.log(user); //
-    if (!user) {
+passport.deserializeUser(async (user, done) => {
+
+    const userInfo = await userModel.getUser(user.username);
+    //console.log(user); //
+    if (!userInfo) {
         return done("Invalid user", null);
     }
-    done(null, user);
+    done(null, userInfo);
 
 });
 
@@ -42,8 +42,8 @@ module.exports = app => {
             return done(null, user);
         }
 
-        done("Invalid authentication", false);
-        
+        done("Wrong username or password!", false);
+
     }));
 
 };

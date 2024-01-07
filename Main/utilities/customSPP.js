@@ -22,9 +22,8 @@ class MyStrategy extends Strategy {
         return this.fail(err)
       }
       if (!user) {
-        return this.fail('Invalid authentication', 400)
+        return this.fail('Wrong username or password!', 405)
       }
-
       return this.success(user)
 
     })
