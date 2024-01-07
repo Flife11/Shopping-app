@@ -125,12 +125,21 @@
 
                 $('#password').removeClass('is-invalid');
                 $('#retypepassword').removeClass('is-invalid');
+                $('#email').removeClass('is-invalid');
             }
             else if (res.status == 402) {
                 $('#password').addClass('is-invalid');
                 $('#retypepassword').addClass('is-invalid');
 
                 $('#username').removeClass('is-invalid');
+                $('#email').removeClass('is-invalid');
+            }
+            else if(res.status == 403){
+                $('#email').addClass('is-invalid');
+
+                $('#username').removeClass('is-invalid');
+                $('#password').removeClass('is-invalid');
+                $('#retypepassword').removeClass('is-invalid');
             }
 
         }
