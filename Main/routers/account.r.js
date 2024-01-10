@@ -2,12 +2,18 @@ const router = require('express').Router();
 const passport = require('passport');
 
 const accountController = require('../controllers/account.c.js');
+const checkLogin = require('../middleware/checkLogin');
+
+// Logout
+// TODO: Tạo 1 nút logout trên header của logged in, method post, gửi request tới /account/logout
+// TODO: Tạo header cho logged in và not logged in
+
 
 // Free routes
-// TODO: Xử lý nếu login rồi thì quay về '/account'
+// Phải kiểm tra user chưa login mới cho zô đây
 
-router.get('/login', accountController.getLogin);
-router.get('/register', accountController.getRegister);
+router.get('/login', checkLogin.isNotLoggedIn, accountController.getLogin);
+router.get('/register', checkLogin.isNotLoggedIn, accountController.getRegister);
 
 router.post('/register', accountController.postRegister);
 router.post('/login', (req, res, next) => {
@@ -41,15 +47,24 @@ router.post('/login', (req, res, next) => {
     })(req, res, next);
 });
 
+router.get('/google/auth', checkLogin.isNotLoggedIn, accountController.authGoogle);
+router.get('/google', checkLogin.isNotLoggedIn, accountController.renderGoogleLogin);
+router.get('/assignpassportGoogle', checkLogin.isNotLoggedIn, passport.authenticate('google', {
+    failureRedirect: '/account/login',
+    successRedirect: '/account'
+}));
 
 
 // Authenticated routes (require login)
-// Ví dụ: xem profile, sửa profile, xem orders, chi tiết orders, thanh toán,...
-//  TODO: Xử lý nếu chưa login thì quay về '/account/login'
-// TODO: Tạo middleware quản lý: đã login? chưa login? là admin? là client? và import vào admin lẫn client để bảo vệ routing
-router.get('/', (req, res) => {
+// Phải kiểm tra user đã login mới cho zô đây :0
+// Ví dụ: xem profile, sửa profile, xem orders, chi tiết orders, thanh toán, nạp tiền,...
+
+router.get('/', checkLogin.isClient,(req, res) => {
     res.send('Trang chu cua account') //xoa cho nay
 });
+router.get('/orders/:id', checkLogin.isClient, ); //them cho nay
+router.get('/orders', checkLogin.isClient, ); //them cho nay
+
 
 
 

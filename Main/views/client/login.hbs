@@ -17,13 +17,13 @@
             {{!-- Form --}}
             <form id="signinForm" style="width: 50%;" action="/account/login" method="post"> {{!-- Login ko có ajax --}}
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control {{#if error}}is-invalid{{/if}}" id="username" name="username" placeholder="user1"
-                        style="border-radius: 100px" required>
+                    <input type="text" class="form-control {{#if error}}is-invalid{{/if}}" id="username" name="username"
+                        placeholder="user1" style="border-radius: 100px" required>
                     <label for="username" class="text-body-tertiary">Username</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="password" class="form-control {{#if error}}is-invalid{{/if}}" id="password" name="password" placeholder="123"
-                        style="border-radius: 100px" required>
+                    <input type="password" class="form-control {{#if error}}is-invalid{{/if}}" id="password"
+                        name="password" placeholder="123" style="border-radius: 100px" required>
                     <label for="password" class="text-body-tertiary">Password</label>
                 </div>
 
@@ -40,11 +40,13 @@
             </form>
 
             {{!-- Google --}}
-            <button class="btn" style="width:50%;border-radius: 100px;background-color:#ededed">
-                <img src="https://cdn.iconscout.com/icon/free/png-256/free-google-1772223-1507807.png"
-                    style="width: 1.5vw;height:1.5vw;margin-right:5px;">
-                Connect with <strong>Google</strong>
-            </button>
+            <form action="/account/google" method="get" style="width: 100%; display:flex;justify-content:center">
+                <button class="btn" style="width:50%;border-radius: 100px;background-color:#ededed">
+                    <img src="https://cdn.iconscout.com/icon/free/png-256/free-google-1772223-1507807.png"
+                        style="width: 1.5vw;height:1.5vw;margin-right:5px;">
+                    Connect with <strong>Google</strong>
+                </button>
+            </form>
         </div>
 
         {{!-- Right side --}}
@@ -78,7 +80,7 @@
 <script>
     var error = "{{error}}";
     $(() => {
-        if(error){
+        if (error) {
             $('#failureNotificationText').text(error)
             $('#failureNotificationModal').css('display', '');
         }
