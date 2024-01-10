@@ -2,11 +2,11 @@
 
 const bcrypt = require('bcrypt');
 const passport = require('passport');
+const jwt = require('jsonwebtoken');
 require('dotenv').config();
-
 const secret = process.env.JWT_SECRET;
 
-const { MyStrategy } = require('../utilities/customSPP');
+const { MyStrategy, GGStrategy } = require('../utilities/customSPP');
 const userModel = require('../models/user.m');
 
 // Start here
@@ -44,6 +44,22 @@ module.exports = app => {
 
         done("Wrong username or password!", false);
 
+    }));
+
+    passport.use(new GGStrategy({}, async (token, done) => {
+
+        if (token) {
+            jwt.verify(token, secret, async (err, user) => {
+                if (err) {
+                    console.log(err)
+                    return done(err, false);
+                }
+                return done(null, user);
+            });
+        }
+        else {
+            return done("Invalid authentication", false);
+        }
     }));
 
 };

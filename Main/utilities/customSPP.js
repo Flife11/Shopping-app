@@ -30,32 +30,32 @@ class MyStrategy extends Strategy {
   }
 }
 
-// class GGStrategy extends Strategy {
-//   constructor(options, verify) {
-//     super()
-//     this.name = 'google'
-//     this.verify = verify
+class GGStrategy extends Strategy {
+  constructor(options, verify) {
+    super()
+    this.name = 'google'
+    this.verify = verify
 
-//     this.tokenField = (options && options.token) ? options.token : 'token';
+    this.tokenField = (options && options.token) ? options.token : 'token';
 
-//     passport.strategies[this.name] = this;
+    passport.strategies[this.name] = this;
   
-//   }
-//   authenticate(req, options) {
-//     const token = req.query[this.tokenField];
-//     this.verify(token, (err, user) => {
-//       if (err) {
-//         return this.fail(err)
-//       }
-//       if (!user) {
-//         return this.fail('Invalid authentication', 401)
-//       }
-//       this.success(user)
-//     })
-//   }
-// }
+  }
+  authenticate(req, options) {
+    const token = req.query[this.tokenField];
+    this.verify(token, (err, user) => {
+      if (err) {
+        return this.fail(err)
+      }
+      if (!user) {
+        return this.fail('Invalid authentication', 401)
+      }
+      this.success(user)
+    })
+  }
+}
 
 module.exports = {
-  MyStrategy
- // GGStrategy
+  MyStrategy,
+  GGStrategy
 };
