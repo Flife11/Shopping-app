@@ -4,6 +4,11 @@ const passport = require('passport');
 const accountController = require('../controllers/account.c.js');
 const checkLogin = require('../middleware/checkLogin');
 
+// Logout
+// TODO: Tạo 1 nút logout trên header của logged in, method post, gửi request tới /account/logout
+// TODO: Tạo header cho logged in và not logged in
+
+
 // Free routes
 // Phải kiểm tra user chưa login mới cho zô đây
 
