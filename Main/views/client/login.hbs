@@ -18,12 +18,12 @@
             <form id="signinForm" style="width: 50%;" action="/account/login" method="post"> {{!-- Login ko có ajax --}}
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control {{#if error}}is-invalid{{/if}}" id="username" name="username"
-                        placeholder="user1" style="border-radius: 100px" required>
+                        placeholder="user1" style="border-radius: 100px" value="{{oldUsername}}" required>
                     <label for="username" class="text-body-tertiary">Tên đăng nhập</label>
                 </div>
                 <div class="form-floating mb-3">
                     <input type="password" class="form-control {{#if error}}is-invalid{{/if}}" id="password"
-                        name="password" placeholder="123" style="border-radius: 100px" required>
+                        name="password" placeholder="123" style="border-radius: 100px" value="{{oldPassword}}" required>
                     <label for="password" class="text-body-tertiary">Mật khẩu</label>
                 </div>
 

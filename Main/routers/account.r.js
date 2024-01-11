@@ -31,8 +31,11 @@ router.post('/login', (req, res, next) => {
             return next(err); // Handle error
         }
         if (!user) {
-            // Render view if authentication fails
-            return res.render('login', { title: 'Login', error: info });
+            // Render view if authentication fails (keep old username and password)
+            let oldUsername = req.body.username;
+            let oldPassword = req.body.password;
+
+            return res.render('login', { title: 'Login', error: info, oldUsername: oldUsername, oldPassword: oldPassword });
         }
         req.logIn(user, (err) => {
             if (err) {
