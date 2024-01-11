@@ -5,7 +5,7 @@ const accountController = require('../controllers/account.c.js');
 const checkLogin = require('../middleware/checkLogin');
 
 // Logout
-router.post('/logout', checkLogin.isLoggedIn, (req, res) => {
+router.get('/logout', checkLogin.isLoggedIn, (req, res) => {
     req.logOut(err => {
         console.log(err);
         next(err);
