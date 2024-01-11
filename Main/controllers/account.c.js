@@ -1,14 +1,20 @@
 const jwt = require('jsonwebtoken');
 
 const userModel = require('../models/user.m');
+const categoryModel = require('../models/category.m');
+const subcategoryModel = require('../models/subcategory.m');
 const secret = process.env.JWT_SECRET;
 
 module.exports = {
-    getLogin(req, res) {
-        res.render('login', { title: 'Đăng nhập' });
+    getLogin: async function (req, res) {
+        const categories = await categoryModel.getAll();
+        const subcategories = await subcategoryModel.getAll();
+        res.render('login', { title: 'Đăng nhập', categories: categories, subcategories: subcategories });
     },
-    getRegister(req, res) {
-        res.render('register', { title: 'Đăng ký' });
+    getRegister: async function (req, res) {
+        const categories = await categoryModel.getAll();
+        const subcategories = await subcategoryModel.getAll();
+        res.render('register', { title: 'Đăng ký', categories: categories, subcategories: subcategories });
     },
     postRegister: async function (req, res) {
         try {
@@ -77,7 +83,7 @@ module.exports = {
         
         res.redirect(`${urlGG}?${queries.toString()}`);
     },
-    authGoogle: async (req, res) => {
+    authGoogle: async function (req, res) {
         const client_id = process.env.CLIENT_ID;
         const client_secret = process.env.CLIENT_SECRET;
         const redirect_uri = process.env.REDIRECT_URI;

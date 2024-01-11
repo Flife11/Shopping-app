@@ -5,7 +5,7 @@ const accountController = require('../controllers/account.c.js');
 const checkLogin = require('../middleware/checkLogin');
 
 // Logout
-router.post('/logout', checkLogin.isLoggedIn, (req, res) => {
+router.get('/logout', checkLogin.isLoggedIn, (req, res) => {
     req.logOut(err => {
         console.log(err);
         next(err);
@@ -14,8 +14,7 @@ router.post('/logout', checkLogin.isLoggedIn, (req, res) => {
     // Back to home page
     res.redirect("/");
 });
-// TODO: Tạo 1 nút logout trên header của logged in, method post, gửi request tới /account/logout
-// TODO: Tạo header cho logged in và not logged in
+// TODO: Sửa lại UI của user trong header
 
 
 // Free routes

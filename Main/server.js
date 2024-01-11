@@ -6,12 +6,16 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 
 // Require custom modules
+const Handlebars = require('./utilities/handlebarsHelper');
 const db = require('./utilities/db');
 
 // Setting up express app
 const app = express();
 
-app.engine('.hbs', engine({ extname: '.hbs' }));
+app.engine('.hbs', engine({
+    extname: '.hbs',
+    helpers: Handlebars.helpers
+}));
 app.set('view engine', '.hbs');
 app.set('views', './Main/views');
 
