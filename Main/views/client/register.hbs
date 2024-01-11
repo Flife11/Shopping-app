@@ -35,8 +35,7 @@
             </div>
 
             {{!-- Form --}}
-            <form style="width: 50%;" action="/account/register" method="post"> {{!-- Nhớ sửa chỗ này lại thành AJAX
-                --}}
+            <form id="signupForm" style="width: 50%;"> {{!-- Nhớ sửa chỗ này lại thành AJAX --}}
                 <div class="form-floating mb-2">
                     <input type="text" class="form-control" id="username" name="username" placeholder="user1"
                         style="border-radius: 100px" required>
@@ -48,8 +47,8 @@
                     <label for="password" class="text-body-tertiary">Password</label>
                 </div>
                 <div class="form-floating mb-2">
-                    <input type="password" class="form-control" id="retypepassword" name="retypepassword" placeholder="123"
-                        style="border-radius: 100px" required>
+                    <input type="password" class="form-control" id="retypepassword" name="retypepassword"
+                        placeholder="123" style="border-radius: 100px" required>
                     <label for="retypepassword" class="text-body-tertiary">Enter your password again</label>
                 </div>
                 <div class="form-floating mb-2">
@@ -58,7 +57,7 @@
                     <label for="name" class="text-body-tertiary">Fullname</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="email" name="email" placeholder="abd@demo.com"
+                    <input type="email" class="form-control" id="email" name="email" placeholder="abd@demo.com"
                         style="border-radius: 100px" required>
                     <label for="email" class="text-body-tertiary">Email</label>
                 </div>
@@ -79,3 +78,70 @@
 
 {{> notification_success}}
 {{> notification_failure}}
+
+<script>
+    $("#signupForm").on("submit", async function (e) {
+        e.preventDefault();
+
+        let data = $(this).serializeArray().reduce((obj, field) => ({ ...obj, [field.name]: field.value }), {});
+        const res = await fetch(`/account/register`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
+
+        const resData = await res.json();
+        if (res.ok) {
+            $('#successNotificationtext').text(resData.message + ` Get ready to login in... ` + 3); // 3 seconds
+            $('#successNotificationModal').css('display', '');
+
+            // Clear form
+            $('#signupForm').trigger("reset");
+
+            // Wait 3 seconds, redirect to login page
+            let count = 3;
+            let interval = setInterval(() => {
+                count--;
+                $('#successNotificationtext').text(resData.message + ` Get ready to login in... ${count}`);
+                if (count === 0) {
+                    clearInterval(interval);
+                }
+            }, 1000);
+            setTimeout(() => {
+                window.location.href = "/account/login";
+            }, 3000);
+
+        }
+        else {
+            $('#failureNotificationText').text(resData.message);
+            $('#failureNotificationModal').css('display', '');
+
+            // Check error code
+            if (res.status == 401) {
+
+                $('#username').addClass('is-invalid');
+
+                $('#password').removeClass('is-invalid');
+                $('#retypepassword').removeClass('is-invalid');
+                $('#email').removeClass('is-invalid');
+            }
+            else if (res.status == 402) {
+                $('#password').addClass('is-invalid');
+                $('#retypepassword').addClass('is-invalid');
+
+                $('#username').removeClass('is-invalid');
+                $('#email').removeClass('is-invalid');
+            }
+            else if(res.status == 403){
+                $('#email').addClass('is-invalid');
+
+                $('#username').removeClass('is-invalid');
+                $('#password').removeClass('is-invalid');
+                $('#retypepassword').removeClass('is-invalid');
+            }
+
+        }
+    });
+</script>
