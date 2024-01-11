@@ -5,10 +5,10 @@ const secret = process.env.JWT_SECRET;
 
 module.exports = {
     getLogin(req, res) {
-        res.render('login', { title: 'Login' });
+        res.render('login', { title: 'Đăng nhập' });
     },
     getRegister(req, res) {
-        res.render('register', { title: 'Register' });
+        res.render('register', { title: 'Đăng ký' });
     },
     postRegister: async function (req, res) {
         try {
@@ -17,25 +17,25 @@ module.exports = {
             // Check if username contains only letters, numbers, underscore and dot
             const regex = /^[a-zA-Z0-9_.]+$/;
             if (!regex.test(username)) {
-                return res.status(401).json({ message: 'Username must contain only letters and numbers!' });
+                return res.status(401).json({ message: 'Tên đăng nhập chỉ chứa số, chữ, dấu gạch dưới (_) và dấu chấm (.)!' });
             }
 
             // Check if username existed
             const existedUser = await userModel.getUser(username);
             if (existedUser) {
-                return res.status(401).json({ message: 'Username already exists, please choose another username!' });
+                return res.status(401).json({ message: 'Tên đăng nhập đã tồn tại, hãy chọn một tên đăng nhập khác nhé!' });
             }
 
             // Check if email is valid
             const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!regexEmail.test(email)) {
-                return res.status(403).json({ message: 'Email is invalid!' });
+                return res.status(403).json({ message: 'Email không hợp lệ!' });
             }
 
 
             // Check if password and retypepassword match
             if (password !== retypepassword) {
-                return res.status(402).json({ message: 'Your password and confirmation password do not match!' });
+                return res.status(402).json({ message: 'Mật khẩu không khớp, nhập lại nha!' });
             }
 
             // Add user to database
@@ -52,10 +52,10 @@ module.exports = {
 
             // Return result
             if (result) {
-                res.status(200).json({ message: 'Register successfully!' });
+                res.status(200).json({ message: 'Đăng ký thành công!' });
             }
             else {
-                res.status(400).json({ message: 'Register failed, please try again!' });
+                res.status(400).json({ message: 'Đăng ký thất bại, thử lại sau nha!' });
             }
         } catch (error) {
             res.status(500).json({ message: error });

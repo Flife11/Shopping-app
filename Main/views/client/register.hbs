@@ -8,14 +8,13 @@
         <div
             style="width: 30%;background-image:linear-gradient(35deg,#91d1de,#2a6792);overflow: hidden;position: relative;">
             {{!-- Header --}}
-            <h3 class="mb-4 mt-5 text-center" style="color: white;z-index:10;position:relative">Got an account?</h3>
-            <p class="text-center text-white" style="z-index:10;position:relative;margin-bottom:24vh">Sign in and
-                discover great amount of new oppotunities!</p>
+            <h3 class="mb-4 mt-5 text-center" style="color: white;z-index:10;position:relative">Đã có tài khoản?</h3>
+            <p class="text-center text-white" style="z-index:10;position:relative;margin-bottom:24vh">Đăng nhập để khám phá thêm nhiều tính năng khác nhé!</p>
 
             <div class="d-flex justify-content-center">
                 <a class="btn border border-white rounded-pill border-3" href="/account/login"
                     style="text-decoration: none; color:white;z-index:10;position:relative; width:50%;">
-                    <strong>Sign in</strong>
+                    <strong>Đăng nhập</strong>
                 </a>
             </div>
 
@@ -31,7 +30,7 @@
             {{!-- Header --}}
             <div class="d-flex">
                 <img src="/public/resource/icon.ico" style="width: 3vw;height:3vw;margin-right:1vw" class="mb-3 mt-3">
-                <h2 class="mb-3 mt-3" style="color: #2a6792;">REGISTER</h2>
+                <h2 class="mb-3 mt-3" style="color: #2a6792;">ĐĂNG KÝ</h2>
             </div>
 
             {{!-- Form --}}
@@ -39,22 +38,22 @@
                 <div class="form-floating mb-2">
                     <input type="text" class="form-control" id="username" name="username" placeholder="user1"
                         style="border-radius: 100px" required>
-                    <label for="username" class="text-body-tertiary">Username</label>
+                    <label for="username" class="text-body-tertiary">Tên đăng nhập</label>
                 </div>
                 <div class="form-floating mb-2">
                     <input type="password" class="form-control" id="password" name="password" placeholder="123"
                         style="border-radius: 100px" required>
-                    <label for="password" class="text-body-tertiary">Password</label>
+                    <label for="password" class="text-body-tertiary">Mật khẩu</label>
                 </div>
                 <div class="form-floating mb-2">
                     <input type="password" class="form-control" id="retypepassword" name="retypepassword"
                         placeholder="123" style="border-radius: 100px" required>
-                    <label for="retypepassword" class="text-body-tertiary">Enter your password again</label>
+                    <label for="retypepassword" class="text-body-tertiary">Nhập lại mật khẩu</label>
                 </div>
                 <div class="form-floating mb-2">
                     <input type="text" class="form-control" id="name" name="name" placeholder="user1"
                         style="border-radius: 100px" required>
-                    <label for="name" class="text-body-tertiary">Fullname</label>
+                    <label for="name" class="text-body-tertiary">Họ tên</label>
                 </div>
                 <div class="form-floating mb-3">
                     <input type="email" class="form-control" id="email" name="email" placeholder="abd@demo.com"
@@ -64,7 +63,7 @@
 
                 <button class="btn mb-5"
                     style="background-image:linear-gradient(to right,#91d1de,#2a6792);color:white;width:100%;border-radius: 100px">
-                    <strong>Sign up</strong>
+                    <strong>Đăng ký</strong>
                 </button>
 
             </form>
@@ -94,7 +93,7 @@
 
         const resData = await res.json();
         if (res.ok) {
-            $('#successNotificationtext').text(resData.message + ` Get ready to login in... ` + 3); // 3 seconds
+            $('#successNotificationtext').text(resData.message + ` Chuyển đến trang đăng nhập trong... ` + 3); // 3 seconds
             $('#successNotificationModal').css('display', '');
 
             // Clear form
@@ -104,7 +103,7 @@
             let count = 3;
             let interval = setInterval(() => {
                 count--;
-                $('#successNotificationtext').text(resData.message + ` Get ready to login in... ${count}`);
+                $('#successNotificationtext').text(resData.message + ` Chuyển đến trang đăng nhập trong... ${count}`);
                 if (count === 0) {
                     clearInterval(interval);
                 }
