@@ -11,7 +11,7 @@
             {{!-- Header --}}
             <div class="d-flex">
                 <img src="/public/resource/icon.ico" style="width: 3vw;height:3vw;margin-right:1vw" class="mb-4 mt-5">
-                <h2 class="mb-4 mt-5" style="color: #2a6792;">WELCOME BACK!</h2>
+                <h2 class="mb-4 mt-5" style="color: #2a6792;">HELLO!</h2>
             </div>
 
             {{!-- Form --}}
@@ -19,22 +19,22 @@
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control {{#if error}}is-invalid{{/if}}" id="username" name="username"
                         placeholder="user1" style="border-radius: 100px" required>
-                    <label for="username" class="text-body-tertiary">Username</label>
+                    <label for="username" class="text-body-tertiary">Tên đăng nhập</label>
                 </div>
                 <div class="form-floating mb-3">
                     <input type="password" class="form-control {{#if error}}is-invalid{{/if}}" id="password"
                         name="password" placeholder="123" style="border-radius: 100px" required>
-                    <label for="password" class="text-body-tertiary">Password</label>
+                    <label for="password" class="text-body-tertiary">Mật khẩu</label>
                 </div>
 
                 <div class="form-check mb-3" style="margin-left:0.8vw">
                     <input class="form-check-input" type="checkbox" id="rememberme" name="rememberme" />
-                    <label class="text-body-tertiary" for="rememberme"> Remember me </label>
+                    <label class="text-body-tertiary" for="rememberme">Ghi nhớ đăng nhập</label>
                 </div>
 
                 <button class="btn mb-5"
                     style="background-image:linear-gradient(to right,#91d1de,#2a6792);color:white;width:100%;border-radius: 100px">
-                    <strong>Sign in</strong>
+                    <strong>Đăng nhập</strong>
                 </button>
 
             </form>
@@ -44,7 +44,7 @@
                 <button class="btn" style="width:50%;border-radius: 100px;background-color:#ededed">
                     <img src="https://cdn.iconscout.com/icon/free/png-256/free-google-1772223-1507807.png"
                         style="width: 1.5vw;height:1.5vw;margin-right:5px;">
-                    Connect with <strong>Google</strong>
+                    Đăng nhập với <strong>Google</strong>
                 </button>
             </form>
         </div>
@@ -53,14 +53,13 @@
         <div
             style="width: 30%;background-image:linear-gradient(35deg,#91d1de,#2a6792);overflow: hidden;position: relative;">
             {{!-- Header --}}
-            <h3 class="mb-4 mt-5 text-center" style="color: white;z-index:10;position:relative">New here?</h3>
-            <p class="text-center text-white" style="z-index:10;position:relative;margin-bottom:24vh">Sign up and
-                discover great amount of new oppotunities!</p>
+            <h3 class="mb-4 mt-5 text-center" style="color: white;z-index:10;position:relative">Là bạn mới?</h3>
+            <p class="text-center text-white" style="z-index:10;position:relative;margin-bottom:24vh">Đăng ký để khám phá thêm nhiều tính năng mới nhé!</p>
 
             <div class="d-flex justify-content-center">
                 <a class="btn border border-white rounded-pill border-3" href="/account/register"
                     style="text-decoration: none; color:white;z-index:10;position:relative; width:50%;">
-                    <strong>Sign up</strong>
+                    <strong>Đăng ký</strong>
                 </a>
             </div>
 

@@ -22,7 +22,7 @@ class MyStrategy extends Strategy {
         return this.fail(err)
       }
       if (!user) {
-        return this.fail('Wrong username or password!', 405)
+        return this.fail('Tên đăng nhập hoặc mật khẩu sai!', 405)
       }
       return this.success(user)
 
@@ -48,7 +48,7 @@ class GGStrategy extends Strategy {
         return this.fail(err)
       }
       if (!user) {
-        return this.fail('Invalid authentication', 401)
+        return this.fail('Xác thực thất bại!', 401)
       }
       this.success(user)
     })
