@@ -5,10 +5,10 @@ const secret = process.env.JWT_SECRET;
 
 module.exports = {
     getLogin(req, res) {
-        res.render('login', { title: 'Login' });
+        res.render('login', { title: 'Đăng nhập' });
     },
     getRegister(req, res) {
-        res.render('register', { title: 'Register' });
+        res.render('register', { title: 'Đăng ký' });
     },
     postRegister: async function (req, res) {
         try {

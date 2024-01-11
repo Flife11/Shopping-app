@@ -63,7 +63,7 @@
 
                 <button class="btn mb-5"
                     style="background-image:linear-gradient(to right,#91d1de,#2a6792);color:white;width:100%;border-radius: 100px">
-                    <strong>Sign up</strong>
+                    <strong>Đăng ký</strong>
                 </button>
 
             </form>
@@ -103,7 +103,7 @@
             let count = 3;
             let interval = setInterval(() => {
                 count--;
-                $('#successNotificationtext').text(resData.message + `Chuyển đến trang đăng nhập trong... ${count}`);
+                $('#successNotificationtext').text(resData.message + ` Chuyển đến trang đăng nhập trong... ${count}`);
                 if (count === 0) {
                     clearInterval(interval);
                 }
