@@ -303,10 +303,10 @@ module.exports = {
                     
                     INSERT INTO "PRODUCT" VALUES 
                     (12,2,null,'Áo khoác dù nam nữ phối màu 2 lớp oversize',109500,19,'12.jpg','Áo khoác dù nam nữ phối màu 2 lớp oversize',
-                    '➖  Kiểu dáng: Áo khoác dù nhẹ - chống nắng - Form rộng
-                    ➖ Chất liệu: áo khoác dù được thiết kế với chất liệu dù 2 lớp nhẹ có mũ trùm đầu giúp chống nắng, giữ ấm tốt, tránh gió hiệu quả, giúp bảo vệ làn da, giúp bạn tự tin khi ra đường dù thời tiết nắng nóng hay giá rét. Ống tay áo hiện đại, trẻ trung với thiết kế bo chắc chắn, mang đến cảm giác khỏe khắm, thời trang. áo khoác gió được thiết kế với tone màu trẻ trung, tinh tế, thời trang, dễ dàng phối đồ theo sở thích của bạn.
-                    ➖  Xuất Xứ: Việt Nam.
-                    ➖  Bảo Quản: Vệ sinh áo khoác bằng tay hoặc máy giặt.');
+                    '-  Kiểu dáng: Áo khoác dù nhẹ - chống nắng - Form rộng
+                    - Chất liệu: áo khoác dù được thiết kế với chất liệu dù 2 lớp nhẹ có mũ trùm đầu giúp chống nắng, giữ ấm tốt, tránh gió hiệu quả, giúp bảo vệ làn da, giúp bạn tự tin khi ra đường dù thời tiết nắng nóng hay giá rét. Ống tay áo hiện đại, trẻ trung với thiết kế bo chắc chắn, mang đến cảm giác khỏe khắm, thời trang. áo khoác gió được thiết kế với tone màu trẻ trung, tinh tế, thời trang, dễ dàng phối đồ theo sở thích của bạn.
+                    -  Xuất Xứ: Việt Nam.
+                    -  Bảo Quản: Vệ sinh áo khoác bằng tay hoặc máy giặt.');
                     
                     INSERT INTO "PRODUCT" VALUES 
                     (13,2,null,'Áo Khoác Nỉ Zip Kéo Unisex Tag Nhựa WZS',169000,2,'13.jpg','Áo Khoác Nỉ Zip Kéo Unisex Tag Nhựa WZS',
@@ -477,16 +477,16 @@ module.exports = {
                     
                     INSERT INTO "PRODUCT" VALUES 
                     (27,4,null,'Combo đồ ngủ hai dây chất đũi mềm thoáng mát bốn mùa nhiều họa tiết',85000,10,'27.jpg','Combo đồ ngủ hai dây chất đũi mềm thoáng mát bốn mùa nhiều họa tiết',
-                    '𝐋𝐚𝐞𝐦 𝐱𝐢𝐧 𝐜𝐡𝐚̀𝐨 𝐜𝐚́𝐜 𝐛𝐚𝐛𝐢 𝐚̣ 🌸
-                    𝐊𝐢́𝐜𝐡 𝐭𝐡𝐮̛𝐨̛́𝐜: 𝐅𝐑𝐄𝐄𝐒𝐈𝐙𝐄 I DƯỚI 58KG
+                    'Laem xin chào khách ạ 🌸
+                    Kích thước: freesize dưới 85kg
                     
-                    🌺 Tất cả đều là 𝐀̉𝐍𝐇 𝐓𝐇𝐀̣̂𝐓 nên các tình iu cứ yên tâm nha.
-                    🌾𝐓𝐇𝐎̂𝐍𝐆 𝐓𝐈𝐍 𝐒𝐀̉𝐍 𝐏𝐇𝐀̂̉𝐌
-                    𝐌𝐚̂̃𝐮: hai dây
-                    𝐂𝐡𝐚̂́𝐭 𝐥𝐢𝐞̣̂𝐮: Đũi xốp THÁI siêu thoáng, bao cả mùa hè bao thấm mồ hôi. Quần lưng thun co dãn tối đa dễ chịu.
-                    𝐊𝐢𝐞̂̉𝐮 𝐝𝐚́𝐧𝐠: Set hai dây - quần đùi
-                    𝐇𝐀̀𝐍𝐆 𝐂𝐎́ 𝐒𝐀̆̃𝐍 
-                    𝐂𝐇𝐀̂𝐍 𝐓𝐇𝐀̀𝐍𝐇 𝐂𝐀̉𝐌 𝐎̛𝐍 🍂');
+                    🌺 Tất cả đều là ảnh thật nên các tình iu cứ yên tâm nha.
+                    🌾 THÔNG TIN SẢN PHẨM
+                    Mẫu: hai dây
+                    Chất liệu: Đũi xốp THÁI siêu thoáng, bao cả mùa hè bao thấm mồ hôi. Quần lưng thun co dãn tối đa dễ chịu.
+                    Kiểu dáng: Set hai dây - quần đùi
+                    HÀNG CÓ SẴN
+                    CHÂN THÀNH CẢM ƠN 🍂');
                     
                     INSERT INTO "PRODUCT" VALUES 
                     (28,4,null,'Bộ Đồ Ngủ cotton Hai Dây In Hoạt Hình Dành Cho Nữ',94000,67,'28.jpg','Bộ Đồ Ngủ cotton Hai Dây In Hoạt Hình Dành Cho Nữ',
@@ -530,7 +530,7 @@ module.exports = {
                     
                     INSERT INTO "PRODUCT" VALUES 
                     (32,5,null,'ENSo - Boots Da Thật Màu Đen',1490000,52,'32.jpg','ENSo - Boots Da Thật Màu Đen CHRIS Đế Cao 8,5 cm',
-                    '𝐂𝐇𝐑𝐈𝐒 𝐁𝐎𝐎𝐓𝐒 - SỰ PHA TRỘN HOÀN HẢO GIỮA NÉT CÁ TÍNH HIỆN ĐẠI VÀ TÍNH ỨNG DỤNG CAO 
+                    'CHRIS BOOTS - SỰ PHA TRỘN HOÀN HẢO GIỮA NÉT CÁ TÍNH HIỆN ĐẠI VÀ TÍNH ỨNG DỤNG CAO 
                     Một nét bổ sung duyên dáng cho các item mùa đông từ chiếc quần jeans bụi bặm cho tới những kiểu váy cá tính. Chris Boots là một item giúp nâng tầm outfit, mang tới vẻ ngoài High fashion cho các cô nàng ENSO năng động, hiện đại.
                     
                     1. Chi tiết sản phẩm:
@@ -555,7 +555,7 @@ module.exports = {
                     INSERT INTO "PRODUCT" VALUES 
                     (34,5,null,'Giày Boot Da Cổ Cao Kèm 2 Kiểu Dây',31990,209,'34.jpg','Giày Boot Da Cổ Cao Kèm 2 Kiểu Dây (hoàn trả nếu không đúng mô tả)',
                     '‼️ HÀNG CÓ SẴN - NẾU HẾT HÀNG TỨC LÀ SHOP ĐANG RESTOCK VỀ THÊM Ạ 
-                    ‼️ẢNH THẬT CAM ĐOAN SHOP TỰ CHỤP 100% 
+                    ẢNH THẬT CAM ĐOAN SHOP TỰ CHỤP 100% 
                     
                     Mua 1 giày đc 2 loại dây 😌  lên chân là như 2 đôi khác nhau luôn ý các bác ạ. Chất da đẹp mướt, đế dày ạ
                     
