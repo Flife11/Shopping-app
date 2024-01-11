@@ -5,6 +5,15 @@ const accountController = require('../controllers/account.c.js');
 const checkLogin = require('../middleware/checkLogin');
 
 // Logout
+router.post('/logout', checkLogin.isLoggedIn, (req, res) => {
+    req.logOut(err => {
+        console.log(err);
+        next(err);
+    });
+
+    // Back to home page
+    res.redirect("/");
+});
 // TODO: Tạo 1 nút logout trên header của logged in, method post, gửi request tới /account/logout
 // TODO: Tạo header cho logged in và not logged in
 
@@ -59,9 +68,13 @@ router.get('/assignpassportGoogle', checkLogin.isNotLoggedIn, passport.authentic
 // Phải kiểm tra user đã login mới cho zô đây :0
 // Ví dụ: xem profile, sửa profile, xem orders, chi tiết orders, thanh toán, nạp tiền,...
 
-router.get('/', checkLogin.isClient,(req, res) => {
+router.get('/', checkLogin.isClient, (req, res) => {
     res.send('Trang chu cua account') //xoa cho nay
 });
+
+router.get('/editprofile', checkLogin.isClient, ); //them cho nay (Update trong CRUD Tài khoản)
+router.get('/addfund', checkLogin.isClient, ); //them cho nay
+router.get('/checkout', checkLogin.isClient, ); //them cho nay (thanh toán thì bắt buộc phải login)
 router.get('/orders/:id', checkLogin.isClient, ); //them cho nay
 router.get('/orders', checkLogin.isClient, ); //them cho nay
 
