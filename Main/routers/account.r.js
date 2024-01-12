@@ -47,6 +47,8 @@ router.post('/login', (req, res, next) => {
                 req.session.cookie.expires = false;
             }
 
+            // TODO: fetch to /getbalance (Payment server) user.id (by token) and assign to req.session.passport.user.balance
+
             // Redirect based on role
             let role = req.session.passport.user.role;
             if (role == "admin") {
