@@ -573,6 +573,15 @@ module.exports = {
                     Thiết kế: phong cách hiện đại
                     Thương hiệu: StarLord
                     Thông tin bảo hành: Đổi trả 7 ngày');
+
+                    INSERT INTO "PRODUCT" VALUES 
+                    (36,5,null,'Dép tổ ong ASIA',55000,0,'36.jpg','Dép tổ ong ASIA,Chất liệu EVA cao cấp thân thiện với môi trường,siêu bền,siêu nhẹ,êm ái, chống trơn trượt,đế giày 3,5cm',
+                    'Dép tổ ong siêu nhẹ thương hiệu ASIA.
+                    Đây là phiên bản dép tổ ong mới nhất,được đúc nguyên khối từ vật liệu  EVA cao cấp,thân thiện với môi trường,an toàn cho người dùng.                    
+                    Siêu nhẹ,siêu bền,mềm mại và cực êm chân                    
+                    Đế dày 3,5 cm, chống trơn trượt                    
+                    Sản xuất trên dây chuyền hiện đại, áp dụng công nghệ mới nhất. Form dáng chuẩn,đẹp từng centimet..                    
+                    Phù hợp với mọi lứa tuổi cả Nam và Nữ, đa công dụng(đi trong nhà,đi làm,đi chơi,...)');
                 `)
 
                 //Thông báo thêm bảng thành công
