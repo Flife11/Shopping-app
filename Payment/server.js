@@ -16,11 +16,13 @@ app.use(express.json());
 
 app.use(cookieParser()); // necessary?
 
+
 const credentials = {
     key: fs.readFileSync('./Payment/cert/demo.key'),
     cert: fs.readFileSync('./Payment/cert/demo.cert'),
 };
-
+app.use('/public', express.static(__dirname + "/public"));
+const router = require('./routers/router');
 const port = process.env.PAYMENT_PORT | 5000;
 const host = process.env.HOST || 'localhost';
 
@@ -32,7 +34,7 @@ const host = process.env.HOST || 'localhost';
 app.use((err, req, res, next) => {
     res.status(500).send('Something broke!');
 })
-
+app.use('/',router);
 // Initialize database and start server
 let server = https.createServer(credentials, app);
 db.initDatabase().then(() => {
