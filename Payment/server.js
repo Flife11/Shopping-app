@@ -20,6 +20,7 @@ app.use(cookieParser()); // necessary?
 const credentials = {
     key: fs.readFileSync('./Payment/cert/demo.key'),
     cert: fs.readFileSync('./Payment/cert/demo.cert'),
+    rejectUnauthorized: false,
 };
 app.use('/public', express.static(__dirname + "/public"));
 const router = require('./routers/router');

@@ -1,0 +1,107 @@
+{{> header}}
+
+{{!-- banner (replace with image later) --}}
+<div style="width: 100%; height:50vh; background-color:black">
+
+</div>
+
+
+{{!-- flexbox --}}
+<div class="d-flex" style="height: auto; width:100%; color:#2a6792">
+
+    {{!-- filter box --}}
+    <div style="height:auto;width:23%;background-color:white;padding:2vw">
+        {{!-- Header --}}
+        <h5 class="text-center" style="margin-bottom:1vw;">BỘ LỌC</h5>
+
+        {{!-- Price filter --}}
+        <div style="margin-bottom: 5px;">Giá</div>
+        <div class="d-flex" style="margin-bottom:1.5vw;">
+            <input placeholder="Min" type="number" id="minprice" min="0" max="1000000000"
+                style="width: 45%; border-radius:100px; color:#2a6792; border-color:#2a6792" class="form-control">
+            <span style="width: 15%; color:#2a6792" class="text-center"> - </span>
+            <input placeholder="Max" type="number" id="maxprice" min="1" max="1000000001"
+                style="width: 45%; border-radius:100px; color:#2a6792; border-color:#2a6792" class="form-control">
+        </div>
+
+        {{!-- Quantity filter --}}
+        <div style="margin-bottom: 5px;">Số lượng tồn</div>
+        <div class="d-flex" style="margin-bottom:3vw;">
+            <input placeholder="Min" type="number" id="minquantity" min="0" max="1000000000"
+                style="width: 45%; border-radius:100px; color:#2a6792; border-color:#2a6792" class="form-control">
+            <span style="width: 15%; color:#2a6792" class="text-center"> - </span>
+            <input placeholder="Max" type="number" id="maxquantity" min="1" max="1000000001"
+                style="width: 45%; border-radius:100px; color:#2a6792; border-color:#2a6792" class="form-control">
+        </div>
+
+        {{!-- Submit button --}}
+        <button class="btn"
+            style="background-image:linear-gradient(to right,#91d1de,#2a6792);color:white;width:100%;border-radius: 100px">
+            <strong>Lọc sản phẩm</strong>
+        </button>
+
+    </div>
+
+</div>
+
+
+{{> notification_failure}}
+{{> notification_success}}
+
+<script>
+    //TODO: Xử lý url cho filter (button "Lọc sản phẩm")
+
+    // minprice on change
+    $("#minprice").change(function () {
+
+        let minprice = parseInt($("#minprice").val());
+        let maxprice = parseInt($("#maxprice").val());
+
+        if (!$("#maxprice").val())
+            $("#maxprice").val(2);
+
+        if (minprice >= maxprice) {
+            $("#minprice").val(maxprice - 1);
+        }
+    });
+
+    // maxprice on change
+    $("#maxprice").change(function () {
+        let minprice = parseInt($("#minprice").val());
+        let maxprice = parseInt($("#maxprice").val());
+
+        if (!$("#minprice").val())
+            $("#minprice").val(0);
+
+        if (maxprice <= minprice) {
+            $("#maxprice").val(minprice + 1);
+        }
+    });
+
+    // minquantity on change
+    $("#minquantity").change(function () {
+
+        let minquantity = parseInt($("#minquantity").val());
+        let maxquantity = parseInt($("#maxquantity").val());
+
+        if (!$("#maxquantity").val())
+            $("#maxquantity").val(2);
+
+        if (minquantity >= maxquantity) {
+            $("#minquantity").val(maxquantity - 1);
+        }
+    });
+
+    // maxquantity on change
+    $("#maxquantity").change(function () {
+        let minquantity = parseInt($("#minquantity").val());
+        let maxquantity = parseInt($("#maxquantity").val());
+
+        if (!$("#minquantity").val())
+            $("#minquantity").val(0);
+
+        if (maxquantity <= minquantity) {
+            $("#maxquantity").val(minquantity + 1);
+        }
+    });
+</script>

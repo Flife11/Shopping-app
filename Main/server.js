@@ -10,6 +10,7 @@ const Handlebars = require('./utilities/handlebarsHelper');
 const db = require('./utilities/db');
 
 // Setting up express app
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 const app = express();
 
 app.engine('.hbs', engine({

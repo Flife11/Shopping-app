@@ -15,3 +15,5 @@
 - Role:
   + client
   + admin
+
+- req.session.passport.user
