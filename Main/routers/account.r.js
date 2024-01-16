@@ -66,7 +66,10 @@ router.get('/google', checkLogin.isNotLoggedIn, accountController.renderGoogleLo
 router.get('/assignpassportGoogle', checkLogin.isNotLoggedIn, passport.authenticate('google', {
     failureRedirect: '/account/login',
     successRedirect: '/account'
-}));
+}), (req, res) => {
+    // TODO: fetch to /getbalance (Payment server) user.id (by token) and assign to req.session.passport.user.balance
+    // console.log(req.session.passport.user);
+});
 
 
 // Authenticated routes (require login)

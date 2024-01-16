@@ -5,10 +5,23 @@ const subcategoryModel = require('../models/subcategory.m');
 
 module.exports = {
 
-    getHome: async function (req, res) {
+    getHome: async function (req, res) { //Sẽ thay đổi sau
         const categories = await categoryModel.getAll();
         const subcategories = await subcategoryModel.getAll();
+        let user = null;
+        if (req.isAuthenticated()) {
+            user = req.session.passport.user;
+        }
         
-        res.render('home', { title: 'Trang chủ', categories: categories, subcategories: subcategories, isLoggedin: req.isAuthenticated() });
+        res.render('home', { title: 'Trang chủ', categories: categories, subcategories: subcategories, isLoggedin: req.isAuthenticated(), user: user });
+    },
+    getListProduct: async function (req, res) { //Sẽ thay đổi sau
+        const categories = await categoryModel.getAll();
+        const subcategories = await subcategoryModel.getAll();
+        let user = null;
+        if (req.isAuthenticated()) {
+            user = req.session.passport.user;
+        }
+        res.render('listproduct', { title: 'Danh sách sản phẩm', categories: categories, subcategories: subcategories, isLoggedin: req.isAuthenticated(), user: user });
     },
 }
