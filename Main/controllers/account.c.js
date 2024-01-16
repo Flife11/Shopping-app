@@ -6,6 +6,8 @@ const subcategoryModel = require('../models/subcategory.m');
 const secret = process.env.JWT_SECRET;
 
 module.exports = {
+
+    //TODO: thêm đếm số lượng sản phẩm trong giỏ hàng trong header.hbs
     getLogin: async function (req, res) {
         const categories = await categoryModel.getAll();
         const subcategories = await subcategoryModel.getAll();
@@ -53,8 +55,28 @@ module.exports = {
             }
             const result = await userModel.addUser(user);
 
-            // TODO: Fetch id and balance to Payment server: id = result[0].id
+            // Fetch id to Payment server: id = result[0].id to add user in Payment server
             // console log result: [ { id: 4 } ]
+            try {
+                let iduser = result[0].id;
+                let token = jwt.sign({ iduser }, secret, { expiresIn: 24 * 60 * 60 });
+                let data = { token: token };
+                let PaymentURL = process.env.PAYMENT_URL;
+                let rs = await fetch(PaymentURL + '/createuser', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                let rsData = await rs.json();
+                if (!rs.ok) {
+                    return res.status(500).json({ message: rsData.message });
+                }
+            } catch (error) {
+                console.log(error);
+                return res.status(500).json({ message: error });
+            } 
 
             // Return result
             if (result) {
@@ -122,7 +144,24 @@ module.exports = {
                 email: user.email,
                 role: 'client'
             }
-            await userModel.addUser(newUser);
+            const result = await userModel.addUser(newUser);
+
+            // Fetch to /createuser (Payment server) user.id (by token) to add user in Payment server
+            let iduser = result[0].id;
+            let token = jwt.sign({ iduser }, secret, { expiresIn: 24 * 60 * 60 });
+            let data = { token: token };
+            let PaymentURL = process.env.PAYMENT_URL;
+            let rs = await fetch(PaymentURL + '/createuser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            let rsData = await rs.json();
+            if(!rs.ok){
+                return res.status(500).json({message: rsData.message});
+            }
         }
         else {
             newUser = existedUser;

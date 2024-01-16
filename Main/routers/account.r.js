@@ -48,6 +48,7 @@ router.post('/login', (req, res, next) => {
             }
 
             // TODO: fetch to /getbalance (Payment server) user.id (by token) and assign to req.session.passport.user.balance
+            
 
             // Redirect based on role
             let role = req.session.passport.user.role;

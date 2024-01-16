@@ -1,7 +1,7 @@
 const router = require('express').Router();
+const clientController = require('../controllers/client.c');
 
-// Free routes
-// Pass isLoggedin vào render: dùng req.isAuthenticated()
+// [ Free routes ]
 
 // Render detail product
 router.get('/:productid', );
@@ -12,6 +12,6 @@ router.get('/:productid', );
 // TODO: xử lý parameter cho filter (bao gồm cả search) (filter = currentURL + filter params)
 router.get('/:catid/:subcatid', );
 
-router.get('/', );
+router.get('/', clientController.getHome);
 
 module.exports = router;

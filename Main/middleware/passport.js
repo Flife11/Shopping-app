@@ -12,7 +12,7 @@ const userModel = require('../models/user.m');
 // Start here
 
 passport.serializeUser((user, done) => {
-    done(null, { id: user.id, username: user.username, role: user.role });
+    done(null, user);
 });
 passport.deserializeUser(async (user, done) => {
 
