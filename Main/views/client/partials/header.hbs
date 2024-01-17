@@ -33,22 +33,25 @@
         <h5 style="margin-top:3px" id="dropdownSHOPButton" data-bs-toggle="dropdownSHOP">SHOP</h5>
         <div class="dropdown-menu dropdown-menu-custom category-dropdown-menu" aria-labelledby="dropdownSHOPButton">
             {{#each categories}}
-                <div class="subcategory-dropdown-menu" style="position: relative;">
-                    <a class="dropdown-item dropdown-item-custom" href="/{{this.id}}/-1"><strong>{{this.name}}</strong></a>
-                    <div class="dropdown-menu dropdown-menu-custom">
-                        {{#each ../subcategories}}
-                        {{#ifEquals this.catid ../id}}
-                            <a class="dropdown-item dropdown-item-custom" href="/{{this.catid}}/{{this.id}}"><strong>{{this.name}}</strong></a>
-                        {{/ifEquals}}
-                        {{/each}}
-                    </div>
+            <div class="subcategory-dropdown-menu" style="position: relative;">
+                <a class="dropdown-item dropdown-item-custom" href="/{{this.id}}/-1"><strong>{{this.name}}</strong></a>
+                <div class="dropdown-menu dropdown-menu-custom">
+                    {{#each ../subcategories}}
+                    {{#ifEquals this.catid ../id}}
+                    <a class="dropdown-item dropdown-item-custom"
+                        href="/{{this.catid}}/{{this.id}}"><strong>{{this.name}}</strong></a>
+                    {{/ifEquals}}
+                    {{/each}}
                 </div>
+            </div>
             {{/each}}
         </div>
     </div>
 
     {{!-- ABOUT US --}}
-    <a href="#" style="color: inherit; text-decoration:none; width:15%"><h5 style="margin-top:3px">ABOUT US</h5></a>
+    <a href="#" style="color: inherit; text-decoration:none; width:15%">
+        <h5 style="margin-top:3px">ABOUT US</h5>
+    </a>
 
     {{!-- SEARCH --}}
     <form id="searchForm" class="d-flex align-items-center position-relative" style="width: 45%;">
@@ -59,33 +62,52 @@
     </form>
 
     {{!-- CART (nhớ sửa href chỗ này nếu cần) --}}
-    <a href="/cart" style="color: inherit; text-decoration:none;margin-top:3px;width:11%;display:flex;justify-content: flex-end;"><h5 class="fa-solid fa-cart-shopping"></h5></a>
+    <a href="/cart"
+        style="color: inherit; text-decoration:none;margin-top:3px;width:11%;display:flex;justify-content: flex-end; position: relative;">
+        <h5 class="fa-solid fa-cart-shopping"></h5>
+        <span id="cart-count"
+            style="position: absolute; top:-0.4vw; right: -0.5vw;color: white; border-radius: 50%; padding: 5px;font-size:8px;font-weight:bold;background-color:red;width:1vw;height:1vw; display: flex; justify-content: center; align-items: center;">
+        </span>
+    </a>
 
     {{!-- USER --}}
-    <div class="dropdownUSER" style="width:3%;display:flex;justify-content:flex-end" >
+    <div class="dropdownUSER" style="width:3%;display:flex;justify-content:flex-end">
         <h5 style="margin-top:3px" id="dropdownMenuButton" data-bs-toggle="dropdownUSER" class="fa-solid fa-user"></h5>
         {{#if isLoggedin}}
-            <div class="dropdown-menu dropdown-menu-custom login-dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item dropdown-item-custom" href="/account"><strong>{{user.username}}</strong></a>
-                <a class="dropdown-item dropdown-item-custom" href="/account/editprofile"><strong>Cập nhật thông tin</strong></a>
-                <a class="dropdown-item dropdown-item-custom" href="/account/addfund"><strong>Nạp tiền</strong></a>
-                <a class="dropdown-item dropdown-item-custom" href="/account/orders"><strong>Đơn hàng</strong></a>
-                <a class="dropdown-item dropdown-item-custom" href="/account/logout"><strong>Đăng xuất</strong></a>
-            </div>
+        <div class="dropdown-menu dropdown-menu-custom login-dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item dropdown-item-custom" href="/account"><strong>{{user.username}}</strong></a>
+            <a class="dropdown-item dropdown-item-custom" href="/account/editprofile"><strong>Cập nhật thông
+                    tin</strong></a>
+            <a class="dropdown-item dropdown-item-custom" href="/account/addfund"><strong>Nạp tiền</strong></a>
+            <a class="dropdown-item dropdown-item-custom" href="/account/orders"><strong>Đơn hàng</strong></a>
+            <a class="dropdown-item dropdown-item-custom" href="/account/logout"><strong>Đăng xuất</strong></a>
+        </div>
         {{else}}
-            <div class="dropdown-menu dropdown-menu-custom login-dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item dropdown-item-custom" href="/account/login"><strong>Đăng nhập</strong></a>
-                <a class="dropdown-item dropdown-item-custom" href="/account/register"><strong>Đăng ký</strong></a>
-            </div>
+        <div class="dropdown-menu dropdown-menu-custom login-dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item dropdown-item-custom" href="/account/login"><strong>Đăng nhập</strong></a>
+            <a class="dropdown-item dropdown-item-custom" href="/account/register"><strong>Đăng ký</strong></a>
+        </div>
         {{/if}}
     </div>
 
 </div>
 
 
-
-
 <script>
+    window.onload = function () {
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        
+        if (cart.length > 0) {
+            //show cart count
+            $('#cart-count').show();
+            $('#cart-count').text(cart.length);
+        }
+
+        else {
+            //hide cart count
+            $('#cart-count').hide();
+        }
+    }
     $(document).ready(function () {
         // SHOP dropdown
         $('.dropdownSHOP').hover(function () {
