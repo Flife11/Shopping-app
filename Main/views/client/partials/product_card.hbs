@@ -1,29 +1,78 @@
+{{!-- Product card partial (note: wrapped by product) --}}
+<div class="card" style="width: 14rem; box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.5); margin:1.5vw">
 
-    <div class="card" style="width: 14rem; box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.5); margin:1.5vw">
-
-        <a href="/{{this.id}}" class="text-decoration-none text-dark" >
-            <img src="/public/image/{{this.image}}" class="card-img-top">
+    <a href="/{{this.id}}" class="text-decoration-none text-dark">
+        <img src="/public/image/{{this.image}}" class="card-img-top">
+    </a>
+    <div class="card-body">
+        <a href="/{{this.id}}" class="text-decoration-none text-dark">
+            <h5 class="card-title">{{this.name}}</h5>
         </a>
-        <div class="card-body">
-            <a href="/{{this.id}}" class="text-decoration-none text-dark">
-                <h5 class="card-title">{{this.name}}</h5>
-            </a>
-            <span class="card-text">Giá: {{this.price}} VNĐ</span>
-            <p class="card-text">Số lượng tồn: {{this.quantity}}</p>
-        </div>
-        {{#if this.quantity}}
-        <button class="btn rounded-circle p-3 lh-1"
-            style="background-color: #2a6792; position: absolute; bottom: -20px; right: -20px; width: 25%; height: auto;"
-            type="button">
-            <img src="/public/resource/add-to-cart.ico" class="img-fluid">
-        </button>
-
-        {{else}}
-        <a href="/{{this.id}}" class="card overlay d-flex align-items-center justify-content-center text-decoration-none"
-            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1;">
-            <strong class="py-3 px-4 text-center"
-                style="background-color: red; color: white; font-size:larger; transform: rotate(-30deg);">OUT OF
-                STOCK</strong>
-        </a>
-        {{/if}}
+        <span class="card-text">Giá: {{this.price}} VNĐ</span>
+        <p class="card-text">Số lượng tồn: {{this.quantity}}</p>
     </div>
+    {{#if this.quantity}}
+    <button class="btn rounded-circle p-3 lh-1" onclick="addCart(event)"
+        style="background-color: #2a6792; position: absolute; bottom: -20px; right: -20px; width: 25%; height: auto;"
+        type="button" id="{{this.id}}">
+        <img src="/public/resource/add-to-cart.ico" class="img-fluid">
+    </button>
+
+    {{else}}
+    <a href="/{{this.id}}" class="card overlay d-flex align-items-center justify-content-center text-decoration-none"
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1;">
+        <strong class="py-3 px-4 text-center"
+            style="background-color: red; color: white; font-size:larger; transform: rotate(-30deg);">OUT OF
+            STOCK
+        </strong>
+    </a>
+    {{/if}}
+</div>
+
+<script>
+
+    //$(() => {
+    //    localStorage.removeItem('cart');
+    //})
+
+    function addCart(event) {
+
+        // Get id of product
+        let Itemid = event.currentTarget.id;
+
+        // If Itemid is empty (error), display error message
+        if (!Itemid) {
+            $('#errorNotificationText').text('Lỗi! Không thể thêm sản phẩm vào giỏ hàng! Vui lòng thử lại sau!')
+            $('#errorNotificationModal').css('display', '');
+            return;
+        }
+
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+
+        // Check if product is already in cart, if yes, increase quantity
+        let isExist = false;
+        for (let i = 0; i < cart.length; i++) {
+            if (cart[i].id == Itemid) {
+                cart[i].quantity++;
+                isExist = true;
+                break;
+            }
+        }
+
+        // If not, add new product to cart
+        if (!isExist) {
+            cart.push({ id: Itemid, quantity: 1 });
+        }
+
+        // Update cart in localStorage
+        localStorage.setItem('cart', JSON.stringify(cart));
+
+        // Display success message
+        $('#successNotificationtext').text('Thêm sản phẩm vào giỏ hàng thành công!')
+        $('#successNotificationModal').css('display', '');
+
+        // Display cart count
+        $('#cart-count').text(cart.length);
+        $('#cart-count').show();
+    }
+</script>

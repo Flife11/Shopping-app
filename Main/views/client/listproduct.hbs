@@ -52,15 +52,19 @@
 
             {{!-- dropdown button --}}
             <div class="dropdown">
-                <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                    aria-expanded="false" style="border-color:#2a6792;color:#2a6792;border-radius:100px;border-width:1px;width:14vw">
+                <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                    style="border-color:#2a6792;color:#2a6792;border-radius:100px;border-width:1px;width:14vw">
                     Sắp xếp mặc định
                 </button>
                 <ul class="dropdown-menu dropdown-menu-custom" style="14vw;border-radius:20px;border-right:0px">
-                    <li class="dropdown-item dropdown-item-custom" data-value="priceasc" onclick="HandleSort()">Giá tăng dần</li>
-                    <li class="dropdown-item dropdown-item-custom" data-value="pricedesc" onclick="HandleSort()">Giá giảm dần</li>
-                    <li class="dropdown-item dropdown-item-custom" data-value="quantityasc" onclick="HandleSort()">Số lượng tăng dần</li>
-                    <li class="dropdown-item dropdown-item-custom" data-value="quantitydesc" onclick="HandleSort()">Số lượng giảm dần</li>
+                    <li class="dropdown-item dropdown-item-custom" data-value="priceasc" onclick="HandleSort()">Giá tăng
+                        dần</li>
+                    <li class="dropdown-item dropdown-item-custom" data-value="pricedesc" onclick="HandleSort()">Giá
+                        giảm dần</li>
+                    <li class="dropdown-item dropdown-item-custom" data-value="quantityasc" onclick="HandleSort()">Số
+                        lượng tăng dần</li>
+                    <li class="dropdown-item dropdown-item-custom" data-value="quantitydesc" onclick="HandleSort()">Số
+                        lượng giảm dần</li>
                 </ul>
             </div>
 
@@ -76,11 +80,10 @@
             </div>
             {{/each}}
         </div>
+
+        {{!-- pagination --}}
+        
     </div>
-</div>
-
-</div>
-
 </div>
 
 
@@ -88,6 +91,10 @@
 {{> notification_success}}
 
 <script>
+    //TODO: add pagination ^
+
+    //TODO: onload, assign value to filter box, sort box, pagination, search box
+
     // Xử lý url cho filter (button "Lọc sản phẩm")
     function HandleFilter() {
         let minprice = $("#minprice").val();
@@ -115,7 +122,7 @@
         params.delete('maxquantity');
         params.delete('sort');
         params.delete('page'); //?
-        
+
 
         //add the filter parameters
         if (minprice)

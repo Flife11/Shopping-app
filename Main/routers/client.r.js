@@ -3,7 +3,10 @@ const clientController = require('../controllers/client.c');
 
 // [ Free routes ]
 
-// Render detail product
+// Render cart
+router.get('/cart', );
+
+// Render detail product (note: handle related product, don't allow user to buy product if quantity = 0)
 router.get('/:productid', );
 
 // Render list product by category and subcategory 
