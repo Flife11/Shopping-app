@@ -1,14 +1,15 @@
-{{#each products}}
-    <div class="card" style="width: 18rem; box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.5);">
 
-        <a href="/{{this.id}}" class="text-decoration-none text-dark">
+    <div class="card" style="width: 14rem; box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.5); margin:1.5vw">
+
+        <a href="/{{this.id}}" class="text-decoration-none text-dark" >
             <img src="/public/image/{{this.image}}" class="card-img-top">
         </a>
         <div class="card-body">
             <a href="/{{this.id}}" class="text-decoration-none text-dark">
                 <h5 class="card-title">{{this.name}}</h5>
             </a>
-            <p class="card-text">{{this.price}}</p>
+            <span class="card-text">Giá: {{this.price}} VNĐ</span>
+            <p class="card-text">Số lượng tồn: {{this.quantity}}</p>
         </div>
         {{#if this.quantity}}
         <button class="btn rounded-circle p-3 lh-1"
@@ -18,12 +19,11 @@
         </button>
 
         {{else}}
-        <div class="overlay d-flex align-items-center justify-content-center"
+        <a href="/{{this.id}}" class="card overlay d-flex align-items-center justify-content-center text-decoration-none"
             style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1;">
             <strong class="py-3 px-4 text-center"
-                style="background-color: red; color: white; font-size: x-large; transform: rotate(-30deg);">OUT OF
+                style="background-color: red; color: white; font-size:larger; transform: rotate(-30deg);">OUT OF
                 STOCK</strong>
-        </div>
+        </a>
         {{/if}}
     </div>
-{{/each}}

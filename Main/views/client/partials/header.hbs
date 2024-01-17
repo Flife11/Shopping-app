@@ -1,26 +1,26 @@
 <style>
-    .dropdown-menu {
+    .dropdown-menu-custom {
         border: none;
         border-radius: 0;
         background-color: rgba(134, 194, 206, 0.8);
         border-right: 15px solid transparent;
     }
 
-    .dropdown-item {
+    .dropdown-item-custom {
         color: white;
     }
 
-    .dropdown-item:hover {
+    .dropdown-item-custom:hover {
         color: #2a6792 !important;
     }
 
-    .dropdown-item:active {
+    .dropdown-item-custom:active {
         background-color: transparent !important;
     }
 </style>
 
 <div class="bg-white d-flex align-items-center z-100 position-relative"
-    style="width: 100vw; height:10vh;color: #2a6792;">
+    style="width: 100%; height:10vh;color: #2a6792;">
 
     {{!-- HOME --}}
     <a href="/" class="d-flex justify-content-center me-5" style="text-decoration: none; color:inherit;width:15%;">
@@ -31,14 +31,14 @@
     {{!-- SHOP --}}
     <div class="dropdownSHOP" style="width:6%">
         <h5 style="margin-top:3px" id="dropdownSHOPButton" data-bs-toggle="dropdownSHOP">SHOP</h5>
-        <div class="dropdown-menu category-dropdown-menu" aria-labelledby="dropdownSHOPButton">
+        <div class="dropdown-menu dropdown-menu-custom category-dropdown-menu" aria-labelledby="dropdownSHOPButton">
             {{#each categories}}
                 <div class="subcategory-dropdown-menu" style="position: relative;">
-                    <a class="dropdown-item" href="/{{this.id}}/-1"><strong>{{this.name}}</strong></a>
-                    <div class="dropdown-menu">
+                    <a class="dropdown-item dropdown-item-custom" href="/{{this.id}}/-1"><strong>{{this.name}}</strong></a>
+                    <div class="dropdown-menu dropdown-menu-custom">
                         {{#each ../subcategories}}
                         {{#ifEquals this.catid ../id}}
-                            <a class="dropdown-item" href="/{{this.catid}}/{{this.id}}"><strong>{{this.name}}</strong></a>
+                            <a class="dropdown-item dropdown-item-custom" href="/{{this.catid}}/{{this.id}}"><strong>{{this.name}}</strong></a>
                         {{/ifEquals}}
                         {{/each}}
                     </div>
@@ -65,17 +65,17 @@
     <div class="dropdownUSER" style="width:3%;display:flex;justify-content:flex-end" >
         <h5 style="margin-top:3px" id="dropdownMenuButton" data-bs-toggle="dropdownUSER" class="fa-solid fa-user"></h5>
         {{#if isLoggedin}}
-            <div class="dropdown-menu login-dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="/account"><strong>{{user.username}}</strong></a>
-                <a class="dropdown-item" href="/account/editprofile"><strong>Cập nhật thông tin</strong></a>
-                <a class="dropdown-item" href="/account/addfund"><strong>Nạp tiền</strong></a>
-                <a class="dropdown-item" href="/account/orders"><strong>Đơn hàng</strong></a>
-                <a class="dropdown-item" href="/account/logout"><strong>Đăng xuất</strong></a>
+            <div class="dropdown-menu dropdown-menu-custom login-dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item dropdown-item-custom" href="/account"><strong>{{user.username}}</strong></a>
+                <a class="dropdown-item dropdown-item-custom" href="/account/editprofile"><strong>Cập nhật thông tin</strong></a>
+                <a class="dropdown-item dropdown-item-custom" href="/account/addfund"><strong>Nạp tiền</strong></a>
+                <a class="dropdown-item dropdown-item-custom" href="/account/orders"><strong>Đơn hàng</strong></a>
+                <a class="dropdown-item dropdown-item-custom" href="/account/logout"><strong>Đăng xuất</strong></a>
             </div>
         {{else}}
-            <div class="dropdown-menu login-dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="/account/login"><strong>Đăng nhập</strong></a>
-                <a class="dropdown-item" href="/account/register"><strong>Đăng ký</strong></a>
+            <div class="dropdown-menu dropdown-menu-custom login-dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item dropdown-item-custom" href="/account/login"><strong>Đăng nhập</strong></a>
+                <a class="dropdown-item dropdown-item-custom" href="/account/register"><strong>Đăng ký</strong></a>
             </div>
         {{/if}}
     </div>

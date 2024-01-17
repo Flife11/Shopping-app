@@ -44,6 +44,22 @@ module.exports = {
 
         products = products.filter(product => product.price >= minprice && product.price <= maxprice && product.quantity >= minquantity && product.quantity <= maxquantity);
 
+
+        // Filter sort
+        if(req.query.sort) {
+            if(req.query.sort == 'priceasc') {
+                products.sort((a, b) => a.price - b.price);
+            } else if(req.query.sort == 'pricedesc') {
+                products.sort((a, b) => b.price - a.price);
+            } else if(req.query.sort == 'quantityasc') {
+                products.sort((a, b) => a.quantity - b.quantity);
+            } else if(req.query.sort == 'quantitydesc') {
+                products.sort((a, b) => b.quantity - a.quantity);
+            }
+        }
+
+        //TODO: pagination
+
         // Render view
         res.render('listproduct', { title: 'Danh sách sản phẩm', categories: categories, subcategories: subcategories, products:products, isLoggedin: req.isAuthenticated(), user: user });
     },
