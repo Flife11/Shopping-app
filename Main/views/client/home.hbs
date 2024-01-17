@@ -1,5 +1,71 @@
 {{> header}}
-{{!-- cái carousel sửa lại thành 50vh nha Quân --}}
+
+<style>
+    h3{
+        color: #2a6792;
+    }
+    .cat div{
+        color: white;
+    }
+    .sub-cat div{
+        color: #2a6792;
+    }
+    a{
+        text-decoration: none;
+    }
+    .container {
+        width: 25%;
+        margin-top: 20px;
+        padding-top: 10px;
+        margin-left: 10px;
+        background-color: rgba(203, 203, 203, 0.427);
+        padding-bottom: 1000px;
+    }
+    .cat {
+        display: block;
+        margin: 10px;
+        padding: 10px;
+        background-color: #2a6792;
+        border: 1px solid black;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .sub-cat {
+        display: none;
+        margin: 10px;
+        padding: 10px;
+        background-color: antiquewhite;
+        border: 1px solid rgb(0, 0, 0);
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .outer:hover > .sub-cat {
+        display: block;
+    }
+</style>
+
+{{!-- banner (replace with image later) --}}
+<div style="width: 100%; height:50vh; background-color:black"></div>
+
+
+<div>
+
+    <center class="container">
+        <center><h3>Categories</h3></center>
+        {{#each categories}}
+        <div class="outer">
+            <a class="cat" href="/{{this.id}}/-1"><div>{{this.name}}</div></a>
+            {{#each ../subcategories}}
+            {{#ifEquals this.catid ../id}}
+                <a class="sub-cat" href="/{{this.catid}}/{{this.id}}"><div>{{this.name}}</div></a>
+            {{/ifEquals}}
+            {{/each}}
+        </div>
+        {{/each}}
+    </center>
+</div>
+
 
 {{> notification_failure}}
 {{> notification_success}}
+
