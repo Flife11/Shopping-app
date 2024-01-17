@@ -1,7 +1,8 @@
 {{#each products}}
     <div class="card" style="width: 18rem; box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.5);">
+
         <a href="/{{this.id}}" class="text-decoration-none text-dark">
-            <img src="./../../public/image/{{this.image}}" class="card-img-top" alt="...">
+            <img src="/public/image/{{this.image}}" class="card-img-top">
         </a>
         <div class="card-body">
             <a href="/{{this.id}}" class="text-decoration-none text-dark">
@@ -9,14 +10,20 @@
             </a>
             <p class="card-text">{{this.price}}</p>
         </div>
-        {{#if (eq this.quantity 0)}}
-            <div class="overlay d-flex align-items-center justify-content-center" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1;">
-                <strong class="py-3 px-4 text-center" style="background-color: red; color: white; font-size: x-large; transform: rotate(-30deg);">OUT OF STOCK</strong>
-            </div>
+        {{#if this.quantity}}
+        <button class="btn rounded-circle p-3 lh-1"
+            style="background-color: #2a6792; position: absolute; bottom: -20px; right: -20px; width: 25%; height: auto;"
+            type="button">
+            <img src="/public/resource/add-to-cart.ico" class="img-fluid">
+        </button>
+
         {{else}}
-            <button class="btn rounded-circle p-3 lh-1" style="background-color: #2a6792; position: absolute; bottom: -20px; right: -20px; width: 25%; height: auto;" type="button">
-                <img src="./../../public/resource/add-to-cart.ico" class="img-fluid">
-            </button>
+        <div class="overlay d-flex align-items-center justify-content-center"
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1;">
+            <strong class="py-3 px-4 text-center"
+                style="background-color: red; color: white; font-size: x-large; transform: rotate(-30deg);">OUT OF
+                STOCK</strong>
+        </div>
         {{/if}}
     </div>
 {{/each}}
