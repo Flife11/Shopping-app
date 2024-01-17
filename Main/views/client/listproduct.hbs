@@ -9,7 +9,7 @@
 {{!-- flexbox --}}
 <div class="d-flex" style="height: auto; width:100%; color:#2a6792">
 
-    {{!-- filter box --}}
+    {{!-- filter box (left) --}}
     <div style="height:auto;width:25%;background-color:white;padding:1vw;padding-top:2vw">
         {{!-- Header --}}
         <h5 class="text-center" style="margin-bottom:1vw;">BỘ LỌC</h5>
@@ -44,10 +44,42 @@
 
     </div>
 
-    {{!-- product box --}}
-    <div class="d-flex justify-content-between flex-wrap" style="width:75%; padding: 2vw">
-        {{> product_card}}
+
+    {{!-- (right) --}}
+    <div style="width:75%; ">
+        {{!-- sort box --}}
+        <div class="d-flex flex-row-reverse align-items-center" style="width: 100%;margin-top:2vw;padding-right:5.5vw;">
+
+            {{!-- dropdown button --}}
+            <div class="dropdown">
+                <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                    aria-expanded="false" style="border-color:#2a6792;color:#2a6792;border-radius:100px;border-width:1px;width:14vw">
+                    Sắp xếp mặc định
+                </button>
+                <ul class="dropdown-menu dropdown-menu-custom" style="14vw;border-radius:20px;border-right:0px">
+                    <li class="dropdown-item dropdown-item-custom" data-value="priceasc" onclick="HandleSort()">Giá tăng dần</li>
+                    <li class="dropdown-item dropdown-item-custom" data-value="pricedesc" onclick="HandleSort()">Giá giảm dần</li>
+                    <li class="dropdown-item dropdown-item-custom" data-value="quantityasc" onclick="HandleSort()">Số lượng tăng dần</li>
+                    <li class="dropdown-item dropdown-item-custom" data-value="quantitydesc" onclick="HandleSort()">Số lượng giảm dần</li>
+                </ul>
+            </div>
+
+            {{!-- sort by --}}
+            <div style="margin-right: 0.8vw;">Sắp xếp theo</div>
+        </div>
+
+        {{!-- product box --}}
+        <div class="d-flex flex-wrap" style="padding:1vw 2vw 2vw 2vw">
+            {{#each products}}
+            <div style="width: 33%;" class="d-flex justify-content-center">
+                {{> product_card}}
+            </div>
+            {{/each}}
+        </div>
     </div>
+</div>
+
+</div>
 
 </div>
 
@@ -56,7 +88,7 @@
 {{> notification_success}}
 
 <script>
-    //TODO: Xử lý url cho filter (button "Lọc sản phẩm")
+    // Xử lý url cho filter (button "Lọc sản phẩm")
     function HandleFilter() {
         let minprice = $("#minprice").val();
         let maxprice = $("#maxprice").val();
@@ -81,7 +113,9 @@
         params.delete('maxprice');
         params.delete('minquantity');
         params.delete('maxquantity');
-
+        params.delete('sort');
+        params.delete('page'); //?
+        
 
         //add the filter parameters
         if (minprice)
@@ -99,6 +133,30 @@
         //navigate to the new url
         window.location.href = url.toString();
 
+    }
+
+    // Xử lý url cho sort (dropdown "Sắp xếp theo")
+    function HandleSort() {
+        let sort = event.target.dataset.value;
+
+        //get current url
+        let url = new URL(window.location.href);
+
+        //get the search parameters from the url
+        let params = new URLSearchParams(url.search);
+
+        //remove the sort parameter
+        params.delete('sort');
+
+        //add the sort parameter
+        if (sort)
+            params.set('sort', sort);
+
+        //set the search parameters back to the url
+        url.search = params.toString();
+
+        //navigate to the new url
+        window.location.href = url.toString();
     }
 
     // minprice on change
