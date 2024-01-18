@@ -24,7 +24,6 @@
         display: block;
         margin: 10px;
         background-color: #2a6792;
-        border: 1px solid black;
         border-radius: 5px;
         cursor: pointer;
     }
@@ -36,7 +35,6 @@
         margin: 10px;
         padding: 10px;
         background-color: #91d1de;
-        border: 1px solid rgb(0, 0, 0);
         border-radius: 5px;
         cursor: pointer;
     }
@@ -62,7 +60,7 @@
     }
 
     .pagination p.active {
-    background-color: #4CAF50;
+    background-color: #91d1de;
     color: white;
     border-radius: 5px;
     }
@@ -75,7 +73,6 @@
 
 {{!-- banner (replace with image later) --}}
 <div style="width: 100%; height:50vh; background-color:black"></div>
-
 
 <center style="margin-top: 10px">
     <h3>Categories</h3>
@@ -97,18 +94,19 @@
     {{!-- product box --}}
     <div class="d-flex flex-wrap" style="padding:1vw 2vw 2vw 2vw">
         {{#each products}}
-        <div style="width: 33%;" class="d-flex justify-content-center">
+        <div style="width: 25%;" class="d-flex justify-content-center">
             {{> product_card}}
         </div>
         {{/each}}
     </div>
 
+    {{!-- pagination --}}
     <div class="pagination">
-        <a href="#">&laquo;</a>
+        <a type="button" onclick="changePage({{pre_page}})">&laquo;</a>
 
         {{#if (equals page 1)}}
         {{else}}
-        <a href="#">{{pre_page}}</a>
+        <a type="button" onclick="changePage({{pre_page}})">{{pre_page}}</a>
         {{/if}}
         
         
@@ -116,7 +114,7 @@
 
         {{#if (equals page total_page)}}
         {{else}}
-        <a href="#">{{next_page}}</a>
+        <a type="button" onclick="changePage({{next_page}})">{{next_page}}</a>
         {{/if}}
         
         
@@ -125,15 +123,25 @@
         {{#if (equals page total_page)}}
         {{else}}
         <p>...</p>
-        <a href="#">{{total_page}}</a>
+        <a type="button" onclick="changePage({{total_page}})">{{total_page}}</a>
         {{/if}}
         {{/if}}
 
-        <a href="#">&raquo;</a>
+        <a type="button" onclick="changePage({{next_page}})">&raquo;</a>
     </div>
 </center>
 
 
 {{> notification_failure}}
 {{> notification_success}}
+
+<script>
+    
+    $(document).ready(function () {
+
+    });
+    function changePage(page){
+        window.location.href = "/?page="+page;
+    }
+</script>
 
