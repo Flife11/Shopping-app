@@ -18,5 +18,14 @@ module.exports = {
         catch (error) {
             console.log(error);
         }
-    }
+    },
+    getCondition: async (columb, value) => {
+        try {
+            const sql = `SELECT * FROM "${tableName}" WHERE "${columb}"=${value}`;
+            const result = await db.db.query(sql);
+            return result;
+        } catch (error) {
+            console.log(error);
+        }
+    },
 }
