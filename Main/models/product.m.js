@@ -15,7 +15,7 @@ module.exports = {
 
         return result;
     },
-    getAll: async function () {
+    getAll : async function () {
         const result = await db.db.query(`SELECT * FROM "PRODUCT"`);
         return result;
     },

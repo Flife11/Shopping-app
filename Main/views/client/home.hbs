@@ -49,6 +49,28 @@
     .outer:hover > .outer-sub-cat {
         display: block;
     }
+
+    .pagination {
+    display: inline-block;
+    }
+
+    .pagination a, p{
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    }
+
+    .pagination p.active {
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    }
+
+    .pagination a:hover:not(.active) {
+    background-color: #ddd;
+    border-radius: 5px;
+    }
 </style>
 
 {{!-- banner (replace with image later) --}}
@@ -79,6 +101,35 @@
             {{> product_card}}
         </div>
         {{/each}}
+    </div>
+
+    <div class="pagination">
+        <a href="#">&laquo;</a>
+
+        {{#if (equals page 1)}}
+        {{else}}
+        <a href="#">{{pre_page}}</a>
+        {{/if}}
+        
+        
+        <p class="active">{{page}}</p>
+
+        {{#if (equals page total_page)}}
+        {{else}}
+        <a href="#">{{next_page}}</a>
+        {{/if}}
+        
+        
+        {{#if (equals page (subtract total_page 1))}}
+        {{else}}
+        {{#if (equals page total_page)}}
+        {{else}}
+        <p>...</p>
+        <a href="#">{{total_page}}</a>
+        {{/if}}
+        {{/if}}
+
+        <a href="#">&raquo;</a>
     </div>
 </center>
 

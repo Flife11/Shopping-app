@@ -14,7 +14,17 @@ module.exports = {
             user = req.session.passport.user;
         }
         let products = await productModel.getAll();
-        res.render('home', { title: 'Trang chủ', categories: categories, subcategories: subcategories, products: products, isLoggedin: req.isAuthenticated(), user: user });
+
+        const page = 1;
+        const perpage = 3;
+
+        const total_page = Math.ceil(products.length / perpage);
+        const pre_page = page - 1 > 0 ? page - 1 : 1;
+        const next_page = page + 1 <= total_page ? page + 1 : total_page;
+        products = products.slice((page - 1) * perpage, page * perpage);
+
+
+        res.render('home', { title: 'Trang chủ', categories: categories, subcategories: subcategories, products: products, isLoggedin: req.isAuthenticated(), user: user, total_page: total_page, next_page: next_page, pre_page: pre_page, page: page});
     },
     getListProduct: async function (req, res) { //Sẽ thay đổi sau
         
