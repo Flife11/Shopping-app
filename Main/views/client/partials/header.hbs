@@ -1,0 +1,150 @@
+<style>
+    .dropdown-menu-custom {
+        border: none;
+        border-radius: 0;
+        background-color: rgba(134, 194, 206, 0.8);
+        border-right: 15px solid transparent;
+    }
+
+    .dropdown-item-custom {
+        color: white;
+    }
+
+    .dropdown-item-custom:hover {
+        color: #2a6792 !important;
+    }
+
+    .dropdown-item-custom:active {
+        background-color: transparent !important;
+    }
+</style>
+
+<div class="bg-white d-flex align-items-center z-100 position-relative"
+    style="width: 100%; height:10vh;color: #2a6792;">
+
+    {{!-- HOME --}}
+    <a href="/" class="d-flex justify-content-center me-5" style="text-decoration: none; color:inherit;width:15%;">
+        <img src="/public/resource/icon.ico" style="width:2.5vw;height:2.5vw" class=" me-2">
+        <h5 style="margin-top:3px">Random Store</h5>
+    </a>
+
+    {{!-- SHOP --}}
+    <div class="dropdownSHOP" style="width:6%">
+        <h5 style="margin-top:3px" id="dropdownSHOPButton" data-bs-toggle="dropdownSHOP">SHOP</h5>
+        <div class="dropdown-menu dropdown-menu-custom category-dropdown-menu" aria-labelledby="dropdownSHOPButton">
+            {{#each categories}}
+            <div class="subcategory-dropdown-menu" style="position: relative;">
+                <a class="dropdown-item dropdown-item-custom" href="/{{this.id}}/-1"><strong>{{this.name}}</strong></a>
+                <div class="dropdown-menu dropdown-menu-custom">
+                    {{#each ../subcategories}}
+                    {{#ifEquals this.catid ../id}}
+                    <a class="dropdown-item dropdown-item-custom"
+                        href="/{{this.catid}}/{{this.id}}"><strong>{{this.name}}</strong></a>
+                    {{/ifEquals}}
+                    {{/each}}
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+
+    {{!-- ABOUT US --}}
+    <a href="#" style="color: inherit; text-decoration:none; width:15%">
+        <h5 style="margin-top:3px">ABOUT US</h5>
+    </a>
+
+    {{!-- SEARCH --}}
+    <form id="searchForm" class="d-flex align-items-center position-relative" style="width: 45%;">
+        <input type="text" class="form-control" placeholder="Tìm kiếm" style="padding-right: 30px;">
+        <button type="submit" class="border-0 bg-transparent position-absolute" style="right: 5px; color:inherit">
+            <i class="fa fa-search"></i>
+        </button>
+    </form>
+
+    {{!-- CART (nhớ sửa href chỗ này nếu cần) --}}
+    <a href="/cart"
+        style="color: inherit; text-decoration:none;margin-top:3px;width:11%;display:flex;justify-content: flex-end; position: relative;">
+        <h5 class="fa-solid fa-cart-shopping"></h5>
+        <span id="cart-count"
+            style="position: absolute; top:-0.4vw; right: -0.5vw;color: white; border-radius: 50%; padding: 5px;font-size:8px;font-weight:bold;background-color:red;width:1vw;height:1vw; display: flex; justify-content: center; align-items: center;">
+        </span>
+    </a>
+
+    {{!-- USER --}}
+    <div class="dropdownUSER" style="width:3%;display:flex;justify-content:flex-end">
+        <h5 style="margin-top:3px" id="dropdownMenuButton" data-bs-toggle="dropdownUSER" class="fa-solid fa-user"></h5>
+        {{#if isLoggedin}}
+        <div class="dropdown-menu dropdown-menu-custom login-dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item dropdown-item-custom" href="/account"><strong>{{user.username}}</strong></a>
+            <a class="dropdown-item dropdown-item-custom" href="/account/editprofile"><strong>Cập nhật thông
+                    tin</strong></a>
+            <a class="dropdown-item dropdown-item-custom" href="/account/addfund"><strong>Nạp tiền</strong></a>
+            <a class="dropdown-item dropdown-item-custom" href="/account/orders"><strong>Đơn hàng</strong></a>
+            <a class="dropdown-item dropdown-item-custom" href="/account/logout"><strong>Đăng xuất</strong></a>
+        </div>
+        {{else}}
+        <div class="dropdown-menu dropdown-menu-custom login-dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item dropdown-item-custom" href="/account/login"><strong>Đăng nhập</strong></a>
+            <a class="dropdown-item dropdown-item-custom" href="/account/register"><strong>Đăng ký</strong></a>
+        </div>
+        {{/if}}
+    </div>
+
+</div>
+
+
+<script>
+    window.onload = function () {
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        
+        if (cart.length > 0) {
+            //show cart count
+            $('#cart-count').show();
+            $('#cart-count').text(cart.length);
+        }
+
+        else {
+            //hide cart count
+            $('#cart-count').hide();
+        }
+    }
+    $(document).ready(function () {
+        // SHOP dropdown
+        $('.dropdownSHOP').hover(function () {
+            $(this).find('.category-dropdown-menu').stop(true, true).show();
+        }, function () {
+            $(this).find('.category-dropdown-menu').stop(true, true).hide();
+        });
+
+        $('.subcategory-dropdown-menu').hover(function () {
+            var $dropdownMenu = $(this).find('.dropdown-menu');
+            if ($dropdownMenu.find('.dropdown-item').length > 0) {
+                $dropdownMenu.stop(true, true).show().css({
+                    'left': '102%',
+                    'top': '0',
+                    'margin-top': '-1px',
+                    'position': 'absolute'
+                });
+            }
+        }, function () {
+            $(this).find('.dropdown-menu').stop(true, true).hide();
+        });
+
+        // USER dropdown
+        $('.dropdownUSER').hover(function () {
+            $(this).find('.login-dropdown-menu').stop(true, true).show();
+        }, function () {
+            $(this).find('.login-dropdown-menu').stop(true, true).hide();
+        });
+
+        // SEARCH submit
+        $('#searchForm').submit(function (e) {
+            e.preventDefault();
+            var search = $(this).find('input').val();
+            if (search == '') {
+                return;
+            }
+            window.location.href = '/-1/-1?search=' + search;
+        });
+    });
+</script>

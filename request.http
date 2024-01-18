@@ -1,0 +1,14 @@
+POST https://localhost:5000/createuser
+Content-Type: application/json
+
+{
+   "token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZHVzZXIiOiIxMjMiLCJpYXQiOjE3MDUxNTI3NTN9.wVkBix22HvY7LgVOqkyuOS-2-YG9WD2l7cbxknbl7k8"
+}
+
+##########
+
+POST https://localhost:5000/payment
+Content-Type: application/json
+{
+    "token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZHVzZXIiOjEyMywiZGF0ZSI6IjIwMjQtMDEtMTMiLCJpZG9yZGVyIjoxLCJhbW91bnQiOjE1MDAwMCwiaWF0IjoxNzA1MTU1OTQ4fQ.01kQ1WAAk1845eb3dQJwFU7gVgPziR3HP_M5iRt0hl8"
+}

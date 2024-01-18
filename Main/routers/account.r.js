@@ -5,8 +5,16 @@ const accountController = require('../controllers/account.c.js');
 const checkLogin = require('../middleware/checkLogin');
 
 // Logout
-// TODO: Tạo 1 nút logout trên header của logged in, method post, gửi request tới /account/logout
-// TODO: Tạo header cho logged in và not logged in
+router.get('/logout', checkLogin.isLoggedIn, (req, res) => {
+    req.logOut(err => {
+        console.log(err);
+        next(err);
+    });
+
+    // Back to home page
+    res.redirect("/");
+});
+// TODO: Sửa lại UI của user trong header
 
 
 // Free routes
@@ -22,8 +30,11 @@ router.post('/login', (req, res, next) => {
             return next(err); // Handle error
         }
         if (!user) {
-            // Render view if authentication fails
-            return res.render('login', { title: 'Login', error: info });
+            // Render view if authentication fails (keep old username and password)
+            let oldUsername = req.body.username;
+            let oldPassword = req.body.password;
+
+            return res.render('login', { title: 'Login', error: info, oldUsername: oldUsername, oldPassword: oldPassword });
         }
         req.logIn(user, (err) => {
             if (err) {
@@ -35,6 +46,9 @@ router.post('/login', (req, res, next) => {
             } else {
                 req.session.cookie.expires = false;
             }
+
+            // TODO: fetch to /getbalance (Payment server) user.id (by token) and assign to req.session.passport.user.balance
+            
 
             // Redirect based on role
             let role = req.session.passport.user.role;
@@ -52,16 +66,23 @@ router.get('/google', checkLogin.isNotLoggedIn, accountController.renderGoogleLo
 router.get('/assignpassportGoogle', checkLogin.isNotLoggedIn, passport.authenticate('google', {
     failureRedirect: '/account/login',
     successRedirect: '/account'
-}));
+}), (req, res) => {
+    // TODO: fetch to /getbalance (Payment server) user.id (by token) and assign to req.session.passport.user.balance
+    // console.log(req.session.passport.user);
+});
 
 
 // Authenticated routes (require login)
 // Phải kiểm tra user đã login mới cho zô đây :0
 // Ví dụ: xem profile, sửa profile, xem orders, chi tiết orders, thanh toán, nạp tiền,...
 
-router.get('/', checkLogin.isClient,(req, res) => {
+router.get('/', checkLogin.isClient, (req, res) => {
     res.send('Trang chu cua account') //xoa cho nay
 });
+
+router.get('/editprofile', checkLogin.isClient, ); //them cho nay (Update trong CRUD Tài khoản)
+router.get('/addfund', checkLogin.isClient, ); //them cho nay
+router.get('/checkout', checkLogin.isClient, ); //them cho nay (thanh toán thì bắt buộc phải login)
 router.get('/orders/:id', checkLogin.isClient, ); //them cho nay
 router.get('/orders', checkLogin.isClient, ); //them cho nay
 
