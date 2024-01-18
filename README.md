@@ -7,6 +7,11 @@
 - Hiển thị failure noti:  
   `$('#failureNotificationText').text('test')`  
   `$('#failureNotificationModal').css('display', '');`
+- Hiển thị số lượng sp trong giỏ:
+  `$('#cart-count').show();`
+  `$('#cart-count').text(cart.length);`
+- Bỏ hiển thị số lượng sp trong giỏ (số sp = 0):
+  `$('#cart-count').hide();`
 
 - Error code (register):
   + 401: username error
@@ -15,3 +20,5 @@
 - Role:
   + client
   + admin
+
+- req.session.passport.user

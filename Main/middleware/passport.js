@@ -12,14 +12,14 @@ const userModel = require('../models/user.m');
 // Start here
 
 passport.serializeUser((user, done) => {
-    done(null, { username: user.username, role: user.role });
+    done(null, user);
 });
 passport.deserializeUser(async (user, done) => {
 
     const userInfo = await userModel.getUser(user.username);
     //console.log(user); //
     if (!userInfo) {
-        return done("Invalid user", null);
+        return done("User không hợp lệ!", null);
     }
     done(null, userInfo);
 
@@ -42,7 +42,7 @@ module.exports = app => {
             return done(null, user);
         }
 
-        done("Wrong username or password!", false);
+        done("Tên đăng nhập hoặc mật khẩu sai!", false);
 
     }));
 
@@ -58,7 +58,7 @@ module.exports = app => {
             });
         }
         else {
-            return done("Invalid authentication", false);
+            return done("Xác thực thất bại!", false);
         }
     }));
 
