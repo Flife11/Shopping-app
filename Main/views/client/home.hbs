@@ -1,5 +1,139 @@
 {{> header}}
-{{!-- cái carousel sửa lại thành 50vh nha Quân --}}
+
+<style>
+    h3{
+        color: #2a6792;
+    }
+    .cat div{
+        color: white;
+    }
+    .sub-cat div{
+        color: #2a6792;
+    }
+    a{
+        text-decoration: none;
+    }
+    .container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        margin-inline: 0px;
+        background-color: rgba(203, 203, 203, 0.427);
+    }
+    .cat {
+        display: block;
+        margin: 10px;
+        background-color: #2a6792;
+        border: 1px solid black;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .outer {
+        flex: 1;
+    }
+    .sub-cat {
+        display: block;
+        margin: 10px;
+        padding: 10px;
+        background-color: #91d1de;
+        border: 1px solid rgb(0, 0, 0);
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .sub-cat:hover {
+        background-color: white;
+    }
+    .outer-sub-cat {
+        display: none;
+    }
+    .outer:hover > .outer-sub-cat {
+        display: block;
+    }
+
+    .pagination {
+    display: inline-block;
+    }
+
+    .pagination a, p{
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    }
+
+    .pagination p.active {
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    }
+
+    .pagination a:hover:not(.active) {
+    background-color: #ddd;
+    border-radius: 5px;
+    }
+</style>
+
+{{!-- banner (replace with image later) --}}
+<div style="width: 100%; height:50vh; background-color:black"></div>
+
+
+<center style="margin-top: 10px">
+    <h3>Categories</h3>
+    <div class="container">
+        {{#each categories}}
+        <div class="outer">
+            <a class="cat" href="/{{this.id}}/-1"><div>{{this.name}}</div></a>
+            <div class="outer-sub-cat">
+
+            {{#each ../subcategories}}
+            {{#ifEquals this.catid ../id}}
+                <a class="sub-cat" href="/{{this.catid}}/{{this.id}}"><div>{{this.name}}</div></a>
+            {{/ifEquals}}
+            {{/each}}
+            </div>
+        </div>
+        {{/each}}
+    </div>
+    {{!-- product box --}}
+    <div class="d-flex flex-wrap" style="padding:1vw 2vw 2vw 2vw">
+        {{#each products}}
+        <div style="width: 33%;" class="d-flex justify-content-center">
+            {{> product_card}}
+        </div>
+        {{/each}}
+    </div>
+
+    <div class="pagination">
+        <a href="#">&laquo;</a>
+
+        {{#if (equals page 1)}}
+        {{else}}
+        <a href="#">{{pre_page}}</a>
+        {{/if}}
+        
+        
+        <p class="active">{{page}}</p>
+
+        {{#if (equals page total_page)}}
+        {{else}}
+        <a href="#">{{next_page}}</a>
+        {{/if}}
+        
+        
+        {{#if (equals page (subtract total_page 1))}}
+        {{else}}
+        {{#if (equals page total_page)}}
+        {{else}}
+        <p>...</p>
+        <a href="#">{{total_page}}</a>
+        {{/if}}
+        {{/if}}
+
+        <a href="#">&raquo;</a>
+    </div>
+</center>
+
 
 {{> notification_failure}}
 {{> notification_success}}
+
