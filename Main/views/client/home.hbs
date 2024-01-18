@@ -14,32 +14,39 @@
         text-decoration: none;
     }
     .container {
-        width: 25%;
+        display: flex;
+        justify-content: center;
         margin-top: 20px;
-        padding-top: 10px;
-        margin-left: 10px;
+        margin-inline: 0px;
         background-color: rgba(203, 203, 203, 0.427);
-        padding-bottom: 1000px;
     }
     .cat {
         display: block;
         margin: 10px;
-        padding: 10px;
         background-color: #2a6792;
         border: 1px solid black;
         border-radius: 5px;
         cursor: pointer;
     }
+    .outer {
+        flex: 1;
+    }
     .sub-cat {
-        display: none;
+        display: block;
         margin: 10px;
         padding: 10px;
-        background-color: antiquewhite;
+        background-color: #91d1de;
         border: 1px solid rgb(0, 0, 0);
         border-radius: 5px;
         cursor: pointer;
     }
-    .outer:hover > .sub-cat {
+    .sub-cat:hover {
+        background-color: white;
+    }
+    .outer-sub-cat {
+        display: none;
+    }
+    .outer:hover > .outer-sub-cat {
         display: block;
     }
 </style>
@@ -48,22 +55,32 @@
 <div style="width: 100%; height:50vh; background-color:black"></div>
 
 
-<div>
-
-    <center class="container">
-        <center><h3>Categories</h3></center>
+<center style="margin-top: 10px">
+    <h3>Categories</h3>
+    <div class="container">
         {{#each categories}}
         <div class="outer">
             <a class="cat" href="/{{this.id}}/-1"><div>{{this.name}}</div></a>
+            <div class="outer-sub-cat">
+
             {{#each ../subcategories}}
             {{#ifEquals this.catid ../id}}
                 <a class="sub-cat" href="/{{this.catid}}/{{this.id}}"><div>{{this.name}}</div></a>
             {{/ifEquals}}
             {{/each}}
+            </div>
         </div>
         {{/each}}
-    </center>
-</div>
+    </div>
+    {{!-- product box --}}
+    <div class="d-flex flex-wrap" style="padding:1vw 2vw 2vw 2vw">
+        {{#each products}}
+        <div style="width: 33%;" class="d-flex justify-content-center">
+            {{> product_card}}
+        </div>
+        {{/each}}
+    </div>
+</center>
 
 
 {{> notification_failure}}

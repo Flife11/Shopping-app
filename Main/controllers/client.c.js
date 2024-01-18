@@ -13,8 +13,8 @@ module.exports = {
         if (req.isAuthenticated()) {
             user = req.session.passport.user;
         }
-        
-        res.render('home', { title: 'Trang chủ', categories: categories, subcategories: subcategories, isLoggedin: req.isAuthenticated(), user: user });
+        let products = await productModel.getAll();
+        res.render('home', { title: 'Trang chủ', categories: categories, subcategories: subcategories, products: products, isLoggedin: req.isAuthenticated(), user: user });
     },
     getListProduct: async function (req, res) { //Sẽ thay đổi sau
         
