@@ -9,6 +9,17 @@ Content-Type: application/json
 
 POST https://localhost:5000/payment
 Content-Type: application/json
+
 {
-    "token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZHVzZXIiOjEyMywiZGF0ZSI6IjIwMjQtMDEtMTMiLCJpZG9yZGVyIjoxLCJhbW91bnQiOjE1MDAwMCwiaWF0IjoxNzA1MTU1OTQ4fQ.01kQ1WAAk1845eb3dQJwFU7gVgPziR3HP_M5iRt0hl8"
+    "token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZHVzZXIiOjEyMywiZGF0ZSI6IjIwMjQtMDEtMTMiLCJpZG9yZGVyIjoxLCJhbW91bnQiOjE1MDAwMCwiaWF0IjoxNzA1NTcxMzc2fQ.Jg8ewIWNUvqt2AnE1E1ZfXEGBNNrr7KQ3hrxcD2CfRg"
+}
+
+
+
+##########
+POST https://localhost:5000/historypayment
+Content-Type: application/json
+
+{
+    "token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZHVzZXIiOjEyMywiaWF0IjoxNzA1NTcxNzk1fQ.TCDByvaTFyJjuT0CnQyIQUTKeCpD1kGV6_oNzWD0eOM"
 }
