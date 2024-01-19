@@ -7,7 +7,7 @@ const clientController = require('../controllers/client.c');
 router.get('/cart', );
 
 // Render detail product (note: handle related product, don't allow user to buy product if quantity = 0)
-router.get('/:productid', );
+router.get('/:productid', clientController.getProductDetail);
 
 // Render list product by category and subcategory 
 // if subcategory = -1 => render list product by only category
