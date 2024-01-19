@@ -62,29 +62,6 @@
         display: block;
     }
 
-    .pagination {
-        display: flex;
-        justify-content: center;
-    }
-
-    .pagination a,
-    p {
-        color: black;
-        float: left;
-        padding: 8px 16px;
-        text-decoration: none;
-    }
-
-    .pagination p.active {
-        background-color: #91d1de;
-        color: white;
-        border-radius: 5px;
-    }
-
-    .pagination a:hover:not(.active) {
-        background-color: #ddd;
-        border-radius: 5px;
-    }
 </style>
 
 {{!-- banner (replace with image later) --}}
@@ -123,42 +100,7 @@
     </div>
 
     {{!-- pagination --}}
-    <div class="pagination">
-        {{#if (equals page 1)}}
-        <a type="button">&laquo;</a>
-        {{else}}
-        <a type="button" onclick="changePage({{pre_page}})">&laquo;</a>
-        {{/if}}
-
-        {{#if (equals page 1)}}
-        {{else}}
-        <a type="button" onclick="changePage({{pre_page}})">{{pre_page}}</a>
-        {{/if}}
-
-
-        <p class="active">{{page}}</p>
-
-        {{#if (equals page total_page)}}
-        {{else}}
-        <a type="button" onclick="changePage({{next_page}})">{{next_page}}</a>
-        {{/if}}
-
-
-        {{#if (equals page (subtract total_page 1))}}
-        {{else}}
-        {{#if (equals page total_page)}}
-        {{else}}
-        <p>...</p>
-        <a type="button" onclick="changePage({{total_page}})">{{total_page}}</a>
-        {{/if}}
-        {{/if}}
-
-        {{#if (equals page total_page)}}
-        <a type="button">&raquo;</a>
-        {{else}}
-        <a type="button" onclick="changePage({{next_page}})">&raquo;</a>
-        {{/if}}
-    </div>
+    {{> pagination}}
 </div>
 
 
@@ -167,8 +109,3 @@
 
 {{> footer}}
 
-<script>
-    function changePage(page) {
-        window.location.href = "/?page=" + page;
-    }
-</script>
