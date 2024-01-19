@@ -45,6 +45,13 @@
 
     {{!-- (right) --}}
     <div style="width:75%; ">
+        {{!-- category/sub category name --}}
+        {{#if category}}
+        <div class="d-flex justify-content-center align-items-center" style="width: 100%;margin-top:2vw;">
+            <h5 style="color:#2a6792; text-transform: uppercase;margin-bottom:0">{{category}}</h5>
+        </div>
+        {{/if}}
+
         {{!-- sort box --}}
         <div class="d-flex flex-row-reverse align-items-center" style="width: 100%;margin-top:2vw;padding-right:5.5vw;">
 
@@ -81,7 +88,6 @@
 
         {{!-- pagination --}}
         {{>pagination}}
-        
     </div>
 </div>
 
