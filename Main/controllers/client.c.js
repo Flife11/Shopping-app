@@ -75,12 +75,14 @@ module.exports = {
         res.render('listproduct', { title: 'Danh sách sản phẩm', categories: categories, subcategories: subcategories, products:products, isLoggedin: req.isAuthenticated(), user: user });
     },
     getProductDetail: async function (req, res) { //Sẽ thay đổi sau
+        const categories = await categoryModel.getAll();
+        const subcategories = await subcategoryModel.getAll();
         let user = null;
         if (req.isAuthenticated()) {
             user = req.session.passport.user;
         }
         const id = req.params.productid;
         let product = await productModel.getOne(id);
-        res.render('product_detail', { title: product[0].name, product: product[0], isLoggedin: req.isAuthenticated(), user: user });
+        res.render('product_detail', { title: product[0].name, categories: categories, subcategories: subcategories, product: product[0], isLoggedin: req.isAuthenticated(), user: user });
     }
 }
