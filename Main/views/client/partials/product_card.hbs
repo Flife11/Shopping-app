@@ -10,6 +10,18 @@
     #addCart:hover{
         background-color: #61adbc;
     }
+    .img-resize{
+        width: 100% ;
+        height: 238px;
+    }
+    .name-resize{
+        height: 48px;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        text-overflow: ellipsis;
+    }
 </style>
  
 {{!-- Product card partial (note: wrapped by product) --}}
@@ -17,11 +29,11 @@
 
     {{!-- product card --}}
     <a href="/{{this.id}}" class="text-decoration-none text-dark">
-        <img src="/public/image/{{this.image}}" class="card-img-top">
+        <img src="/public/image/{{this.image}}" class="img-resize">
     </a>
     <div class="card-body">
         <a href="/{{this.id}}" class="text-decoration-none text-dark">
-            <h5 class="card-title">{{this.name}}</h5>
+            <h5 class="card-title name-resize">{{this.name}}</h5>
         </a>
         <span class="card-text">Giá: {{this.price}} VNĐ</span>
         <div class="card-text">Số lượng tồn: {{this.quantity}}</div>
