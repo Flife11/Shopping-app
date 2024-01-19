@@ -1,6 +1,7 @@
 {{!-- Product card partial (note: wrapped by product) --}}
 <div class="card" style="width: 14rem; box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.25); margin:1.5vw; border:none">
 
+    {{!-- product card --}}
     <a href="/{{this.id}}" class="text-decoration-none text-dark">
         <img src="/public/image/{{this.image}}" class="card-img-top">
     </a>
@@ -9,15 +10,16 @@
             <h5 class="card-title">{{this.name}}</h5>
         </a>
         <span class="card-text">Giá: {{this.price}} VNĐ</span>
-        <p class="card-text">Số lượng tồn: {{this.quantity}}</p>
+        <div class="card-text">Số lượng tồn: {{this.quantity}}</div>
     </div>
+
+    {{!-- out of stock --}}
     {{#if this.quantity}}
     <button class="btn rounded-circle p-3 lh-1" onclick="addCart(event)"
-        style="background-color: #2a6792; position: absolute; bottom: -20px; right: -20px; width: 25%; height: auto;"
+        style="background-color: #2a6792; position: absolute; bottom: -20px; right: -20px; width: 55.91px; height: auto;"
         type="button" id="{{this.id}}">
         <img src="/public/resource/add-to-cart.ico" class="img-fluid">
     </button>
-
     {{else}}
     <a href="/{{this.id}}" class="card overlay d-flex align-items-center justify-content-center text-decoration-none"
         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1;">
