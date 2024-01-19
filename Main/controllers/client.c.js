@@ -1,6 +1,7 @@
 const categoryModel = require('../models/category.m');
 const subcategoryModel = require('../models/subcategory.m');
 const productModel = require('../models/product.m');
+const { as } = require('pg-promise');
 
 // Pass isLoggedin vào render: dùng req.isAuthenticated()
 
@@ -73,4 +74,13 @@ module.exports = {
         // Render view
         res.render('listproduct', { title: 'Danh sách sản phẩm', categories: categories, subcategories: subcategories, products:products, isLoggedin: req.isAuthenticated(), user: user });
     },
+    getProductDetail: async function (req, res) { //Sẽ thay đổi sau
+        let user = null;
+        if (req.isAuthenticated()) {
+            user = req.session.passport.user;
+        }
+        const id = req.params.productid;
+        let product = await productModel.getOne(id);
+        res.render('product_detail', { title: product[0].name, product: product[0], isLoggedin: req.isAuthenticated(), user: user });
+    }
 }
