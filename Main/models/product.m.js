@@ -19,6 +19,10 @@ module.exports = {
         const result = await db.db.query(`SELECT * FROM "PRODUCT"`);
         return result;
     },
+    getProduct : async function (id) {
+        const result = await db.db.oneOrNone(`SELECT * FROM "PRODUCT" WHERE id = ${id}`);
+        return result;
+    },
 
     
 

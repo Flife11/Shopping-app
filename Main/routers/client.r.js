@@ -4,7 +4,8 @@ const clientController = require('../controllers/client.c');
 // [ Free routes ]
 
 // Render cart
-router.get('/cart', );
+router.get('/cart', clientController.getCart);
+router.post('/cart', clientController.postCart);
 
 // Render detail product (note: handle related product, don't allow user to buy product if quantity = 0)
 router.get('/:productid', );
