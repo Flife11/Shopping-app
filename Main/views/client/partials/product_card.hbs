@@ -1,3 +1,17 @@
+<style>
+    #addCart {
+        background-color: #2a6792; 
+        position: absolute; 
+        bottom: -20px; 
+        right: -20px; 
+        width: 55.91px; 
+        height: auto;
+    }
+    #addCart:hover{
+        background-color: #61adbc;
+    }
+</style>
+ 
 {{!-- Product card partial (note: wrapped by product) --}}
 <div class="card" style="width: 14rem; box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.25); margin:1.5vw; border:none">
 
@@ -15,9 +29,7 @@
 
     {{!-- out of stock --}}
     {{#if this.quantity}}
-    <button class="btn rounded-circle p-3 lh-1" onclick="addCart(event)"
-        style="background-color: #2a6792; position: absolute; bottom: -20px; right: -20px; width: 55.91px; height: auto;"
-        type="button" id="{{this.id}}">
+    <button id="addCart" class="btn rounded-circle p-3 lh-1" onclick="addCart(event)" type="button" id="{{this.id}}">
         <img src="/public/resource/add-to-cart.ico" class="img-fluid">
     </button>
     {{else}}
