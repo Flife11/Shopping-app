@@ -20,9 +20,10 @@
     #container {
         display: flex;
         justify-content: center;
-        margin-top: 20px;
+        margin-top: 1vw;
         margin-inline: 50px;
-        background-color: rgba(203, 203, 203, 0.427);
+        /*background-color: rgba(203, 203, 203, 0.427);*/
+        
     }
 
     .cat {
@@ -30,9 +31,9 @@
         padding-block: 10px;
         margin: 10px;
         background-color: #2a6792;
-        border-radius: 5px;
+        /*border-radius: 5px;*/
         cursor: pointer;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);*/
         font-weight: bold;
     }
 
@@ -45,7 +46,7 @@
         margin: 10px;
         padding: 10px;
         background-color: #91d1de;
-        border-radius: 5px;
+        /*border-radius: 5px;*/
         cursor: pointer;
         font-weight: bold;
     }
@@ -66,8 +67,7 @@
         display: inline-block;
     }
 
-    .pagination a,
-    p {
+    .pagination a, .pagination p {
         color: black;
         float: left;
         padding: 8px 16px;
@@ -86,15 +86,15 @@
     }
 </style>
 
-{{!-- banner (replace with image later) --}}
+{{!-- banner --}}
 {{> carousel}}
 
 
-<div style="margin-top: 10px">
+<div style="margin-top: 5vh">
 
     {{!-- categories --}}
     <center>
-        <h3>CATEGORY</h3>
+        <h3 style="margin-bottom:0px">Bạn muốn mua gì á?</h3>
     </center>
     <center id="container">
         {{#each categories}}
@@ -116,6 +116,10 @@
     </center>
 
     {{!-- product box --}}
+    <center style="margin-top:8vh;">
+        <h3 style="margin-bottom:0px">Một số sản phẩm nổi bật nè~</h3>
+    </center>
+
     <div class="d-flex flex-wrap" style="padding:1vw 2vw 2vw 2vw">
         {{#each products}}
         <div style="width: 20%;" class="d-flex justify-content-center">
@@ -125,11 +129,11 @@
     </div>
 
     {{!-- pagination --}}
-    <center class="pagination">
+    <div class="pagination d-flex justify-content-center" style="width: 100%; font-weight:bold;color:#2a6792" >
         {{#if (equals page 1)}}
-        <a type="button">&laquo;</a>
+        <a type="button"><i class="fa-solid fa-caret-left"></i></a>
         {{else}}
-        <a type="button" onclick="changePage({{pre_page}})">&laquo;</a>
+        <a type="button" onclick="changePage({{pre_page}})"><i class="fa-solid fa-caret-left"></i></a>
         {{/if}}
 
         {{#if (equals page 1)}}
@@ -156,11 +160,11 @@
         {{/if}}
 
         {{#if (equals page total_page)}}
-        <a type="button">&raquo;</a>
+        <a type="button"><i class="fa-solid fa-caret-right"></i></a>
         {{else}}
-        <a type="button" onclick="changePage({{next_page}})">&raquo;</a>
+        <a type="button" onclick="changePage({{next_page}})"><i class="fa-solid fa-caret-right"></i></a>
         {{/if}}
-    </center>
+    </div>
 </div>
 
 
