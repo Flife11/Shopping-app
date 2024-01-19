@@ -1,7 +1,7 @@
 
 const RenderAdmin = (req, res, next) => {
     res.render('admin', {
-        title: 'Admin'        
+        title: 'Admin'
     })
 }
 

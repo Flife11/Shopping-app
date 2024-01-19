@@ -15,6 +15,24 @@ const connectionString = {
 
 const db = pgp(connectionString);
 module.exports = {
+    getByOffset: async (tbName, offset, condition, limit) => {
+        let dbcn = null;
+        try {            
+            dbcn = await db.connect();
+            const query = `
+            SELECT * FROM
+            (SELECT * FROM "${tbName}" ${condition}')
+            LIMIT ${limit}
+            OFFSET ${offset};`
+            const data = await db.any(query);
+            return data;
+        } catch (error) {
+            throw error
+        } finally {
+            dbcn.done();
+        }
+    },
+
     // tbName: tên của bảng
     // getCol: mảng các cột cần lấy giá trị ví dụ: ['id', 'name']
     // condition: điều kiện where nếu có ví dụ 'where id=1'
