@@ -8,7 +8,7 @@ router.get('/cart', clientController.getCart);
 router.post('/cart', clientController.postCart);
 
 // Render detail product (note: handle related product, don't allow user to buy product if quantity = 0)
-router.get('/:productid', );
+router.get('/:productid', clientController.getProductDetail);
 
 // Render list product by category and subcategory 
 // if subcategory = -1 => render list product by only category
