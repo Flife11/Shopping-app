@@ -71,7 +71,7 @@ module.exports = {
 
         // phân trang
         const page = req.query.page ? parseInt(req.query.page) : 1;
-        const perpage = req.query.perpage ? parseInt(req.query.perpage) : 3;
+        const perpage = req.query.perpage ? parseInt(req.query.perpage) : 6;
         const total_page = Math.ceil(products.length / perpage);
         const pre_page = page - 1 > 0 ? page - 1 : 1;
         const next_page = page + 1 <= total_page ? page + 1 : total_page;
@@ -101,7 +101,7 @@ module.exports = {
 
         // phân trang
         const page = req.query.page ? parseInt(req.query.page) : 1;
-        const perpage = req.query.perpage ? parseInt(req.query.perpage) : 5;
+        const perpage = req.query.perpage ? parseInt(req.query.perpage) : 4;
         const total_page = Math.ceil(products.length / perpage);
         const pre_page = page - 1 > 0 ? page - 1 : 1;
         const next_page = page + 1 <= total_page ? page + 1 : total_page;
