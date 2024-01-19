@@ -1,5 +1,5 @@
 <style>
-    #addCart {
+    .addCart {
         background-color: #2a6792; 
         position: absolute; 
         bottom: -20px; 
@@ -7,7 +7,7 @@
         width: 55.91px; 
         height: auto;
     }
-    #addCart:hover{
+    .addCart:hover{
         background-color: #61adbc;
     }
     .img-resize{
@@ -45,7 +45,7 @@
 
     {{!-- out of stock --}}
     {{#if this.quantity}}
-    <button id="addCart" class="btn rounded-circle p-3 lh-1" onclick="addCart(event)" type="button" id="{{this.id}}">
+    <button class="btn rounded-circle p-3 lh-1 addCart" onclick="addCart(event)" type="button" id="{{this.id}}">
         <img src="/public/resource/add-to-cart.ico" class="img-fluid">
     </button>
     {{else}}

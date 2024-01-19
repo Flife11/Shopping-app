@@ -120,5 +120,34 @@ module.exports = {
 
         res.render('product_detail', { title: product[0].name, categories: categories, subcategories: subcategories, product: product[0], suggestProducts, isLoggedin: req.isAuthenticated(), user: user, total_page: total_page, next_page: next_page, pre_page: pre_page, page: page});
 
+    },
+    getCart: async function (req, res) {
+        // Get necessary data
+        const categories = await categoryModel.getAll();
+        const subcategories = await subcategoryModel.getAll();
+        let user = null;
+        if (req.isAuthenticated()) {
+            user = req.session.passport.user;
+        }
+
+        res.render('cart', { title: 'Giỏ hàng', categories: categories, subcategories: subcategories, isLoggedin: req.isAuthenticated(), user: user });
+    },
+
+    postCart: async function (req, res) {
+        try {
+            let data = req.body;
+            let result = [];
+            for (let i = 0; i < data.length; i++) {
+                let product = await productModel.getProduct(data[i].id);
+                product.amount = data[i].quantity;
+                result.push(product);
+            }
+            res.status(200).json({ message:'Lấy giỏ hàng thành công', cart: result });
+
+        } catch(error) {
+            console.log(error);
+            res.status(500).json({message: 'Lấy giỏ hàng thất bại'});
+        }
+
     }
 }
