@@ -4,7 +4,7 @@ const payCtrl= require('../controllers/pay.ctrl');
 
 router.post('/createuser',payCtrl.createUserBalance);
 router.post('/payment',payCtrl.payment);
-router.post('/historypayment');
-router.post('/getbalance');
+router.post('/historypayment',payCtrl.historypayment);
+router.post('/getbalance',payCtrl.getbalance);
 
 module.exports = router;

@@ -14,7 +14,11 @@ module.exports = {
         const result = await db.db.query(sql);
 
         return result;
-    }
+    },
+    getAll : async function () {
+        const result = await db.db.query(`SELECT * FROM "PRODUCT"`);
+        return result;
+    },
 
 
 }
