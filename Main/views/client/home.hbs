@@ -1,18 +1,22 @@
 {{> header}}
 
 <style>
-    h3{
+    h3 {
         color: #2a6792;
     }
-    .cat div{
+
+    .cat div {
         color: white;
     }
-    .sub-cat div{
+
+    .sub-cat div {
         color: #2a6792;
     }
-    a{
+
+    a {
         text-decoration: none;
     }
+
     .container {
         display: flex;
         justify-content: center;
@@ -20,6 +24,7 @@
         margin-inline: 0px;
         background-color: rgba(203, 203, 203, 0.427);
     }
+
     .cat {
         display: block;
         margin: 10px;
@@ -27,9 +32,11 @@
         border-radius: 5px;
         cursor: pointer;
     }
+
     .outer {
         flex: 1;
     }
+
     .sub-cat {
         display: block;
         margin: 10px;
@@ -38,36 +45,40 @@
         border-radius: 5px;
         cursor: pointer;
     }
+
     .sub-cat:hover {
         background-color: white;
     }
+
     .outer-sub-cat {
         display: none;
     }
-    .outer:hover > .outer-sub-cat {
+
+    .outer:hover>.outer-sub-cat {
         display: block;
     }
 
     .pagination {
-    display: inline-block;
+        display: inline-block;
     }
 
-    .pagination a, p{
-    color: black;
-    float: left;
-    padding: 8px 16px;
-    text-decoration: none;
+    .pagination a,
+    p {
+        color: black;
+        float: left;
+        padding: 8px 16px;
+        text-decoration: none;
     }
 
     .pagination p.active {
-    background-color: #91d1de;
-    color: white;
-    border-radius: 5px;
+        background-color: #91d1de;
+        color: white;
+        border-radius: 5px;
     }
 
     .pagination a:hover:not(.active) {
-    background-color: #ddd;
-    border-radius: 5px;
+        background-color: #ddd;
+        border-radius: 5px;
     }
 </style>
 
@@ -79,14 +90,18 @@
     <div class="container">
         {{#each categories}}
         <div class="outer">
-            <a class="cat" href="/{{this.id}}/-1"><div>{{this.name}}</div></a>
+            <a class="cat" href="/{{this.id}}/-1">
+                <div>{{this.name}}</div>
+            </a>
             <div class="outer-sub-cat">
 
-            {{#each ../subcategories}}
-            {{#ifEquals this.catid ../id}}
-                <a class="sub-cat" href="/{{this.catid}}/{{this.id}}"><div>{{this.name}}</div></a>
-            {{/ifEquals}}
-            {{/each}}
+                {{#each ../subcategories}}
+                {{#ifEquals this.catid ../id}}
+                <a class="sub-cat" href="/{{this.catid}}/{{this.id}}">
+                    <div>{{this.name}}</div>
+                </a>
+                {{/ifEquals}}
+                {{/each}}
             </div>
         </div>
         {{/each}}
@@ -102,22 +117,26 @@
 
     {{!-- pagination --}}
     <div class="pagination">
+        {{#if (equals page 1)}}
+        <a type="button">&laquo;</a>
+        {{else}}
         <a type="button" onclick="changePage({{pre_page}})">&laquo;</a>
+        {{/if}}
 
         {{#if (equals page 1)}}
         {{else}}
         <a type="button" onclick="changePage({{pre_page}})">{{pre_page}}</a>
         {{/if}}
-        
-        
+
+
         <p class="active">{{page}}</p>
 
         {{#if (equals page total_page)}}
         {{else}}
         <a type="button" onclick="changePage({{next_page}})">{{next_page}}</a>
         {{/if}}
-        
-        
+
+
         {{#if (equals page (subtract total_page 1))}}
         {{else}}
         {{#if (equals page total_page)}}
@@ -127,7 +146,11 @@
         {{/if}}
         {{/if}}
 
+        {{#if (equals page total_page)}}
+        <a type="button">&raquo;</a>
+        {{else}}
         <a type="button" onclick="changePage({{next_page}})">&raquo;</a>
+        {{/if}}
     </div>
 </center>
 
@@ -136,12 +159,7 @@
 {{> notification_success}}
 
 <script>
-    
-    $(document).ready(function () {
-
-    });
-    function changePage(page){
-        window.location.href = "/?page="+page;
+    function changePage(page) {
+        window.location.href = "/?page=" + page;
     }
 </script>
-
