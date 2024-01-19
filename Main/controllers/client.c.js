@@ -16,7 +16,7 @@ module.exports = {
         let products = await productModel.getAll();
 
         const page = req.query.page ? parseInt(req.query.page) : 1;
-        const perpage = req.query.perpage ? parseInt(req.query.perpage) : 8;
+        const perpage = req.query.perpage ? parseInt(req.query.perpage) : 10;
 
         const total_page = Math.ceil(products.length / perpage);
         const pre_page = page - 1 > 0 ? page - 1 : 1;
