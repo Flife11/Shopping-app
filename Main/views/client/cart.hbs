@@ -147,7 +147,7 @@
 
     $(document).ready(async function () {
         let cart = JSON.parse(localStorage.getItem("cart"));
-        if (cart.length) {
+        if (cart && cart.length) {
             $('#cartPart').css('display', 'flex');
             $('#cartPart').css('margin', '3vw 0vw');
             getCart();

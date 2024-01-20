@@ -131,7 +131,7 @@
 
         // Get order 
         let Itemid = {{product.id}};
-        let Quantity = $('#quantity').val();
+        let Quantity = parseInt($('#quantity').val());
 
         const cart = JSON.parse(localStorage.getItem('cart') || '[]');
 
@@ -139,8 +139,8 @@
         let isExist = false;
         for (let i = 0; i < cart.length; i++) {
             if (cart[i].id == Itemid) {
-                if (cart[i].quantity + parseInt(Quantity) <= quantity){
-                    cart[i].quantity = parseInt(cart[i].quantity) + parseInt(Quantity);
+                if (cart[i].quantity + Quantity <= quantity){
+                    cart[i].quantity = parseInt(cart[i].quantity) + Quantity;
                     isExist = true;
                     break;
                 }
