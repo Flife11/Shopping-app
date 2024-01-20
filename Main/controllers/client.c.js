@@ -90,7 +90,7 @@ module.exports = {
 
         // Render view
 
-        res.render('listproduct', { title: 'Danh sách sản phẩm', categories: categories, subcategories: subcategories, products:products, isLoggedin: req.isAuthenticated(), user: user, total_page: total_page, next_page: next_page, pre_page: pre_page, page: page });
+        res.render('listproduct', { title: 'Danh sách sản phẩm', category: category, categories: categories, subcategories: subcategories, products: products, isLoggedin: req.isAuthenticated(), user: user, total_page: total_page, next_page: next_page, pre_page: pre_page, page: page });
     },
     getProductDetail: async function (req, res) { //Sẽ thay đổi sau
 
@@ -118,7 +118,7 @@ module.exports = {
         const next_page = page + 1 <= total_page ? page + 1 : total_page;
         suggestProducts = products.slice((page - 1) * perpage, page * perpage);
 
-        res.render('product_detail', { title: product[0].name, categories: categories, subcategories: subcategories, product: product[0], suggestProducts, isLoggedin: req.isAuthenticated(), user: user, total_page: total_page, next_page: next_page, pre_page: pre_page, page: page});
+        res.render('product_detail', { title: product[0].name, categories: categories, subcategories: subcategories, product: product[0], suggestProducts, isLoggedin: req.isAuthenticated(), user: user, total_page: total_page, next_page: next_page, pre_page: pre_page, page: page });
 
     },
     getCart: async function (req, res) {
@@ -142,11 +142,11 @@ module.exports = {
                 product.amount = data[i].quantity;
                 result.push(product);
             }
-            res.status(200).json({ message:'Lấy giỏ hàng thành công', cart: result });
+            res.status(200).json({ message: 'Lấy giỏ hàng thành công', cart: result });
 
-        } catch(error) {
+        } catch (error) {
             console.log(error);
-            res.status(500).json({message: 'Lấy giỏ hàng thất bại'});
+            res.status(500).json({ message: 'Lấy giỏ hàng thất bại' });
         }
 
     }
