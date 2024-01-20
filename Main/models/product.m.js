@@ -28,6 +28,5 @@ module.exports = {
         const result = await db.db.query(`SELECT * FROM "PRODUCT" WHERE id = ${id}`);
         return result;
     },
-    
 
 }

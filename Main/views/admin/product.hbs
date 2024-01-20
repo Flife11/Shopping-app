@@ -1,0 +1,84 @@
+<div class="content">
+    <div class="page-heading d-flex justify-content-between align-items-center">
+        <h1 class="page-heading-title">Sản phẩm</h1>
+        <a href="/admin/product/new" class="btn btn-primary"><span>Thêm sản phẩm</span></a>
+    </div>
+    
+    <div class="card-shadow">
+        <table class="table-listing table">
+            <thead>
+                <th scope="col">
+                    <input class="check-all form-check-input mt-0" type="checkbox" value="0" aria-label="Checkbox for select all">
+                </th>
+                <th scope="col"><span>Mã số</span></th>
+                <th scope="col"><span>Hình ảnh</span></th>
+                <th scope="col">
+                    <div class="table-header" style="margin-bottom: 1rem;">
+                            Tên sản phẩm
+                    </div>
+                    <div class="header-filter input-group" style="width: 15rem;">
+                        <input name="productName" class="product-name form-control" placeholder="Tên sản phẩm" type="text" aria-label="Product name">
+                    </div>
+                </th>
+                <th scope="col">
+                    <div class="table-header" style="margin-bottom: 1rem;">
+                            Giá
+                    </div>
+                    <div class="input-group d-flex" style="width: 15rem;">                    
+                        <input name="priceFrom" placeholder="Min" type="text" class="form-control">
+                        <input name="priceTo" placeholder="Max" type="text" class="form-control">
+                    </div>
+                </th>
+                <th scope="col">
+                    <div class="table-header" style="margin-bottom: 1rem;">
+                            Số lượng
+                    </div>
+                    <div class="input-group" style="width: 10rem;">                    
+                        <input name="qtyFrom" placeholder="Min" type="text" class="form-control">
+                        <input name="qtyTo" placeholder="Max" type="text" class="form-control">
+                    </div>
+                </th>            
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input class="check form-check-input mt-0" type="checkbox" value="0"></td>
+                    <td style="vertical-align:middle;">1</td>
+                    <td style="width: 100px;">
+                        <img src="../public/image/1.jpg" class="img-thumbnail" alt="...">
+                    </td>
+                    <td style="vertical-align:middle;">Ao sieu cap vippro</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center" style="gap: 5px">
+                <div><span>Show</span></div>
+                <input name="limit" class="form-control" style="width: 80px;" type="number" value=""/>
+                <div>per page</div>
+            </div>
+            <div class="d-flex align-items-center" style="gap: 10px; font-size: 15px;">
+                <div class="first self-center" >
+                    <button>&lt;&lt;</button>
+                </div>
+                <div class="prev self-center">
+                    <button>&lt;</button>
+                </div>
+                <div class="current">                    
+                    <select class="form-control form-field" placeholder="2" style="width: 50px;">
+                        <option selected="" value="" disabled="">2</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+                </div>                       
+                <div class="next self-center">
+                    <button>&gt;</button>
+                </div>
+                <div class="last self-center">
+                    <button>&gt;&gt;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
