@@ -1,13 +1,11 @@
 {{> header}}
 
-{{!-- banner (replace with image later) --}}
-<div style="width: 100%; height:50vh; background-color:black">
-
-</div>
+{{!-- banner --}}
+{{> carousel}}
 
 
 {{!-- flexbox --}}
-<div class="d-flex" style="height: auto; width:100%; color:#2a6792">
+<div class="d-flex" style="height: auto; width:100%; color:#2a6792;margin-bottom:1px">
 
     {{!-- filter box (left) --}}
     <div style="height:auto;width:25%;background-color:white;padding:1vw;padding-top:2vw">
@@ -47,6 +45,13 @@
 
     {{!-- (right) --}}
     <div style="width:75%; ">
+        {{!-- category/sub category name --}}
+        {{#if category}}
+        <div class="d-flex justify-content-center align-items-center" style="width: 100%;margin-top:2vw;">
+            <h5 style="color:#2a6792; text-transform: uppercase;margin-bottom:0">{{category}}</h5>
+        </div>
+        {{/if}}
+
         {{!-- sort box --}}
         <div class="d-flex flex-row-reverse align-items-center" style="width: 100%;margin-top:2vw;padding-right:5.5vw;">
 
@@ -82,7 +87,7 @@
         </div>
 
         {{!-- pagination --}}
-        
+        {{>pagination}}
     </div>
 </div>
 
