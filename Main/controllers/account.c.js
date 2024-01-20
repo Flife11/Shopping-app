@@ -19,7 +19,7 @@ module.exports = {
     },
     postRegister: async function (req, res) {
         try {
-            const { username, password, retypepassword, email, name } = req.body;
+            const { username, password, retypepassword, email, address, name } = req.body;
 
             // Check if username contains only letters, numbers, underscore and dot
             const regex = /^[a-zA-Z0-9_.]+$/;
@@ -50,6 +50,7 @@ module.exports = {
                 username: username,
                 password: password,
                 email: email,
+                address: address,
                 name: name
             }
             const result = await userModel.addUser(user);
@@ -141,9 +142,13 @@ module.exports = {
                 password: randomPassword,
                 name: user.name,
                 email: user.email,
+                address: '123 ABC',
                 role: 'client'
             }
             const result = await userModel.addUser(newUser);
+
+            // Add user's id to newUser
+            newUser.id = result[0].id;
 
             // Fetch to /createuser (Payment server) user.id (by token) to add user in Payment server
             let iduser = result[0].id;

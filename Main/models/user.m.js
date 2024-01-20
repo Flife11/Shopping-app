@@ -18,7 +18,7 @@ module.exports = {
             const hashPassword = await bcrypt.hash(user.password, parseInt(process.env.SALT_ROUNDS));
             user.password = hashPassword;
 
-            const sql = `INSERT INTO "USER" (username, password, name, email, role) VALUES ('${user.username}', '${user.password}', '${user.name}', '${user.email}', 'client') RETURNING id`;
+            const sql = `INSERT INTO "USER" (username, password, name, email, address, role) VALUES ('${user.username}', '${user.password}', '${user.name}', '${user.email}', '${user.address}', 'client') RETURNING id`;
 
             // Note: execute query that can return insertedId
 
