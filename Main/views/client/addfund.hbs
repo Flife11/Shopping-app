@@ -1,0 +1,90 @@
+{{> header}}
+<section style="background-color: #eee;">
+    <div class="container py-5">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-8 col-lg-6 col-xl-4">
+                <div class="card rounded-3">
+                    <div class="card-body mx-1 my-2">
+                        <div class="d-flex align-items-center justify-content-center">
+                            <div class="d-flex flex-column ">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td><b>Tên người dùng: </b></td>
+                                            <td><span class="text-muted">{{user.name}}</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Email: </b></td>
+                                            <td><span class="text-muted">{{user.email}}</span></td>
+
+                                        </tr>
+                                        <tr>
+                                            <td><b>Địa chỉ: </b></td>
+                                            <td><span class="text-muted">{{user.address}}</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Số tiền hiện tại: </b></td>
+                                            <td><span class="text-muted">{{user.balance}}</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="pt-3">
+                            <div class="d-flex flex-column py-1">
+                                <p class="mb-1 small text-primary">Nhập số tiền</p>
+                                <div class="d-flex flex-column align-items-center">
+                                    <div class="d-flex flex-row align-items-center">
+                                        <h6 class="mb-0 text-primary pe-1">$</h6>
+                                        <input type="text" class="form-control form-control-sm" id="amount" />
+                                    </div>
+                                    <p id="error" style="display: none; color:red;"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center pb-1">
+                            <a href="/" class="text-muted">Go back</a>
+                            <button id="showNotification" type="button" class="btn btn-primary btn-lg">Nạp tiền</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    $('#showNotification').click(function () {
+        var amount = document.getElementById('amount');
+        const val = amount.value;
+        var regex = /^[-+]?\d*\.?\d+$/;
+        const error = document.getElementById('error');
+
+        if (regex.test(val)) {
+            const floatValue= parseFloat(val)
+            if (floatValue <= 0) {
+                error.innerText = "Số tiền đã nhập bé hơn hoặc bằng 0, Vui lòng nhập lại!"
+                error.style.display = "flex";
+            }
+            else {
+                error.style.display = "none";
+                const amount_send_server= document.getElementById('amount_send_server');
+                amount_send_server.value=floatValue;
+                $('#formConfirmPassword').css('display', 'flex');
+
+            }
+        }
+        else {
+            const error = document.getElementById('error');
+            error.innerText = "Số tiền đã nhập không phải là số, Vui lòng nhập lại!"
+            error.style.display = "flex";
+        }
+
+    });
+</script>
+{{> confirm_password}}
+{{> notification_failure}}
+{{> notification_success}}
+{{> footer}}

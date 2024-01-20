@@ -79,6 +79,20 @@ module.exports = {
             dbcn.done();
         }
     },
+
+    delete: async function(tbName, listID){
+        let dbcn = null;
+        try {
+            dbcn = await db.connect();
+            const query = `DELETE FROM "${tbName}" WHERE id IN (${listID.join()})`;
+            const data = await db.any(query);
+            return data;
+        } catch (error) {
+            throw error
+        } finally {
+            dbcn.done();
+        }
+    },
     
     initDatabase: async function(){
         try {

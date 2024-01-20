@@ -45,7 +45,17 @@ const RenderProduct = async (req, res, next) => {
         })
     } catch (error) {
         next(error);
-    }    
+    }
 }
 
-module.exports = {RenderProduct}
+const DeleteProduct = async(req, res, next) => {
+    try {
+        const { listID } = req.body;
+        Product.delete(listID);
+        res.status(201).json({url: 'http://localhost:3000/admin/product'});
+    } catch (error) {
+        next(error);
+    }
+}
+
+module.exports = {RenderProduct, DeleteProduct}
