@@ -1,5 +1,106 @@
+{{!-- <style>
+    .cartTable tr,
+    .cartTable td,
+    .cartTable th {
+        background-color: transparent;
+    }
+</style> --}}
+
 {{> header}}
+
+<div style="margin: 2vw;">
+    {{!-- header --}}
+    <H3 style="color: #2a6792; ">GIỎ HÀNG</H3>
+
+    {{!-- cart part --}}
+    <div style="width: 100%; display:flex; margin:2vw 0vw">
+        {{!-- cart --}}
+        <div style="width: 65%;" id="cardBox" class="border-top">
+            <table class="table cartTable">
+                <thead>
+                    <tr class="text-center">
+                        <th scope="col" style="width: 45%;">Sản phẩm</th>
+                        <th scope="col" style="width: 20%;">Số lượng</th>
+                        <th scope="col" style="width: 20%;">Số tiền</th>
+                        <th scope="col" style="width: 15%;">Thao Tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {{!-- data start here --}}
+                    
+
+                </tbody>
+            </table>
+        </div>
+
+        {{!-- space --}}
+        <div style="width: 5%;"></div>
+
+        {{!-- checkout --}}
+        <div style="width: 30%; height:2vw;background-color:aqua">
+        </div>
+    </div>
+</div>
 
 
 {{> notification_failure}}
 {{> notification_success}}
+
+{{> footer}}
+
+<script>
+    let total = 0.0;
+
+    $(document).ready(async function () {
+        let cart = JSON.parse(localStorage.getItem("cart"));
+        if (cart) {
+            const res = await fetch(`/cart`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(cart)
+            });
+
+            const resData = await res.json();
+
+            if (res.ok) {
+
+                resData.cart.forEach(element => {
+                    total += element.price * element.amount;
+                });
+
+                $("#cardBox tbody").html(resData.cart.map((element) => {
+                    return `
+                    <tr>
+                        <td>
+                            <div style="display: flex;">
+                                <img src="/public/image/${element.image}" style="width: 7vw; height: 7vw;">
+                                <div style="display: flex; flex-direction: column; justify-content: center;">
+                                    <p style="margin-left: 1vw;">${element.name}</p>
+                                    <p style="margin-left: 1vw;">${element.price} VNĐ</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex justify-content-center align-items-center">
+                                <button class="btn"><i class="fa-solid fa-minus"></i></button>
+                                <input type="number" value="${element.amount}" style="width: 50%; background-color:transparent" class="form-control">
+                                <button class="btn"><i class="fa-solid fa-plus"></i></button>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <p>${element.price * element.amount} VNĐ</p>
+                        </td>
+                        <td class="text-center">
+                            <button class="btn" style="background-color: transparent;"><i class="fa-regular fa-trash-can"></i></button>
+                        </td>
+                    </tr>
+                    `;
+                }));
+
+            }
+        }
+    });
+</script>

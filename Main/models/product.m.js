@@ -20,6 +20,10 @@ module.exports = {
         const result = await db.db.query(`SELECT * FROM "PRODUCT"`);
         return result;
     },
+    getProduct : async function (id) {
+        const result = await db.db.oneOrNone(`SELECT * FROM "PRODUCT" WHERE id = ${id}`);
+        return result;
+    },
 
     getByOffset: async function(offset, limit) {
         const data = await db.getByOffset('PRODUCT', offset, '', limit);
@@ -29,7 +33,11 @@ module.exports = {
     countRecord: async function() {
         const cnt = await db.db.query('SELECT COUNT(*) as cnt FROM "PRODUCT"');        
         return cnt[0].cnt;
-    }
+    },
 
+    getOne : async function (id) {
+        const result = await db.db.query(`SELECT * FROM "PRODUCT" WHERE id = ${id}`);
+        return result;
+    },
 
 }
