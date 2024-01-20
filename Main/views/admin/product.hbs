@@ -9,7 +9,7 @@
         <table class="table-listing table">
             <thead>            
                 <th scope="col">
-                    <input class="check-all form-check-input mt-0" type="checkbox" value="0" aria-label="Checkbox for select all">
+                    <input id="check-all" class="form-check-input mt-0" type="checkbox" value="0" aria-label="Checkbox for select all">
                 </th>
                 <th scope="col"><span>Mã số</span></th>
                 <th scope="col"><span>Hình ảnh</span></th>
@@ -43,7 +43,7 @@
             <tbody>
                 {{#each data}}
                     <tr>
-                        <td><input class="check form-check-input mt-0" type="checkbox" value="0"></td>
+                        <td><input id="{{this.id}}" class="check form-check-input mt-0" type="checkbox" value="0"></td>
                         <td style="vertical-align:middle;">{{this.id}}</td>
                         <td style="width: 100px;">
                             <img src="../public/image/{{this.image}}" class="img-thumbnail" alt="...">
@@ -74,7 +74,7 @@
                             <option value="{{this}}">{{this}}</option>
                         {{/each}}
                     </select>
-                </div>                       
+                </div>
                 <div class="next">
                     <button id="next-button">&gt;</button>
                 </div>
@@ -82,6 +82,8 @@
         </div>
     </div>
 </div>
+
+{{> notification_failure}}
 
 <script>
     $(() => {
@@ -158,5 +160,9 @@
         $('#page').val(curpage-1);  
         $('#page-selected').val(parseInt(curpage)-1);      
         HandleFilter();
-    })
+    });
+
+    $('#check-all').change(function() {        
+        $('.check').prop('checked', $('#check-all').prop('checked'))
+    });
 </script>
