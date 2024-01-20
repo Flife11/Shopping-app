@@ -1,3 +1,4 @@
+{{> header}}
 <div class="content">
     <div class="page-heading d-flex justify-content-between align-items-center">
         <h1 class="page-heading-title">Sản phẩm</h1>
@@ -17,7 +18,7 @@
                             Tên sản phẩm
                     </div>
                     <div class="header-filter input-group" style="width: 15rem;">
-                        <input name="productName" id="productName" class="product-name form-control" placeholder="Tên sản phẩm" type="text" aria-label="Product name">
+                        <input value="{{productname}}" name="productName" id="productName" class="product-name form-control" placeholder="Tên sản phẩm" type="text" aria-label="Product name">
                     </div>
                 </th>
                 <th scope="col">
@@ -25,17 +26,17 @@
                             Giá
                     </div>
                     <div class="input-group d-flex" style="width: 15rem;">                    
-                        <input name="minprice" id="minprice" placeholder="Min" type="text" class="form-control">
-                        <input name="maxprice" id="maxprice" placeholder="Max" type="text" class="form-control">
+                        <input value = "{{minprice}}" name="minprice" id="minprice" placeholder="Min" type="text" class="form-control">
+                        <input value = "{{maxprice}}" name="maxprice" id="maxprice" placeholder="Max" type="text" class="form-control">
                     </div>
                 </th>
                 <th scope="col">
                     <div class="table-header" style="margin-bottom: 1rem;">
                             Số lượng
                     </div>
-                    <div class="input-group" style="width: 10rem;">                    
-                        <input name="minquantity" id="minquantity" placeholder="Min" type="text" class="form-control">
-                        <input name="maxquantity" id="maxquantity" placeholder="Max" type="text" class="form-control">
+                    <div class="input-group" style="width: 15rem;">                    
+                        <input value="{{minquantity}}" name="minquantity" id="minquantity" placeholder="Min" type="text" class="form-control">
+                        <input value="{{maxquantity}}" name="maxquantity" id="maxquantity" placeholder="Max" type="text" class="form-control">
                     </div>
                 </th>            
             </thead>
@@ -47,7 +48,9 @@
                         <td style="width: 100px;">
                             <img src="../public/image/{{this.image}}" class="img-thumbnail" alt="...">
                         </td>
-                        <td style="vertical-align:middle;">{{this.name}}</td>
+                        <td style="vertical-align:middle;">
+                            <a href="" style="color: black; text-decoration: none;">{{this.name}}</a>
+                        </td>
                         <td style="vertical-align:middle;">{{this.price}}</td>
                         <td style="vertical-align:middle;">{{this.quantity}}</td>
                     </tr>
@@ -57,29 +60,23 @@
         <div class="d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center" style="gap: 5px">
                 <div><span>Hiển thị</span></div>
-                <input name="limit" id="limit" class="form-control" style="width: 80px;" type="number" value="{{this.perpage}}"/>
+                <input name="limit" id="limit" class="form-control" style="width: 80px;" type="number" value="{{perpage}}"/>
                 <div>mỗi trang</div>
             </div>
-            <div class="d-flex align-items-center" style="gap: 10px; font-size: 15px;">
-                <div class="first self-center" >
-                    <button>&lt;&lt;</button>
-                </div>
-                <div class="prev self-center">
-                    <button>&lt;</button>
+            <div class="d-flex align-items-center" style="gap: 10px; font-size: 15px;">                
+                <div class="prev">
+                    <button id="previous-button">&lt;</button>
                 </div>
                 <div class="current">
-                    <select id="perpage" class="form-control form-field" placeholder="1" style="width: 50px;">
-                        <option selected="" value="1" disabled="">1</option>
+                    <select id="page" class="form-control form-field" placeholder="{{this.page}}" style="width: 50px;">                        
+                        <option id="page-selected" selected="" value="" disabled="">{{this.page}}</option>
                         {{#each totalpage}}
                             <option value="{{this}}">{{this}}</option>
                         {{/each}}
                     </select>
                 </div>                       
-                <div class="next self-center">
-                    <button>&gt;</button>
-                </div>
-                <div class="last self-center">
-                    <button>&gt;&gt;</button>
+                <div class="next">
+                    <button id="next-button">&gt;</button>
                 </div>
             </div>
         </div>
@@ -87,19 +84,20 @@
 </div>
 
 <script>
+    $(() => {
+        let curpage = {{page}};
+        if (curpage==1) $('#previous-button').css({display: "none"});
+        if (curpage=={{totalpage.length}}) $('#next-button').css({display: "none"});
+    });
+
     function HandleFilter() {
-        let productname - $("#productName").val();
+        let productname = $("#productName").val();
         let minprice = $("#minprice").val();
         let maxprice = $("#maxprice").val();
         let minquantity = $("#minquantity").val();
         let maxquantity = $("#maxquantity").val();
-        let perpage = $("#perpage").val();
+        let page = $("#page").val();
         let limit = $("#limit").val();
-
-        if (!minprice && !maxprice && !minquantity && !maxquantity && !productname && !perpage && !limit) {            
-            return;
-        }
-
         //get current url
         let url = new URL(window.location.href);
 
@@ -112,7 +110,7 @@
         params.delete('maxprice');
         params.delete('minquantity');
         params.delete('maxquantity');
-        params.delete('perpage');
+        params.delete('page');
         params.delete('limit'); //?
 
         //add the filter parameters
@@ -126,8 +124,8 @@
             params.set('minquantity', minquantity);
         if (maxquantity)
             params.set('maxquantity', maxquantity);
-        if (perpage)
-            params.set('perpage', perpage);
+        if (page)
+            params.set('page', page);
         if (limit)
             params.set('limit', limit);
 
@@ -139,8 +137,26 @@
     }
     
     document.onkeydown=function(){
-    if(window.event.keyCode=='13'){        
-        HandleFilter();
+        if(window.event.keyCode=='13'){           
+            HandleFilter();
+        }
     }
-}
+
+    $('#page').change(function() {
+        HandleFilter();
+    });
+    
+    $('#next-button').click(function() {  
+        let curpage = {{page}};
+        $('#page').val(parseInt(curpage)+1);        
+        $('#page-selected').val(parseInt(curpage)+1);
+        HandleFilter();
+    });
+
+    $('#previous-button').click(function() {
+        let curpage = {{page}};
+        $('#page').val(curpage-1);  
+        $('#page-selected').val(parseInt(curpage)-1);      
+        HandleFilter();
+    })
 </script>
