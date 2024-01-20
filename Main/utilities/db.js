@@ -17,11 +17,11 @@ const db = pgp(connectionString);
 module.exports = {
     getByOffset: async (tbName, offset, condition, limit) => {
         let dbcn = null;
-        try {            
+        try {
             dbcn = await db.connect();
             const query = `
             SELECT * FROM
-            (SELECT * FROM "${tbName}" ${condition}')
+            (SELECT * FROM "${tbName}" ${condition})
             LIMIT ${limit}
             OFFSET ${offset};`
             const data = await db.any(query);
