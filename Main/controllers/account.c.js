@@ -1,13 +1,12 @@
 const jwt = require('jsonwebtoken');
 
 const userModel = require('../models/user.m');
-const categoryModel = require('../models/category.m');
+const categoryModel = require('../models/Category.m');
 const subcategoryModel = require('../models/subcategory.m');
 const secret = process.env.JWT_SECRET;
 
 module.exports = {
 
-    //TODO: thêm đếm số lượng sản phẩm trong giỏ hàng trong header.hbs
     getLogin: async function (req, res) {
         const categories = await categoryModel.getAll();
         const subcategories = await subcategoryModel.getAll();

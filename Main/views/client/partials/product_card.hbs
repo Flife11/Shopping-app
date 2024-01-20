@@ -1,13 +1,43 @@
+<style>
+    .addCart {
+        background-color: #2a6792; 
+        position: absolute; 
+        bottom: -20px; 
+        right: -20px; 
+        width: 55.91px; 
+        height: auto;
+    }
+    .addCart:hover{
+        background-color: #61adbc;
+    }
+    .img-resize{
+        width: 100% ;
+        height: 238px;
+    }
+    .name-resize{
+        height: 48px;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        text-overflow: ellipsis;
+    }
+    .card-body span{
+        color: #2a6792;
+        font-weight: bold;
+    }
+</style>
+ 
 {{!-- Product card partial (note: wrapped by product) --}}
-<div class="card" style="width: 14rem; box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.25); margin:1.5vw; border:none">
+<div class="card" style="width: 14rem; box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.25); margin:1.5vw; border:none; border-radius:0; border-radius:0">
 
     {{!-- product card --}}
     <a href="/{{this.id}}" class="text-decoration-none text-dark">
-        <img src="/public/image/{{this.image}}" class="card-img-top">
+        <img src="/public/image/{{this.image}}" class="img-resize" style="border-radius:0">
     </a>
     <div class="card-body">
         <a href="/{{this.id}}" class="text-decoration-none text-dark">
-            <h5 class="card-title">{{this.name}}</h5>
+            <h5 class="card-title name-resize">{{this.name}}</h5>
         </a>
         <span class="card-text">Giá: {{this.price}} VNĐ</span>
         <div class="card-text">Số lượng tồn: {{this.quantity}}</div>
@@ -15,9 +45,7 @@
 
     {{!-- out of stock --}}
     {{#if this.quantity}}
-    <button class="btn rounded-circle p-3 lh-1" onclick="addCart(event)"
-        style="background-color: #2a6792; position: absolute; bottom: -20px; right: -20px; width: 55.91px; height: auto;"
-        type="button" id="{{this.id}}">
+    <button class="btn rounded-circle p-3 lh-1 addCart" onclick="addCart(event)" type="button" id="{{this.id}}">
         <img src="/public/resource/add-to-cart.ico" class="img-fluid">
     </button>
     {{else}}

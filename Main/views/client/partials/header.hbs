@@ -75,7 +75,7 @@
         <h5 style="margin-top:3px" id="dropdownMenuButton" data-bs-toggle="dropdownUSER" class="fa-solid fa-user"></h5>
         {{#if isLoggedin}}
         <div class="dropdown-menu dropdown-menu-custom login-dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item dropdown-item-custom" href="/account"><strong>{{user.username}}</strong></a>
+            <a class="dropdown-item dropdown-item-custom" href="/account"><strong>{{user.username}} (Số dư: {{user.balance}} VNĐ)</strong></a>
             <a class="dropdown-item dropdown-item-custom" href="/account/editprofile"><strong>Cập nhật thông
                     tin</strong></a>
             <a class="dropdown-item dropdown-item-custom" href="/account/addfund"><strong>Nạp tiền</strong></a>
