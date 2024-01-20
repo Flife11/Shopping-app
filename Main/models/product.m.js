@@ -15,6 +15,7 @@ module.exports = {
 
         return result;
     },
+
     getAll : async function () {
         const result = await db.db.query(`SELECT * FROM "PRODUCT"`);
         return result;
@@ -24,9 +25,15 @@ module.exports = {
         return result;
     },
 
+    // getByOffset: async function(search, offset, limit) {
+    //     let condition = 'WHERE 1=1';
+    //     if (search) condition += ` AND LOWER(name) LIKE '%${search.toLowerCase()}%'`;
+    //     const data = await db.getByOffset('PRODUCT', offset, condition, limit, search);
+    //     return data;
+    // },
+
     getOne : async function (id) {
         const result = await db.db.query(`SELECT * FROM "PRODUCT" WHERE id = ${id}`);
         return result;
     },
-
 }
