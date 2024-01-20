@@ -45,7 +45,7 @@
 
     {{!-- out of stock --}}
     {{#if this.quantity}}
-    <button class="btn rounded-circle p-3 lh-1 addCart" onclick="addCart(event)" type="button" id="{{this.id}}">
+    <button class="btn rounded-circle p-3 lh-1 addCart" onclick="addCart(event, {{this.quantity}})" type="button" id="{{this.id}}">
         <img src="/public/resource/add-to-cart.ico" class="img-fluid">
     </button>
     {{else}}
@@ -65,15 +65,15 @@
     //    localStorage.removeItem('cart');
     //})
 
-    function addCart(event) {
+    function addCart(event,quantity) {
 
         // Get id of product
         let Itemid = event.currentTarget.id;
 
         // If Itemid is empty (error), display error message
         if (!Itemid) {
-            $('#errorNotificationText').text('Lỗi! Không thể thêm sản phẩm vào giỏ hàng! Vui lòng thử lại sau!')
-            $('#errorNotificationModal').css('display', '');
+            $('#failureNotificationText').text('Lỗi! Không thể thêm sản phẩm vào giỏ hàng! Vui lòng thử lại sau!')
+            $('#failureNotificationModal').css('display', '');
             return;
         }
 
@@ -83,9 +83,17 @@
         let isExist = false;
         for (let i = 0; i < cart.length; i++) {
             if (cart[i].id == Itemid) {
-                cart[i].quantity++;
-                isExist = true;
-                break;
+                if ((cart[i].quantity + 1) <= quantity){
+                    cart[i].quantity++;
+                    isExist = true;
+                    break;
+                }
+                else{
+                    $('#failureNotificationText').text('Đã thêm tối đa số lượng sản phẩm vào giỏ hàng cho sản phẩm này!')
+                    $('#failureNotificationModal').css('display', '');
+                    return;
+                }
+                
             }
         }
 

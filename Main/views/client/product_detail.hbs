@@ -78,7 +78,7 @@
                     <label for="quantity" class="mx-2">Số lượng</label>
                     <input type="number" oninput="HandleAmount({{product.quantity}})" id="quantity" name="quantity" min="1" max="{{product.quantity}}" value="1" style="text-align: center;">
                 </div>
-                <button class="btn" onclick="addCart({{product.id}})" style="background-image:linear-gradient(to right,#91d1de,#2a6792);color:white;width:50%;max-width: 185px;border-radius: 100px">Thêm vào giỏ hàng</button>
+                <button class="btn" onclick="addCart({{product.id}},{{product.quantity}})" style="background-image:linear-gradient(to right,#91d1de,#2a6792);color:white;width:50%;max-width: 185px;border-radius: 100px">Thêm vào giỏ hàng</button>
                 {{/if}}
             </div>
         </div>
@@ -127,7 +127,7 @@
 
     }
 
-    function addCart(event) {
+    function addCart(event, quantity) {
 
         // Get order 
         let Itemid = {{product.id}};
@@ -139,9 +139,16 @@
         let isExist = false;
         for (let i = 0; i < cart.length; i++) {
             if (cart[i].id == Itemid) {
-                cart[i].quantity = parseInt(cart[i].quantity) + parseInt(Quantity);
-                isExist = true;
-                break;
+                if (cart[i].quantity + parseInt(Quantity) <= quantity){
+                    cart[i].quantity = parseInt(cart[i].quantity) + parseInt(Quantity);
+                    isExist = true;
+                    break;
+                }
+                else{
+                    $('#failureNotificationText').text(`Không đủ số lượng sản phẩm trong kho! (số lượng tồn: ${quantity}; số lượng trong giỏ hàng: ${cart[i].quantity})`)
+                    $('#failureNotificationModal').css('display', '');
+                    return;
+                }
             }
         }
 
