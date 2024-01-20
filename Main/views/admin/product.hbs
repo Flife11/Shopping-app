@@ -9,7 +9,7 @@
         <table class="table-listing table">
             <thead>            
                 <th scope="col">
-                    <input id="check-all" class="form-check-input mt-0" type="checkbox" value="0" aria-label="Checkbox for select all">
+                    <input id="check-all" class="fs-4 form-check-input" type="checkbox" value="0" aria-label="Checkbox for select all">
                 </th>
                 <th scope="col"><span>Mã số</span></th>
                 <th scope="col"><span>Hình ảnh</span></th>
@@ -41,9 +41,10 @@
                 </th>            
             </thead>
             <tbody>
+                <tr id="hidden-row"></tr>
                 {{#each data}}
                     <tr>
-                        <td><input id="{{this.id}}" class="check form-check-input mt-0" type="checkbox" value="0"></td>
+                        <td style="vertical-align:middle;"><input id="{{this.id}}" class="fs-4 check form-check-input" type="checkbox" value="0"></td>
                         <td style="vertical-align:middle;">{{this.id}}</td>
                         <td style="width: 100px;">
                             <img src="../public/image/{{this.image}}" class="img-thumbnail" alt="...">
@@ -83,7 +84,7 @@
     </div>
 </div>
 
-{{> notification_failure}}
+{{> notification_warning}}
 
 <script>
     $(() => {
@@ -137,13 +138,34 @@
         //navigate to the new url
         window.location.href = url.toString();
     }
-    
+        
+    function HandleHiddenRow() {
+        let count = $('.check').filter((index, d) => {            
+            if (d.checked==true) return d;
+        }).length;
+
+        if (count==0) $('#hidden-row').html('')
+        else {
+            $('#hidden-row').html(`
+                <td colspan="100" style="border-top: 0px;">
+                    <button class="btn" disabled>${count} được chọn</button>
+                    <button id="delete-button" class="btn btn-light"><span>Xóa</span></button>
+                </td>
+            `)
+            $('#delete-button').click(function() {
+                $('#WarningNotificationText').text('Hành động xóa sẽ không thể hoàn tác ')
+                $('#WarningNotificationModal').css('display', '');
+            })
+        }        
+    }
+
     document.onkeydown=function(){
         if(window.event.keyCode=='13'){           
             HandleFilter();
         }
     }
 
+    // Paging
     $('#page').change(function() {
         HandleFilter();
     });
@@ -161,8 +183,41 @@
         $('#page-selected').val(parseInt(curpage)-1);      
         HandleFilter();
     });
+    // --------------------------------- //
 
+    // Check for what item will be deleted
     $('#check-all').change(function() {        
         $('.check').prop('checked', $('#check-all').prop('checked'))
+        HandleHiddenRow();
     });
+
+    $('.check').change(function() {
+        HandleHiddenRow();
+    });
+    // -------------------------------- //
+
+    // Delete    
+
+    $('#closeYesWarningModal').click(async function() {
+        $('#WarningNotificationModal').css('display', 'none');
+        let listID = [];
+        $('.check').filter((index, d) => {
+            if (d.checked==true) return listID.push(d.id);
+        })
+        let dataBody = JSON.stringify({"listID": listID});        
+        
+        let rs = await fetch('http://localhost:3000/admin/product/delete', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: dataBody
+        })    
+        let url = await rs.json();        
+        window.location.href = url.url;
+
+    });
+    // -------------------------------- //
+
 </script>

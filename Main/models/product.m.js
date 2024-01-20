@@ -32,8 +32,12 @@ module.exports = {
     //     return data;
     // },
 
-    getOne : async function (id) {
+    getOne : async function(id) {
         const result = await db.db.query(`SELECT * FROM "PRODUCT" WHERE id = ${id}`);
         return result;
     },
+
+    delete: async function(listID) {
+        db.delete("PRODUCT", listID);
+    }
 }
