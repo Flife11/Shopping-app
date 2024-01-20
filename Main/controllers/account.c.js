@@ -175,4 +175,7 @@ module.exports = {
         const token = jwt.sign(newUser, secret, { expiresIn: 24 * 60 * 60 });
         res.redirect('/account/assignpassportGoogle?token=' + token);
     },
+    getAddfund: async function (req, res) {
+        res.render('addfund.hbs');
+    },
 };
