@@ -9,13 +9,10 @@ const jwt = require('jsonwebtoken');
 let secret = process.env.JWT_SECRET;
 
 // Logout
-router.get('/logout', checkLogin.isLoggedIn, (req, res, next) => {
+router.get('/logout', checkLogin.isLoggedIn, function (req, res) {
     req.logOut(err => {
         console.log(err);
-        next(err);
     });
-
-    // Back to home page
     res.redirect("/");
 });
 
@@ -65,7 +62,7 @@ router.post('/login', (req, res, next) => {
             });
 
             let rsData = await rs.json();
-            if (!rs.ok){
+            if (!rs.ok) {
                 return res.status(501).json({ message: rsData.message })
             }
 
@@ -90,7 +87,7 @@ router.get('/google', checkLogin.isNotLoggedIn, accountController.renderGoogleLo
 router.get('/assignpassportGoogle', checkLogin.isNotLoggedIn, passport.authenticate('google', {
     failureRedirect: '/account/login'
 }), async (req, res) => {
-    
+
     // fetch to /getbalance (Payment server) user.id (by token) and assign to req.session.passport.user.balance
     let iduser = req.session.passport.user.id;
     let token = jwt.sign({ iduser }, secret, { expiresIn: 24 * 60 * 60 });
@@ -106,14 +103,14 @@ router.get('/assignpassportGoogle', checkLogin.isNotLoggedIn, passport.authentic
     });
 
     let rsData = await rs.json();
-    if (!rs.ok){
+    if (!rs.ok) {
         return res.status(501).json({ message: rsData.message })
     }
 
     let balanceToken = rsData.token;
     let balanceData = jwt.verify(balanceToken, secret);
     req.session.passport.user.balance = balanceData.balance;
-    
+
     res.redirect('/account');
 });
 
@@ -127,8 +124,8 @@ router.get('/', checkLogin.isClient, (req, res) => {
 });
 
 router.get('/editprofile', checkLogin.isClient,); //them cho nay (Update trong CRUD Tài khoản)
-router.get('/addfund', checkLogin.isClient,); //them cho nay
-router.get('/checkout', checkLogin.isClient, (req,res) => {res.send('thanh toan')}); //them cho nay (thanh toán thì bắt buộc phải login)
+router.get('/addfund', checkLogin.isClient, (req, res) => res.send('add fund')); //them cho nay
+router.get('/checkout', checkLogin.isClient, (req, res) => { res.send('thanh toan') }); //them cho nay (thanh toán thì bắt buộc phải login)
 router.get('/orders/:id', checkLogin.isClient,); //them cho nay
 router.get('/orders', checkLogin.isClient,); //them cho nay
 
