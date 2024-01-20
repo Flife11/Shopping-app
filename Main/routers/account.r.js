@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken');
 let secret = process.env.JWT_SECRET;
 
 // Logout
-router.get('/logout', checkLogin.isLoggedIn, (req, res) => {
+router.get('/logout', checkLogin.isLoggedIn, (req, res, next) => {
     req.logOut(err => {
         console.log(err);
         next(err);
@@ -18,7 +18,6 @@ router.get('/logout', checkLogin.isLoggedIn, (req, res) => {
     // Back to home page
     res.redirect("/");
 });
-// TODO: Sửa lại UI của user trong header
 
 
 // Free routes
@@ -93,7 +92,6 @@ router.get('/assignpassportGoogle', checkLogin.isNotLoggedIn, passport.authentic
 }), async (req, res) => {
     
     // fetch to /getbalance (Payment server) user.id (by token) and assign to req.session.passport.user.balance
-    
     let iduser = req.session.passport.user.id;
     let token = jwt.sign({ iduser }, secret, { expiresIn: 24 * 60 * 60 });
     let data = { token: token };

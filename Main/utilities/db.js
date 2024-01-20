@@ -142,6 +142,7 @@ module.exports = {
                         password varchar(500),
                         name varchar(100),
                         email varchar(100),
+                        address varchar(500),
                         role varchar(100) CHECK (role IN ('client', 'admin')),
                         
                         PRIMARY KEY (id)
@@ -179,6 +180,7 @@ module.exports = {
                     password: await bcrypt.hash('123', parseInt(process.env.SALT_ROUNDS)),
                     name: 'Admin 1',
                     email: 'abc@gmail.com',
+                    address: '123 ABC',
                     role: 'admin'
                 }
                 const user2 = {
@@ -186,11 +188,12 @@ module.exports = {
                     password: await bcrypt.hash('123', parseInt(process.env.SALT_ROUNDS)),
                     name: 'Admin 2',
                     email: 'def@gmail.com',
+                    address: '456 DEF',
                     role: 'admin'
                 }
 
-                await db.none('INSERT INTO "USER"(username, password, name, email, role) VALUES(${username}, ${password}, ${name}, ${email}, ${role})', user1);
-                await db.none('INSERT INTO "USER"(username, password, name, email, role) VALUES(${username}, ${password}, ${name}, ${email}, ${role})', user2);
+                await db.none('INSERT INTO "USER"(username, password, name, email, address, role) VALUES(${username}, ${password}, ${name}, ${email}, ${address}, ${role})', user1);
+                await db.none('INSERT INTO "USER"(username, password, name, email, address, role) VALUES(${username}, ${password}, ${name}, ${email}, ${address}, ${role})', user2);
 
                 //Thêm dữ liệu mẫu bán hàng vào database
                 await db.none(`

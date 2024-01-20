@@ -2,7 +2,7 @@ const router = require('express').Router();
 const clientController = require('../controllers/client.c');
 
 // [ Free routes ]
-
+//TODO: fix đăng xuất
 // Render cart
 router.get('/cart', clientController.getCart);
 router.post('/cart', clientController.postCart);
