@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-
+const bcrypt = require('bcrypt');
 const userModel = require('../models/user.m');
 const categoryModel = require('../models/category.m');
 const subcategoryModel = require('../models/subcategory.m');
@@ -75,7 +75,7 @@ module.exports = {
             } catch (error) {
                 console.log(error);
                 return res.status(500).json({ message: error });
-            } 
+            }
 
             // Return result
             if (result) {
@@ -101,7 +101,7 @@ module.exports = {
             client_id,
             scope: scopes.join(' '),
         });
-        
+
         res.redirect(`${urlGG}?${queries.toString()}`);
     },
     authGoogle: async function (req, res) {
@@ -128,7 +128,7 @@ module.exports = {
         // Receive data from Google and decode
         const data = await rs.json()
         const user = await jwt.decode(data.id_token);
-        
+
         // Check if user existed
         let existedUser = await userModel.getUser(user.email);
         let newUser = {};
@@ -158,8 +158,8 @@ module.exports = {
                 body: JSON.stringify(data)
             })
             let rsData = await rs.json();
-            if(!rs.ok){
-                return res.status(500).json({message: rsData.message});
+            if (!rs.ok) {
+                return res.status(500).json({ message: rsData.message });
             }
         }
         else {
@@ -169,5 +169,68 @@ module.exports = {
         // Create token
         const token = jwt.sign(newUser, secret, { expiresIn: 24 * 60 * 60 });
         res.redirect('/account/assignpassportGoogle?token=' + token);
+    },
+    getAddfund: async function (req, res) {
+        if (req.isAuthenticated()) {
+            user = req.session.passport.user;
+        }
+        // console.log(user);
+        res.render('addfund', { isLoggedin: req.isAuthenticated(), user: user });
+    },
+    postAddfund: async function (req, res) {
+        // Get Infor user
+        if (req.isAuthenticated()) {
+            user = req.session.passport.user;
+        }
+        //Get data from client
+        const data = req.body;
+
+        // Get userData with username
+        const userData = await userModel.getUser(user.username);
+        //Get Date
+        var checkPassword = true;
+        const timestamp = Date.now(); 
+
+        const dateWithoutTimeZone = new Date(timestamp);
+
+        const year = dateWithoutTimeZone.getFullYear();
+        const month = dateWithoutTimeZone.getMonth() + 1; 
+        const day = dateWithoutTimeZone.getDate();
+        const hours = dateWithoutTimeZone.getHours();
+        const minutes = dateWithoutTimeZone.getMinutes();
+        const seconds = dateWithoutTimeZone.getSeconds();
+
+        const formattedDateWithoutTimeZone = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        // console.log(formattedDateWithoutTimeZone);
+
+        //Create Data Send
+        const dataSend = {
+            iduser: userData.id,
+            date:formattedDateWithoutTimeZone,
+            idorder: null,
+            amount: data.amount,
+        }
+        let token = jwt.sign(dataSend, secret, { expiresIn: 24 * 60 * 60 });
+        const dataAddFund={token:token};
+        let PaymentURL = process.env.PAYMENT_URL;
+        let rs = await fetch(PaymentURL + '/payment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dataAddFund)
+        })
+        let rsData = await rs.json();
+        if (!rs.ok) {
+            checkPassword = false;
+        }
+        if (checkPassword) {
+            req.session.passport.user.balance=parseFloat(req.session.passport.user.balance) + parseFloat(data.amount);
+            res.status(200).json({ message: "Nạp tiền thành công" })
+        }
+        else {
+            res.status(500).json({ message: "Sai mật khẩu!" })
+        }
+
     },
 };
