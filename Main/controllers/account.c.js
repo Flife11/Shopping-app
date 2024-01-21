@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const userModel = require('../models/user.m');
 const categoryModel = require('../models/category.m');
 const subcategoryModel = require('../models/subcategory.m');
+const corsHelper = require('../utilities/corsHelper');
 const secret = process.env.JWT_SECRET;
 
 module.exports = {
@@ -56,6 +57,9 @@ module.exports = {
 
             // Fetch id to Payment server: id = result[0].id to add user in Payment server
             // console log result: [ { id: 4 } ]
+
+            const corsToken = await corsHelper.generateCorsToken(req);
+
             try {
                 let iduser = result[0].id;
                 let token = jwt.sign({ iduser }, secret, { expiresIn: 24 * 60 * 60 });
@@ -64,7 +68,8 @@ module.exports = {
                 let rs = await fetch(PaymentURL + '/createuser', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': corsToken,
                     },
                     body: JSON.stringify(data)
                 })
@@ -117,6 +122,7 @@ module.exports = {
             client_secret,
             redirect_uri
         }
+
         const rs = await fetch('https://oauth2.googleapis.com/token', {
             method: 'POST',
             headers: {
@@ -153,10 +159,12 @@ module.exports = {
             let token = jwt.sign({ iduser }, secret, { expiresIn: 24 * 60 * 60 });
             let data = { token: token };
             let PaymentURL = process.env.PAYMENT_URL;
+            const corsToken = await corsHelper.generateCorsToken(req);
             let rs = await fetch(PaymentURL + '/createuser', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': corsToken,
                 },
                 body: JSON.stringify(data)
             })
@@ -219,10 +227,12 @@ module.exports = {
         const dataAddFund = { token: token };
         let PaymentURL = process.env.PAYMENT_URL;
 
+        const corsToken = await corsHelper.generateCorsToken(req);
         let rs = await fetch(PaymentURL + '/payment', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': corsToken,
             },
             body: JSON.stringify(dataAddFund)
         })

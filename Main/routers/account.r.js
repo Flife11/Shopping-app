@@ -4,9 +4,10 @@ const passport = require('passport');
 const accountController = require('../controllers/account.c.js');
 const checkLogin = require('../middleware/checkLogin');
 
-//TODO: chuyển tất cả handle login về controller, xóa 2 require ở dưới
+//TODO: chuyển tất cả handle login về controller, xóa 3 require ở dưới
 const jwt = require('jsonwebtoken');
 let secret = process.env.JWT_SECRET;
+const corsHelper = require('../utilities/corsHelper');
 
 // Logout
 router.get('/logout', checkLogin.isLoggedIn, function (req, res) {
@@ -54,10 +55,12 @@ router.post('/login', (req, res, next) => {
                 let data = { token: token };
 
                 let PaymentURL = process.env.PAYMENT_URL;
+                const corsToken = await corsHelper.generateCorsToken(req);
                 let rs = await fetch(PaymentURL + '/getbalance', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': corsToken
                     },
                     body: JSON.stringify(data)
                 });
@@ -97,10 +100,12 @@ router.get('/assignpassportGoogle', checkLogin.isNotLoggedIn, passport.authentic
         let data = { token: token };
 
         let PaymentURL = process.env.PAYMENT_URL;
+        const corsToken = await corsHelper.generateCorsToken(req);
         let rs = await fetch(PaymentURL + '/getbalance', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': corsToken
             },
             body: JSON.stringify(data)
         });
