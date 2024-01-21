@@ -8,6 +8,7 @@ const { as } = require('pg-promise');
 module.exports = {
 
     getHome: async function (req, res) { //Sẽ thay đổi sau
+
         const categories = await categoryModel.getAll();
         const subcategories = await subcategoryModel.getAll();
         let user = null;

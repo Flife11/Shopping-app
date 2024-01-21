@@ -2,12 +2,14 @@
 require("dotenv").config();
 const express = require("express");
 const cookieParser = require("cookie-parser"); // necessary?
-let cors = require("cors");
 const https = require("https");
 const fs = require("fs");
+const jwt = require("jsonwebtoken");
 
 // Require custom modules
 const db = require('./utilities/db');
+const secret = process.env.JWT_SECRET;
+const mainURL = process.env.MAIN_URL;
 
 // Setting up express app
 const app = express();
@@ -17,11 +19,25 @@ app.use(express.json());
 
 app.use(cookieParser()); // necessary?
 
-app.use(cors({
-    origin: `http://localhost:${process.env.MAINPORT}`,
-    credentials: true,
-}));
+app.use((req, res, next) => {
+    const token = req.headers['authorization'];
 
+    if(!token) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    try {
+        const decoded = jwt.verify(token, secret);
+        if (decoded.url == mainURL) {
+            next();
+        }
+        else {
+            return res.status(401).json({ message: 'Forbidden - Invalid server' });
+        }
+    } catch (error) {
+        return res.status(401).json({ message: 'Unauthorized - Invalid token' });
+    }
+});
 
 const credentials = {
     key: fs.readFileSync('./Payment/cert/demo.key'),
