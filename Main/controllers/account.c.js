@@ -250,4 +250,14 @@ module.exports = {
         }
 
     },
+
+    getAccount: async function (req, res) {
+            
+            //Get necessary data
+            user = req.session.passport.user;
+            const categories = await categoryModel.getAll();
+            const subcategories = await subcategoryModel.getAll();
+    
+            res.render('account', { title: 'Tài khoản', categories: categories, subcategories: subcategories, isLoggedin: req.isAuthenticated(), user: user });
+    },
 };
