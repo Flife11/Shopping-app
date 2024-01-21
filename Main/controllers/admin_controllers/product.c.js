@@ -1,4 +1,7 @@
 const Product = require('../../models/product.m');
+const Categories = require('../../models/category.m');
+const SubCategories = require('../../models/subcategory.m');
+const fs = require('fs');
 
 const RenderProduct = async (req, res, next) => {
     try {
@@ -31,7 +34,6 @@ const RenderProduct = async (req, res, next) => {
         
         // console.log(page, perpage);
         data = data.slice((page - 1) * perpage, page * perpage);
-
         res.render('product', {
             title: 'Admin',
             data: data, 
@@ -51,6 +53,7 @@ const RenderProduct = async (req, res, next) => {
 const DeleteProduct = async(req, res, next) => {
     try {
         const { listID } = req.body;
+        console.log(listID);
         Product.delete(listID);
         res.status(201).json({url: 'http://localhost:3000/admin/product'});
     } catch (error) {
@@ -58,4 +61,50 @@ const DeleteProduct = async(req, res, next) => {
     }
 }
 
-module.exports = {RenderProduct, DeleteProduct}
+const NewProduct = async(req, res, next) => {
+    try {
+        let categories = await Categories.getAll();
+        let subcategories = await SubCategories.getAll();
+        let subCatList = []
+
+        categories.forEach(cat => {
+            let tmp = {"cat": cat, list: []};
+            subcategories.forEach(sub => {
+                if (sub.catid==cat.id) tmp.list.push(sub);
+            });
+            subCatList.push(tmp);
+        });
+        
+        
+        res.render('newproduct', {
+            title: 'Admin',
+            categories: categories,
+            subCatList: subCatList,            
+        })
+    } catch (error) {
+        next(error);
+    }
+}
+
+const CreateProduct = async(req, res, next) => {
+    try {
+        let {name, price, quantity, category, subcategory, shortdes, longdes} = req.body;
+        let filename = req.file.filename;
+        price = parseInt(price);
+        quantity = parseInt(quantity);
+        let newid = await Product.insert(name, price, quantity, category, subcategory, shortdes, longdes);
+        // console.log(name, price, quantity, category, subcategory, shortdes, longdes);
+        // console.log(req.file);
+        // console.log(newid, filename);
+
+        fs.rename(`Main/public/image/${filename}`, `Main/public/image/${newid}.jpg`, function(err) {
+            if ( err ) console.log('ERROR: ' + err);
+        });
+
+        res.redirect('http://localhost:3000/admin/product/new');
+    } catch (error) {
+        next(error);
+    }
+}
+
+module.exports = {RenderProduct, DeleteProduct, NewProduct, CreateProduct}
