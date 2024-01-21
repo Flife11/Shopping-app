@@ -78,21 +78,21 @@
                     <label for="quantity" class="mx-2">Số lượng</label>
                     <input type="number" oninput="HandleAmount({{product.quantity}})" id="quantity" name="quantity" min="1" max="{{product.quantity}}" value="1" style="text-align: center;">
                 </div>
-                <button class="btn" onclick="addCart({{product.id}},{{product.quantity}})" style="background-image:linear-gradient(to right,#91d1de,#2a6792);color:white;width:50%;max-width: 185px;border-radius: 100px">Thêm vào giỏ hàng</button>
+                <button class="btn" onclick="addCart({{product.id}},{{product.quantity}})" style="background-image:linear-gradient(to right,#91d1de,#2a6792);color:white;width:50%;max-width: 185px;border-radius: 100px"><strong>Thêm vào giỏ hàng</strong></button>
                 {{/if}}
             </div>
         </div>
 
         {{!-- full description container --}}
         <div class="full_description_container block">
-            <h4>Mô tả chi tiết</h4>
+            <h4 style="color: #2a6792;">Mô tả chi tiết</h4>
             <p class="text-dark-emphasis">{{product.fulldescription}}</p>
         </div>
 
 
         {{!-- suggestion container --}}
         <div class="suggestion_container block">
-            <h4>Sản phẩm liên quan</h4>
+            <h4 style="color: #2a6792;">Sản phẩm liên quan</h4>
 
             {{!-- product box --}}
             <div class="d-flex flex-wrap justify-content-center" style="padding:1vw 2vw 2vw 2vw">
