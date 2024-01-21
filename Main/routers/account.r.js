@@ -134,8 +134,8 @@ router.get('/editprofile', checkLogin.isClient, accountController.getEditprofile
 router.get('/editpassword', checkLogin.isClient, accountController.getEditpassword);
 router.get('/addfund', checkLogin.isClient, accountController.getAddfund); 
 router.get('/checkout', checkLogin.isClient, (req, res) => { res.send('thanh toan') }); //them cho nay (thanh toán thì bắt buộc phải login)
-router.get('/orders/:id', checkLogin.isClient,); //them cho nay
-router.get('/orders', checkLogin.isClient,); //them cho nay
+router.get('/orders/:id', checkLogin.isClient,accountController.getOrder); //them cho nay
+router.get('/orders', checkLogin.isClient,accountController.getOrder); //them cho nay
 
 
 router.post('/addfund', accountController.postAddfund)
