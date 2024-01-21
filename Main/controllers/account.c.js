@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 const userModel = require('../models/user.m');
 const categoryModel = require('../models/category.m');
@@ -21,7 +22,7 @@ module.exports = {
     },
     postRegister: async function (req, res) {
         try {
-            const { username, password, retypepassword, email,address, name } = req.body;
+            const { username, password, retypepassword, email, address, name } = req.body;
 
             // Check if username contains only letters, numbers, underscore and dot
             const regex = /^[a-zA-Z0-9_.]+$/;
@@ -255,14 +256,95 @@ module.exports = {
     },
 
     getAccount: async function (req, res) {
+
+        //Get necessary data
+        user = req.session.passport.user;
+        const categories = await categoryModel.getAll();
+        const subcategories = await subcategoryModel.getAll();
+        const orders = await orderModel.getByUserID(user.id);
+        const orderscount = orders.length;
+
+        res.render('account', { title: 'Tài khoản', categories: categories, subcategories: subcategories, orderscount: orderscount, isLoggedin: req.isAuthenticated(), user: user });
+    },
+
+    getEditprofile: async function (req, res) {
+        //Get necessary data
+        user = req.session.passport.user;
+        const categories = await categoryModel.getAll();
+        const subcategories = await subcategoryModel.getAll();
+
+        res.render('editprofile', { title: 'Chỉnh sửa thông tin', categories: categories, subcategories: subcategories, isLoggedin: req.isAuthenticated(), user: user });
+    },
+
+    postEditprofile: async function (req, res) {
+        try {
+            const { name, address, email } = req.body;
+
+            // Check if email is valid
+            const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!regexEmail.test(email)) {
+                return res.status(403).json({ message: 'Email không hợp lệ!' });
+            }
+
+            // Update user in database and passport
+            let user = {
+                id: req.session.passport.user.id,
+                name: name,
+                address: address,
+                email: email
+            }           
+
+            await userModel.editUser(user);
+
+            req.session.passport.user.name = name;
+            req.session.passport.user.address = address;
+            req.session.passport.user.email = email;
             
-            //Get necessary data
-            user = req.session.passport.user;
-            const categories = await categoryModel.getAll();
-            const subcategories = await subcategoryModel.getAll();
-            const orders = await orderModel.getByUserID(user.id);
-            const orderscount = orders.length;
-    
-            res.render('account', { title: 'Tài khoản', categories: categories, subcategories: subcategories, orderscount:orderscount, isLoggedin: req.isAuthenticated(), user: user });
+            res.status(200).json({ message: 'Chỉnh sửa thông tin thành công!' });
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: 'Lỗi hệ thống, vui lòng thử lại sau!' });
+        }
+    },
+
+    getEditpassword: async function (req, res) {
+        //Get necessary data
+        user = req.session.passport.user;
+        const categories = await categoryModel.getAll();
+        const subcategories = await subcategoryModel.getAll();
+
+        res.render('editpassword', { title: 'Đổi mật khẩu', categories: categories, subcategories: subcategories, isLoggedin: req.isAuthenticated(), user: user });
+    },
+
+    postEditpassword: async function (req, res) {
+        try {
+            const { oldpassword, password, retypepassword } = req.body;
+
+            // Check if old password is correct
+            const user = await userModel.getUser(req.session.passport.user.username);
+            const auth = await bcrypt.compare(oldpassword, user.password);
+            if (!auth) {
+                return res.status(401).json({ message: 'Mật khẩu cũ không đúng!' });
+            }
+
+            // Check if password and retypepassword match
+            if (password !== retypepassword) {
+                return res.status(402).json({ message: 'Mật khẩu mới không khớp, nhập lại nha!' });
+            }            
+
+            // Update user in database and passport
+            let newUser = {
+                id: req.session.passport.user.id,
+                password: password
+            }
+            await userModel.editUser(newUser); // necessary to update password passport? no >:(
+
+            // Send success message to res
+            res.status(200).json({ message: 'Đổi mật khẩu thành công!' });
+
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: 'Lỗi hệ thống, vui lòng thử lại sau!' });
+        }
     },
 };
