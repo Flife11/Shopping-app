@@ -1,3 +1,168 @@
+<style>
+    .accountTable tr,
+    .infoTable tr,
+    .accountTable td,
+    .infoTable td,
+    .accountTable th,
+    .infoTable th {
+        background-color: transparent;
+    }
+
+    .href:hover {
+        color: #91d1de;
+    }
+    
+</style>
+
 {{> header}}
+
+<div style="margin: 3vw;">
+    {{!-- header --}}
+    <H3 style="color: #2a6792; ">TRANG THÔNG TIN CÁ NHÂN</H3>
+
+    {{!-- addfund part --}}
+    <div style="width: 100%; display:flex; margin:3vw 0vw">
+
+        {{!-- info --}}
+        <div style="width: 40%; " class="border-top">
+
+            <table class="table infoTable">
+
+
+                <thead>
+                    <tr>
+                        <th class="d-flex justify-content-center">
+                            Thông tin cá nhân
+                        </th>
+                    </tr>
+                </thead>
+
+
+                <tbody>
+
+                    <tr>
+                        <td scope="col" class="d-flex">
+                            <div style="width:35%"><strong>Tên đăng nhập: </strong></div>
+                            <span>{{user.username}}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td scope="col" class="d-flex">
+                            <div style="width:35%"><strong>Mật khẩu: </strong></div>
+                            <div style="width: 15%;">*********</div>
+                            <div style="width: 50%" class="d-flex justify-content-center">
+                                <a class="btn" href="/account/editpassword"
+                                    style="background-image:linear-gradient(to left,#91d1de,#2a6792);color:white;width:60%; border-radius: 100px;font-weight:bold;">
+                                    Đổi mật khẩu
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td scope="col" class="d-flex">
+                            <div style="width:35%"><strong>Họ tên: </strong></div>
+                            <span>{{user.name}}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td scope="col" class="d-flex">
+                            <div style="width:35%"><strong>Địa chỉ: </strong></div>
+                            <span>{{user.address}}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td scope="col" class="d-flex">
+                            <div style="width:35%"><strong>Email: </strong></div>
+                            <span>{{user.email}}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td scope="col" class="d-flex">
+                            <div style="width:35%"><strong>Số đơn hàng đã đặt: </strong></div>
+                            <div style="width: 15%;">{{orderscount}}</div>
+                            <div style="width: 50%" class="d-flex justify-content-center">
+                                <a class="btn" href="/account/orders"
+                                    style="background-image:linear-gradient(to right,#91d1de,#2a6792);color:white;width:60%; border-radius: 100px;font-weight:bold;">
+                                    Xem lịch sử
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+            <div style="width:100%" class="d-flex justify-content-center text-decorat">
+                <strong>Bạn muốn <a class="text-decoration-none href" href="/account/editprofile" >cập nhật thông tin cá nhân</a>?</strong>
+            </div>
+        </div>
+
+
+        {{!-- space --}}
+        <div style="width: 5%;"></div>
+
+
+        {{!-- card --}}
+        <div style="width: 55%;" id="cartBox" class="border-top">
+
+            <table class="table accountTable">
+
+                <thead>
+                    <tr class="text-center">
+                        <th scope="col">Thông tin tài khoản</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td class="d-flex justify-content-center">
+
+                            {{!-- card --}}
+                            <div
+                                style="background-image:linear-gradient(to right,#91d1de,#2a6792);color:white;width:70%; height:250px;border-radius: 50px;font-weight:bold;margin:2vh;box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.25);position:relative">
+                                {{!-- icon box --}}
+                                <div style="width: 100%;height:60%">
+
+                                    <div style="top:11%;left:6.5%;position:absolute">
+                                        <H4 style="margin-bottom:17px">RANDOM CARD</H4>
+                                        <img src="/public/resource/chip.png" style="width: 15%;">
+                                    </div>
+
+
+
+                                    <div class="d-flex align-items-center justify-content-center"
+                                        style="width: 70px; height:70px; background-color:#ededed;z-index:5;position:absolute;top:12%;right:6.5%;border-radius:20px;box-shadow: inset 5px 5px 8px rgba(0, 0, 0, 0.25);">
+                                        <img src="/public/resource/icon.png"
+                                            style="width: 80%;filter:drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));">
+                                    </div>
+                                </div>
+
+                                {{!-- information --}}
+                                <div style="width: 80%; margin:0 35px; ">
+                                    <span>Mã tài khoản: {{user.id}}</span>
+                                    <br>
+                                    <span>Họ tên: {{user.name}}</span>
+                                    <br>
+                                    <span>Số dư: {{user.balance}} VNĐ</span>
+                                </div>
+
+                            </div>
+                        </td>
+                    </tr>
+
+
+                </tbody>
+            </table>
+
+            <div style="width:100%" class="d-flex justify-content-center">
+                <strong>Còn muốn nạp tiền thì bấm vô <a class="text-decoration-none href" href="/account/addfund" >đây</a> nha!</strong>
+            </div>
+        </div>
+
+
+    </div>
+</div>
 
 {{> footer}}

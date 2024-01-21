@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const userModel = require('../models/user.m');
 const categoryModel = require('../models/category.m');
 const subcategoryModel = require('../models/subcategory.m');
+const orderModel = require('../models/order.m');
 const corsHelper = require('../utilities/corsHelper');
 const secret = process.env.JWT_SECRET;
 
@@ -20,7 +21,7 @@ module.exports = {
     },
     postRegister: async function (req, res) {
         try {
-            const { username, password, retypepassword, email, name } = req.body;
+            const { username, password, retypepassword, email,address, name } = req.body;
 
             // Check if username contains only letters, numbers, underscore and dot
             const regex = /^[a-zA-Z0-9_.]+$/;
@@ -51,6 +52,7 @@ module.exports = {
                 username: username,
                 password: password,
                 email: email,
+                address: address,
                 name: name
             }
             const result = await userModel.addUser(user);
@@ -147,6 +149,7 @@ module.exports = {
                 password: randomPassword,
                 name: user.name,
                 email: user.email,
+                address: 'Thành phố Hồ Chí Minh',
                 role: 'client'
             }
             const result = await userModel.addUser(newUser);
@@ -257,7 +260,9 @@ module.exports = {
             user = req.session.passport.user;
             const categories = await categoryModel.getAll();
             const subcategories = await subcategoryModel.getAll();
+            const orders = await orderModel.getByUserID(user.id);
+            const orderscount = orders.length;
     
-            res.render('account', { title: 'Tài khoản', categories: categories, subcategories: subcategories, isLoggedin: req.isAuthenticated(), user: user });
+            res.render('account', { title: 'Tài khoản', categories: categories, subcategories: subcategories, orderscount:orderscount, isLoggedin: req.isAuthenticated(), user: user });
     },
 };
