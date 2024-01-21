@@ -347,4 +347,7 @@ module.exports = {
             res.status(500).json({ message: 'Lỗi hệ thống, vui lòng thử lại sau!' });
         }
     },
+    getOrder: async function (req, res) {
+        res.status(500).json({ message: 'Lỗi hệ thống, vui lòng thử lại sau!' });
+    }
 };
