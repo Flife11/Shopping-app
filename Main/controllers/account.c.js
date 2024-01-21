@@ -145,8 +145,11 @@ module.exports = {
             }
             const result = await userModel.addUser(newUser);
 
-            // Fetch to /createuser (Payment server) user.id (by token) to add user in Payment server
+            // Add user's id to newUser
             let iduser = result[0].id;
+            newUser.id = iduser;
+
+            // Fetch to /createuser (Payment server) user.id (by token) to add user in Payment server
             let token = jwt.sign({ iduser }, secret, { expiresIn: 24 * 60 * 60 });
             let data = { token: token };
             let PaymentURL = process.env.PAYMENT_URL;
@@ -177,44 +180,45 @@ module.exports = {
         const categories = await categoryModel.getAll();
         const subcategories = await subcategoryModel.getAll();
 
-        res.render('addfund', { title: 'Nạp tiền', categories: categories, subcategories: subcategories, user: user });
+        res.render('addfund', { title: 'Nạp tiền', categories: categories, subcategories: subcategories, isLoggedin: req.isAuthenticated(), user: user });
     },
     postAddfund: async function (req, res) {
-        
+
         //Get user from session
         user = req.session.passport.user;
-        
+
         //Get data from client
         const data = req.body;
 
         // Get userData with username
         const userData = await userModel.getUser(user.username);
+
         //Get Date
-        var checkPassword = true;
-        const timestamp = Date.now(); 
+        var checkSuccess = true;
+        const timestamp = Date.now();
 
         const dateWithoutTimeZone = new Date(timestamp);
 
         const year = dateWithoutTimeZone.getFullYear();
-        const month = dateWithoutTimeZone.getMonth() + 1; 
+        const month = dateWithoutTimeZone.getMonth() + 1;
         const day = dateWithoutTimeZone.getDate();
         const hours = dateWithoutTimeZone.getHours();
         const minutes = dateWithoutTimeZone.getMinutes();
         const seconds = dateWithoutTimeZone.getSeconds();
 
         const formattedDateWithoutTimeZone = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-        // console.log(formattedDateWithoutTimeZone);
 
         //Create Data Send
         const dataSend = {
             iduser: userData.id,
-            date:formattedDateWithoutTimeZone,
+            date: formattedDateWithoutTimeZone,
             idorder: null,
             amount: data.amount,
         }
         let token = jwt.sign(dataSend, secret, { expiresIn: 24 * 60 * 60 });
-        const dataAddFund={token:token};
+        const dataAddFund = { token: token };
         let PaymentURL = process.env.PAYMENT_URL;
+
         let rs = await fetch(PaymentURL + '/payment', {
             method: 'POST',
             headers: {
@@ -223,15 +227,16 @@ module.exports = {
             body: JSON.stringify(dataAddFund)
         })
         let rsData = await rs.json();
+
         if (!rs.ok) {
-            checkPassword = false;
+            checkSuccess = false;
         }
-        if (checkPassword) {
-            req.session.passport.user.balance=parseFloat(req.session.passport.user.balance) + parseFloat(data.amount);
-            res.status(200).json({ message: "Nạp tiền thành công" })
+        if (checkSuccess) {
+            req.session.passport.user.balance = parseFloat(req.session.passport.user.balance) + parseFloat(data.amount);
+            res.status(200).json({ message: rsData.message });
         }
         else {
-            res.status(500).json({ message: "Sai mật khẩu!" })
+            res.status(500).json({ message: rsData.message });
         }
 
     },

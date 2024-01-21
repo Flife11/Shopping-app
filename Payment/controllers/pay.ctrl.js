@@ -74,17 +74,17 @@ module.exports = {
                     }
                 }
                 const message = {}
-                res.status(200).json({ message: "Thanh toán thành công" });
+                res.status(200).json({ message: "Thanh toán thành công!" });
             }
             catch (err) {
                 console.log(err);
 
-                res.status(501).json({ message: "Lỗi không thể thanh toán" })
+                res.status(501).json({ message: "Lỗi không thể thanh toán!" })
             }
         }
         catch (error) {
             console.log(error);
-            res.status(403).json({ message: "Lỗi không thể decode" })
+            res.status(403).json({ message: "Lỗi không thể decode!" })
         }
 
     },

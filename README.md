@@ -7,6 +7,11 @@
 - Hiển thị failure noti:  
   `$('#failureNotificationText').text('test')`  
   `$('#failureNotificationModal').css('display', '');`
+- Hiển thị confirm noti:  
+  `$('#confirmNotificationText').text('test')`  
+  `$('#confirmNotificationModal').css('display', '');`
+  (gán event cho confirm button click: `$confirmConfirmModal on click`)
+
 - Hiển thị số lượng sp trong giỏ:
   `$('#cart-count').show();`
   `$('#cart-count').text(cart.length);`

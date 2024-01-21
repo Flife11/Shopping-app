@@ -119,7 +119,7 @@
     </div>
 </div>
 
-{{> confirm_password}}
+{{> notification_confirm}}
 {{> notification_failure}}
 {{> notification_success}}
 {{> footer}}
@@ -144,6 +144,60 @@
             $('#failureNotificationText').text(errorString);
             $('#failureNotificationModal').css('display', '');
             return;
+        }
+
+        $('#confirmNotificationText').text('Xác nhận giao dịch: Nạp ' + amount + ' VNĐ vào tài khoản?')
+        $('#confirmNotificationModal').css('display', '');
+    });
+
+    // Set event for confirm notification
+    $('#confirmConfirmModal').click(async function () {
+
+        // Close confirm notification
+        $('#confirmNotificationModal').css('display', 'none');
+
+        // Get amount
+        let amount = parseFloat($("#amount").val());
+        const data = {
+            amount: amount
+        };
+
+        // Send request to add fund
+        const res = await fetch('/account/addfund', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data),
+        });
+
+        // Get response data at json
+        const resData = await res.json();
+
+        // If success, display success notification
+        if (res.ok) {
+            $('#successNotificationtext').text(resData.message + ` Tải lại trang trong... ` + 3); // 3 seconds
+            $('#successNotificationModal').css('display', '');
+
+            // Wait 3 seconds, reload
+            let count = 3;
+            let interval = setInterval(() => {
+                count--;
+                $('#successNotificationtext').text(resData.message + ` Tải lại trang trong... ${count}`);
+                if (count === 0) {
+                    clearInterval(interval);
+                }
+            }, 1000);
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000);
+
+        }
+
+        // If fail, display fail notification
+        else {
+            $('#failureNotificationText').text(resData.message);
+            $('#failureNotificationModal').css('display', '');
         }
     });
 </script>
