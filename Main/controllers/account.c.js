@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+
 const userModel = require('../models/user.m');
 const categoryModel = require('../models/category.m');
 const subcategoryModel = require('../models/subcategory.m');
@@ -171,17 +171,19 @@ module.exports = {
         res.redirect('/account/assignpassportGoogle?token=' + token);
     },
     getAddfund: async function (req, res) {
-        if (req.isAuthenticated()) {
-            user = req.session.passport.user;
-        }
-        // console.log(user);
-        res.render('addfund', { isLoggedin: req.isAuthenticated(), user: user });
+
+        //Get necessary data
+        user = req.session.passport.user;
+        const categories = await categoryModel.getAll();
+        const subcategories = await subcategoryModel.getAll();
+
+        res.render('addfund', { title: 'Nạp tiền', categories: categories, subcategories: subcategories, user: user });
     },
     postAddfund: async function (req, res) {
-        // Get Infor user
-        if (req.isAuthenticated()) {
-            user = req.session.passport.user;
-        }
+        
+        //Get user from session
+        user = req.session.passport.user;
+        
         //Get data from client
         const data = req.body;
 

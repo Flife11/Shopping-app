@@ -128,7 +128,9 @@ router.get('/addfund', checkLogin.isClient, accountController.getAddfund); //the
 router.get('/checkout', checkLogin.isClient, (req, res) => { res.send('thanh toan') }); //them cho nay (thanh toán thì bắt buộc phải login)
 router.get('/orders/:id', checkLogin.isClient,); //them cho nay
 router.get('/orders', checkLogin.isClient,); //them cho nay
-router.post('/addfund',checkLogin.isClient,accountController.postAddfund)
+
+
+router.post('/addfund',accountController.postAddfund)
 
 
 
