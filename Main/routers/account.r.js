@@ -48,27 +48,29 @@ router.post('/login', (req, res, next) => {
             }
 
             // fetch to /getbalance (Payment server) user.id (by token) and assign to req.session.passport.user.balance
-            let iduser = user.id;
-            let token = jwt.sign({ iduser }, secret, { expiresIn: 24 * 60 * 60 });
-            let data = { token: token };
+            if (user.role == "client") {
+                let iduser = user.id;
+                let token = jwt.sign({ iduser }, secret, { expiresIn: 24 * 60 * 60 });
+                let data = { token: token };
 
-            let PaymentURL = process.env.PAYMENT_URL;
-            let rs = await fetch(PaymentURL + '/getbalance', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
+                let PaymentURL = process.env.PAYMENT_URL;
+                let rs = await fetch(PaymentURL + '/getbalance', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
 
-            let rsData = await rs.json();
-            if (!rs.ok) {
-                return res.status(501).json({ message: rsData.message })
+                let rsData = await rs.json();
+                if (!rs.ok) {
+                    return res.status(501).json({ message: rsData.message })
+                }
+
+                let balanceToken = rsData.token;
+                let balanceData = jwt.verify(balanceToken, secret);
+                req.session.passport.user.balance = balanceData.balance;
             }
-
-            let balanceToken = rsData.token;
-            let balanceData = jwt.verify(balanceToken, secret);
-            req.session.passport.user.balance = balanceData.balance;
 
 
             // Redirect based on role
@@ -89,27 +91,29 @@ router.get('/assignpassportGoogle', checkLogin.isNotLoggedIn, passport.authentic
 }), async (req, res) => {
 
     // fetch to /getbalance (Payment server) user.id (by token) and assign to req.session.passport.user.balance
-    let iduser = req.session.passport.user.id;
-    let token = jwt.sign({ iduser }, secret, { expiresIn: 24 * 60 * 60 });
-    let data = { token: token };
+    if (req.session.passport.user.role == "client") {
+        let iduser = req.session.passport.user.id;
+        let token = jwt.sign({ iduser }, secret, { expiresIn: 24 * 60 * 60 });
+        let data = { token: token };
 
-    let PaymentURL = process.env.PAYMENT_URL;
-    let rs = await fetch(PaymentURL + '/getbalance', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    });
+        let PaymentURL = process.env.PAYMENT_URL;
+        let rs = await fetch(PaymentURL + '/getbalance', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
 
-    let rsData = await rs.json();
-    if (!rs.ok) {
-        return res.status(501).json({ message: rsData.message })
+        let rsData = await rs.json();
+        if (!rs.ok) {
+            return res.status(501).json({ message: rsData.message })
+        }
+
+        let balanceToken = rsData.token;
+        let balanceData = jwt.verify(balanceToken, secret);
+        req.session.passport.user.balance = balanceData.balance;
     }
-
-    let balanceToken = rsData.token;
-    let balanceData = jwt.verify(balanceToken, secret);
-    req.session.passport.user.balance = balanceData.balance;
 
     res.redirect('/account');
 });
@@ -130,7 +134,7 @@ router.get('/orders/:id', checkLogin.isClient,); //them cho nay
 router.get('/orders', checkLogin.isClient,); //them cho nay
 
 
-router.post('/addfund',accountController.postAddfund)
+router.post('/addfund', accountController.postAddfund)
 
 
 

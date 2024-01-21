@@ -2,6 +2,7 @@
 require("dotenv").config();
 const express = require("express");
 const cookieParser = require("cookie-parser"); // necessary?
+let cors = require("cors");
 const https = require("https");
 const fs = require("fs");
 
@@ -15,6 +16,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(cookieParser()); // necessary?
+
+app.use(cors({
+    origin: `http://localhost:${process.env.MAINPORT}`,
+    credentials: true,
+}));
 
 
 const credentials = {
