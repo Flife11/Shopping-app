@@ -1,0 +1,126 @@
+<style>
+    .editinfoTable tr,
+    .editinfoTable td,
+    .editinfoTable th {
+        background-color: transparent;
+    }
+</style>
+
+{{> header}}
+
+
+<div style="margin: 3vw;">
+    {{!-- header --}}
+    <H3 style="color: #2a6792; ">CHỈNH SỬA THÔNG TIN CÁ NHÂN</H3>
+
+    {{!-- addfund part --}}
+    <div style="width: 100%; display:flex; margin:3vw 0vw">
+
+        {{!-- info --}}
+        <div style="width: 100%; " class="border-top">
+
+            <form id="editprofileForm">
+                <table class="table editinfoTable">
+                    <thead>
+                        <tr>
+                            <th class="d-flex justify-content-center">
+                                Thông tin cá nhân
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        <tr>
+                            <td scope="col" class="d-flex">
+                                <div style="width: 20%;"></div>
+                                <div style="width:10%"><strong>Họ tên: </strong></div>
+                                <input type="text" name="name" id="name" value="{{user.name}}"
+                                    class="border border-secondary-subtle rounded-pill text-center"
+                                    style="background-color: transparent; width:40%">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="col" class="d-flex">
+                                <div style="width: 20%;"></div>
+                                <div style="width:10%"><strong>Địa chỉ: </strong></div>
+                                <input type="text" name="address" id="address" value="{{user.address}}"
+                                    class="border border-secondary-subtle rounded-pill text-center"
+                                    style="background-color: transparent; width:40%">
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="col" class="d-flex">
+                                <div style="width: 20%;"></div>
+                                <div style="width:10%"><strong>Email: </strong></div>
+                                <input type="email" name="email" id="email" value="{{user.email}}"
+                                    class="border border-secondary-subtle rounded-pill text-center"
+                                    style="background-color: transparent; width:40%">
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="d-flex justify-content-center">
+                                <button
+                                    style="background-image:linear-gradient(to right,#91d1de,#2a6792);color:white;width:120px;border-radius: 100px;border:none;height:6vh;margin-right:10px">
+                                    <strong>Xác nhận</strong>
+                                </button>
+
+                                <a href="/account"
+                                    style="background-image:linear-gradient(to right,#ffd986,#ff0000);color:white;width:120px;border-radius: 100px;border:none;height:6vh;margin-left:10px"
+                                    class="d-flex justify-content-center align-items-center text-decoration-none">
+                                    <strong>Hủy</strong>
+                                </a>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </form>
+
+        </div>
+
+
+    </div>
+</div>
+
+
+{{> notification_failure}}
+{{> notification_success}}
+{{> footer}}
+
+<script>
+
+    $("#editprofileForm").submit(async function (e) {
+        e.preventDefault();
+
+        let data = $(this).serializeArray().reduce((obj, field) => ({ ...obj, [field.name]: field.value }), {});
+
+        //if any field is empty
+        if (Object.values(data).some(x => x === '')) {
+            $('#failureNotificationText').text('Vui lòng điền đầy đủ thông tin');
+            $('#failureNotificationModal').css('display', '');
+            return;
+        }
+
+        const res = await fetch(`/account/editprofile`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
+
+        const resData = await res.json();
+
+        if (res.ok) {
+            $('#successNotificationtext').text(resData.message);
+            $('#successNotificationModal').css('display', '');
+        }
+        else {
+            $('#failureNotificationtext').text(resData.message);
+            $('#failureNotificationModal').css('display', '');
+        }
+    });
+
+</script>

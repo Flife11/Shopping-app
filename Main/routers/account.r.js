@@ -130,16 +130,17 @@ router.get('/assignpassportGoogle', checkLogin.isNotLoggedIn, passport.authentic
 
 router.get('/', checkLogin.isClient, accountController.getAccount);
 
-router.get('/editprofile', checkLogin.isClient,); //them cho nay (Update trong CRUD Tài khoản)
-router.get('/editpassword', checkLogin.isClient,); //them cho nay (Update trong CRUD Tài khoản)
-router.get('/addfund', checkLogin.isClient, accountController.getAddfund); //them cho nay
+router.get('/editprofile', checkLogin.isClient, accountController.getEditprofile); 
+router.get('/editpassword', checkLogin.isClient, accountController.getEditpassword);
+router.get('/addfund', checkLogin.isClient, accountController.getAddfund); 
 router.get('/checkout', checkLogin.isClient, (req, res) => { res.send('thanh toan') }); //them cho nay (thanh toán thì bắt buộc phải login)
 router.get('/orders/:id', checkLogin.isClient,); //them cho nay
 router.get('/orders', checkLogin.isClient,); //them cho nay
 
 
 router.post('/addfund', accountController.postAddfund)
-
+router.post('/editprofile', accountController.postEditprofile);
+router.post('/editpassword', accountController.postEditpassword);
 
 
 
