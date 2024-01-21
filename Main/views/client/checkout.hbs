@@ -1,0 +1,309 @@
+<style>
+    .cartTable tr,
+    .totalTable tr,
+    .cartTable td,
+    .totalTable td,
+    .cartTable th,
+    .totalTable th {
+        background-color: transparent;
+    }
+    .totalTable span{
+        color: #2a6792;
+    }
+
+
+    .totalTable.disabled thead,
+    .totalTable.disabled #purchase-btn{
+        opacity: 0.5;
+    }
+    .totalTable.disabled a{
+        pointer-events: none;
+    }
+    .totalTable.disabled #balance-warning{
+        display: block;
+    }
+    .totalTable #balance-warning{
+        display: none;
+    }
+</style>
+
+{{> header}}
+
+<div style="margin: 3vw;">
+    {{!-- header --}}
+    <H3 style="color: #2a6792; ">GIỎ HÀNG</H3>
+
+    {{!-- cart part --}}
+    <div style="width: 100%; display:flex; margin:3vw 0vw" id="cartPart">
+        {{!-- cart --}}
+        <div style="width: 65%;" id="cartBox" class="border-top">
+            <table class="table cartTable">
+                <thead>
+                    <tr class="text-center">
+                        <th scope="col" style="width: 45%;">Sản phẩm</th>
+                        <th scope="col" style="width: 20%;">Số lượng</th>
+                        <th scope="col" style="width: 20%;">Số tiền</th>
+                        <th scope="col" style="width: 15%;">Thao Tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {{!-- data start here --}}
+
+
+                </tbody>
+            </table>
+        </div>
+
+        {{!-- space --}}
+        <div style="width: 3%;"></div>
+
+        {{!-- total --}}
+        <div style="width: 32%;" class="border-top">
+            <table class="table totalTable">
+                <thead>
+                    <tr>
+                        <th>Tên: <span id="name">{{user.name}}</span></th>
+                    </tr>
+                    <tr>
+                        <th>Email: <span id="email">{{user.email}}</span></th>
+                    </tr>
+                    <tr>
+                        <th>Địa chỉ: <span id="address">{{user.address}}</span></th>
+                    </tr>
+                    <tr>
+                        <th>Số dư: <span id="balance">{{user.balance}}</span></th>
+                    </tr>
+                    <tr>
+                        <th>Tổng thanh toán: <span id="total"></span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="purchase-btn" class="d-flex justify-content-center">
+                            <a class="btn" href="/account/checkout"
+                                style="background-image:linear-gradient(to right,#91d1de,#2a6792);color:white;width:70%; border-radius: 100px;font-weight:bold;margin:3vh">
+                                Thanh toán
+                            </a>
+                        </td>
+                    </tr>
+                    <tr id="balance-warning">
+                        <td class="text text-warning">Số dư không đủ</td> 
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+</div>
+
+
+{{> notification_failure}}
+{{> notification_success}}
+
+{{> footer}}
+
+<script>
+    let total = 0.0;
+    let products = [];
+
+    async function getCart() {
+        let cart = JSON.parse(localStorage.getItem("cart"));
+        if (cart) {
+            const res = await fetch(`/cart`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(cart)
+            });
+
+            const resData = await res.json();
+
+            if (res.ok) {
+
+                products = resData.cart;
+
+                resData.cart.forEach(element => {
+                    total += element.price * element.amount;
+                });
+
+                $("#total").text(`${total}`);
+                // disable total table if balance is not enough
+                let balance = parseFloat($('#balance').text());
+                if (balance < total) {
+                    $('.totalTable').addClass('disabled');
+                }
+                else {
+                    $('.totalTable').removeClass('disabled');
+                }
+
+                // render cart
+                $("#cartBox tbody").html(resData.cart.map((element) => {
+                    return `
+                    <tr id=${element.id}>
+                        <td>
+                            <a style="display: flex;color:inherit;text-decoration:none" href="${element.id}">
+                                <img src="/public/image/${element.image}" style="width: 7vw; height: 7vw;">
+                                <div style="display: flex; flex-direction: column; justify-content: center;">
+                                    <p style="margin-left: 1vw;">
+                                        ${element.name}
+                                    </p>
+                                    <p style="margin-left: 1vw;color:#2a6792"><strong>${element.price} VNĐ</strong></p>
+                                </div>
+                            </a>
+                        </td>
+                        <td>
+                            <div class="d-flex justify-content-center align-items-center">
+                                <button class="btn" onclick="HandleDecrease(${element.id})"><i class="fa-solid fa-minus"></i></button>
+                                <input id="input-${element.id}" type="number" value="${element.amount}" onchange="HandleAmount(${element.id})"; min=0; max=${element.quantity}; style="width: 50%; background-color:transparent" class="form-control">
+                                <button class="btn" onclick="HandleIncrease(${element.id})"><i class="fa-solid fa-plus"></i></button>
+                            </div>
+                        </td>
+                        <td class="text-center" id="total-${element.id}">
+                            <strong>${element.price * element.amount} VNĐ</strong>
+                        </td>
+                        <td class="text-center">
+                            <button class="btn" onclick="HandleRemoveProduct(${element.id})" style="background-color: transparent;"><i class="fa-regular fa-trash-can"></i></button>
+                        </td>
+                    </tr>
+                    `;
+                }));
+
+            }
+        }
+    }
+    function renderEmptyCart() {
+        $('#cartPart').html(`
+            <div class="d-flex justify-content-center" style="width:100%"><img src="/public/resource/empty_cart.png" style="width: 20%;"></div>
+            <h5 class="text-center mt-4" >Chưa có gì trong giỏ hàng!</h5>
+            <p class="text-center">Chưa có mặt hàng nào trong giỏ, chọn ít nhất một sản phẩm để tiếp tục.</p>
+        `);
+    }
+
+    $(document).ready(async function () {
+        let cart = JSON.parse(localStorage.getItem("cart"));
+        if (cart && cart.length) {
+            $('#cartPart').css('display', 'flex');
+            $('#cartPart').css('margin', '3vw 0vw');
+            getCart();
+
+        }
+        else {
+            $('#cartPart').css('display', '');
+            $('#cartPart').css('margin', '1vw 0vw');
+            renderEmptyCart();
+        }
+    });
+
+
+    function HandleIncrease(id) {
+
+        let input = $(`#input-${id}`);
+        input.val(parseInt(input.val()) + 1);
+        input.change();
+    }
+
+    function HandleDecrease(id) {
+        let input = $(`#input-${id}`);
+        input.val(parseInt(input.val()) - 1);
+        input.change();
+    }
+
+    function HandleRemoveProduct(id) {
+        let input = $(`#input-${id}`);
+        input.val(0);
+        input.change();
+    }
+
+    function HandleAmount(id) {
+
+        // Note: tất cả cần xử lý : local storage, products, table, total, input-id, total-id
+
+        let inputVal = parseInt($(`#input-${id}`).val());
+        let index = products.findIndex((element) => element.id == id);
+
+        if (inputVal < 0) {
+            $(`#input-${id}`).val(1);
+            inputVal = 1;
+
+        }
+
+        else if (inputVal > products[index].quantity) {
+            $(`#input-${id}`).val(products[index].quantity);
+            inputVal = products[index].quantity;
+
+        }
+        else if (inputVal == 0) {
+
+            $(`#input-${id}`).val(0);
+            inputVal = 0;
+        }
+
+        // update products
+        products[index].amount = inputVal;
+
+        // update local storage
+        let cart = JSON.parse(localStorage.getItem("cart"));
+        cart = cart.map((element) => {
+            if (element.id == id) {
+                element.quantity = inputVal;
+            }
+            return element;
+        });
+        localStorage.setItem("cart", JSON.stringify(cart));
+
+        // update total for this product only
+        $(`#total-${id}`).html(`<strong>${products[index].price * inputVal} VNĐ</strong>`);
+
+        // update total for all products
+        total = 0;
+        products.forEach((element) => {
+            total += element.price * element.amount;
+        });
+        $("#total").text(`${total} VNĐ`);
+        // disable total table if balance is not enough
+        let balance = parseFloat($('#balance').text());
+        if (balance < total) {
+            $('.totalTable').addClass('disabled');
+        }
+        else {
+            $('.totalTable').removeClass('disabled');
+        }
+
+        // remove product if amount = 0
+        if (inputVal == 0) {
+            $(`#${id}`).remove();
+
+            cart = JSON.parse(localStorage.getItem("cart"));
+            cart = cart.filter((element) => element.id != id);
+            localStorage.setItem("cart", JSON.stringify(cart));
+
+            products = products.filter((element) => element.id != id);
+        }
+
+        // update cart number
+        cart = JSON.parse(localStorage.getItem("cart"));
+        if (cart.length == 0) {
+            $('#cart-count').hide();
+        }
+        else {
+            $('#cart-count').show();
+            $('#cart-count').text(cart.length);
+        }
+
+        // update cart part
+        if (cart.length != 0) {
+            $('#cartPart').css('display', 'flex');
+            $('#cartPart').css('margin', '3vw 0vw');
+        }
+        else {
+            $('#cartPart').css('display', '');
+            $('#cartPart').css('margin', '1vw 0vw');
+            renderEmptyCart();
+        }
+
+    }
+
+</script>

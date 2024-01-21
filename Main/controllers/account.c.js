@@ -347,4 +347,13 @@ module.exports = {
             res.status(500).json({ message: 'Lỗi hệ thống, vui lòng thử lại sau!' });
         }
     },
+
+    getCheckout: async function (req, res) {
+        //Get necessary data
+        user = req.session.passport.user;
+        const categories = await categoryModel.getAll();
+        const subcategories = await subcategoryModel.getAll();
+
+        res.render('checkout', { title: 'Thanh toán', categories: categories, subcategories: subcategories, isLoggedin: req.isAuthenticated(), user: user });
+    }
 };
