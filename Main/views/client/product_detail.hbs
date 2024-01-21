@@ -2,41 +2,41 @@
 
 <style>
     #wrapper{
-        margin-top: 20px;
-        margin-inline: 50px;
+        margin-top: 30px;
+        margin-bottom: 30px;
+        margin-inline: 30px;
         display: flex;
         justify-content: center;
     }
     #container{
         display: flex;
         flex-direction: column;
-        max-width: 1200px;
     }
     .block{
-        margin-bottom: 10px;
+        margin-bottom: 0px;
         background-color: white;
     }
     
     .detail_container{
         display: grid;
-        grid-template-columns: 50% 50%;
+        grid-template-columns: 40% 60%;
+        padding-bottom: 20px;
     }
     .col-left img{
         max-width: 100%;
         max-height: 100%;
     }
     .col-right{
-        padding: 20px;
-        margin-left: 20px;
+        padding: 0px 20px 20px 50px;
         display: flex;
         flex-direction: column;
     }
     .col-right p{
-        font-size: x-large;
-        color: #2a6792;
+        /*font-size: x-large;*/
+        /*color: #2a6792;*/
     }
     .col-right li{
-        font-size: large;
+        /*font-size: large;*/
     }
     #het_hang{
         background-color: red;
@@ -48,6 +48,7 @@
         cursor:default;
         color:white;
         font-weight: bold;
+        width: 60%;
     }
 
 
@@ -58,25 +59,28 @@
 </style>
 
 <div id="wrapper">
-    <div id="container">
+    <div id="container" style="border-radius: 30px;">
         {{!-- detail containter --}}
-        <div class="detail_container block">
+        <div class="detail_container block" style="border-radius: 30px 30px 0 0;">
             <div class="col-left">
-                <img src="/public/image/{{product.image}}">
+                <img src="/public/image/{{product.image}}" style="border-radius: 30px 0px 0px 0;">
             </div>
             <div class="col-right">
-                <h2>{{product.name}}</h2>
-                <p class="mt-3 mb-1">{{product.price}} VNĐ</p>
+                <h5 class="text-center" style="margin: 35px 0px;color:#2a6792;text-transform:uppercase">{{product.name}}</h5>
                 
-                <li class="text-body-tertiary mb-0">Số lượng tồn: {{product.quantity}}</li>
-                <li class="text-body-tertiary">Mô tả ngắn: {{product.shortdescription}}</li>
+                <li class="mb-0" >Giá: <STRONG style="color: #ee4f2e;">{{product.price}} VNĐ</STRONG> </li>
+                <li class="mb-0">Số lượng tồn: {{product.quantity}}</li>
+                <li class="">Mô tả ngắn: {{product.shortdescription}}</li>
 
                 {{#if (equals product.quantity 0)}}
-                <div id="het_hang">TẠM HẾT HÀNG</div>
+                <div style="width: 100%;" class="d-flex justify-content-center mt-4">
+                    <div id="het_hang">TẠM HẾT HÀNG</div>
+                </div>
                 {{else}}
-                <div class="mt-3 mb-3">
-                    <label for="quantity" class="mx-2">Số lượng</label>
-                    <input type="number" oninput="HandleAmount({{product.quantity}})" id="quantity" name="quantity" min="1" max="{{product.quantity}}" value="1" style="text-align: center;">
+                <div class="mb-2" style="margin-top: 35px;">
+                    <label for="quantity" class="mx-2">Số lượng: </label>
+                    <input type="number" oninput="HandleAmount({{product.quantity}})" id="quantity" name="quantity" min="1" max="{{product.quantity}}" value="1" class="border border-secondary-subtle rounded-pill text-center"
+                                    style="background-color: transparent;">
                 </div>
                 <button class="btn" onclick="addCart({{product.id}},{{product.quantity}})" style="background-image:linear-gradient(to right,#91d1de,#2a6792);color:white;width:50%;max-width: 185px;border-radius: 100px"><strong>Thêm vào giỏ hàng</strong></button>
                 {{/if}}
@@ -86,12 +90,12 @@
         {{!-- full description container --}}
         <div class="full_description_container block">
             <h4 style="color: #2a6792;">Mô tả chi tiết</h4>
-            <p class="text-dark-emphasis">{{product.fulldescription}}</p>
+            <span class="text-dark-emphasis">{{product.fulldescription}}</span>
         </div>
 
 
         {{!-- suggestion container --}}
-        <div class="suggestion_container block">
+        <div class="suggestion_container block" style="border-radius: 0 0 30px 30px;">
             <h4 style="color: #2a6792;">Sản phẩm liên quan</h4>
 
             {{!-- product box --}}
@@ -105,7 +109,7 @@
                 
             </div>
             {{!-- pagination --}}
-            {{>pagination}}
+            <div style="color: #2a6792;">{{>pagination}}</div>
         </div>
     </div>
 </div>
