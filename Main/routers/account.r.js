@@ -128,9 +128,7 @@ router.get('/assignpassportGoogle', checkLogin.isNotLoggedIn, passport.authentic
 // Phải kiểm tra user đã login mới cho zô đây :0
 // Ví dụ: xem profile, sửa profile, xem orders, chi tiết orders, thanh toán, nạp tiền,...
 
-router.get('/', checkLogin.isClient, (req, res) => {
-    res.send('Trang chu cua account') //xoa cho nay
-});
+router.get('/', checkLogin.isClient, accountController.getAccount);
 
 router.get('/editprofile', checkLogin.isClient,); //them cho nay (Update trong CRUD Tài khoản)
 router.get('/addfund', checkLogin.isClient, accountController.getAddfund); //them cho nay
