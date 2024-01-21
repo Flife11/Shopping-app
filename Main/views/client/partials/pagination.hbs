@@ -4,9 +4,8 @@
         justify-content: center;
     }
 
-    .pagination a,
-    p {
-        color: black;
+    .pagination a, .pagination p {
+        color: #2a6792;
         float: left;
         padding: 8px 16px;
         text-decoration: none;
@@ -26,9 +25,9 @@
 </style>
 <div class="pagination">
     {{#if (equals page 1)}}
-    <a type="button">&laquo;</a>
+    <a type="button"><i class="fa-solid fa-caret-left"></i></a>
     {{else}}
-    <a type="button" onclick="changePage({{pre_page}})">&laquo;</a>
+    <a type="button" onclick="changePage({{pre_page}})"><i class="fa-solid fa-caret-left"></i></a>
     {{/if}}
 
     {{#if (equals page 1)}}
@@ -55,9 +54,9 @@
     {{/if}}
 
     {{#if (equals page total_page)}}
-    <a type="button">&raquo;</a>
+    <a type="button"><i class="fa-solid fa-caret-right"></i></a>
     {{else}}
-    <a type="button" onclick="changePage({{next_page}})">&raquo;</a>
+    <a type="button" onclick="changePage({{next_page}})"><i class="fa-solid fa-caret-right"></i></a>
     {{/if}}
 </div>
 

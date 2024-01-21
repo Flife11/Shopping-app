@@ -15,6 +15,85 @@ const connectionString = {
 
 const db = pgp(connectionString);
 module.exports = {
+    getByOffset: async (tbName, offset, condition, limit) => {
+        let dbcn = null;
+        try {
+            dbcn = await db.connect();
+            const query = `
+            SELECT * FROM
+            (SELECT * FROM "${tbName}" ${condition})
+            LIMIT ${limit}
+            OFFSET ${offset};`
+            const data = await db.any(query);
+            return data;
+        } catch (error) {
+            throw error
+        } finally {
+            dbcn.done();
+        }
+    },
+
+    // tbName: tên của bảng
+    // getCol: mảng các cột cần lấy giá trị ví dụ: ['id', 'name']
+    // condition: điều kiện where nếu có ví dụ 'where id=1'
+    get: async (tbName, getCol, condition='') => {
+        let dbcn = null;
+        try {            
+            dbcn = await db.connect();
+            const query = `SELECT ${getCol.join()} FROM "${tbName}" ${condition}'`;
+            const data = await db.any(query);
+            return data;
+        } catch (error) {
+            throw error
+        } finally {
+            dbcn.done();
+        }
+    },
+    // tbName: tên của bảng
+    // colName: mảng các cột sẽ thêm giá trị ví dụ: ['id', 'name']
+    // data: mảng các giá trị sẽ được thêm mỗi giá trị là một object với key giống với tên cột
+    insert: async (tbName, colName, data) => {
+        try {
+            const query = pgp.helpers.insert(data, colName, tbName);
+            const d = await db.query(query + 'RETURNING id');
+            return d;
+        } catch (error) {
+            throw error
+        }
+    },
+
+    // tbName: tên của bảng
+    // colName: mảng các cột sẽ cập nhật giá trị ví dụ: ['id', 'name']
+    // data: mảng các giá trị sẽ được thêm mỗi giá trị là một object với key giống với tên cột
+    // condition: điều kiện where nếu có ví dụ 'where id=1'
+    update: async function(tbName, colName, data, condition) {
+        let dbcn = null;
+        try {
+            dbcn = await db.connect();
+            const query = pgp.helpers.update(data, colName, tbName);
+            const d = await db.query(query + ` ${condition}`);
+            return d;
+        } catch (error) {
+            throw error
+        } finally {
+            dbcn.done();
+        }
+    },
+
+    delete: async function(tbName, listID){
+        let dbcn = null;
+        try {
+            dbcn = await db.connect();
+            const query = `DELETE FROM "${tbName}" WHERE id IN (${listID.join()})`;
+            const data = await db.any(query);
+            return data;
+        } catch (error) {
+            throw error
+        } finally {
+            dbcn.done();
+        }
+    },
+    
     initDatabase: async function(){
         try {
             // Kiểm tra xem database đã tồn tại chưa    
@@ -77,6 +156,7 @@ module.exports = {
                         password varchar(500),
                         name varchar(100),
                         email varchar(100),
+                        address varchar(500),
                         role varchar(100) CHECK (role IN ('client', 'admin')),
                         
                         PRIMARY KEY (id)
@@ -114,6 +194,7 @@ module.exports = {
                     password: await bcrypt.hash('123', parseInt(process.env.SALT_ROUNDS)),
                     name: 'Admin 1',
                     email: 'abc@gmail.com',
+                    address: '123 ABC',
                     role: 'admin'
                 }
                 const user2 = {
@@ -121,11 +202,12 @@ module.exports = {
                     password: await bcrypt.hash('123', parseInt(process.env.SALT_ROUNDS)),
                     name: 'Admin 2',
                     email: 'def@gmail.com',
+                    address: '456 DEF',
                     role: 'admin'
                 }
 
-                await db.none('INSERT INTO "USER"(username, password, name, email, role) VALUES(${username}, ${password}, ${name}, ${email}, ${role})', user1);
-                await db.none('INSERT INTO "USER"(username, password, name, email, role) VALUES(${username}, ${password}, ${name}, ${email}, ${role})', user2);
+                await db.none('INSERT INTO "USER"(username, password, name, email, address, role) VALUES(${username}, ${password}, ${name}, ${email}, ${address}, ${role})', user1);
+                await db.none('INSERT INTO "USER"(username, password, name, email, address, role) VALUES(${username}, ${password}, ${name}, ${email}, ${address}, ${role})', user2);
 
                 //Thêm dữ liệu mẫu bán hàng vào database
                 await db.none(`

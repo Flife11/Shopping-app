@@ -43,6 +43,7 @@ module.exports = {
         const token = req.body.token;
         try {
             var data = jwt.verify(token, secret);
+            console.log(data);
             try {
                 if (data.idorder === null) {
                     var user = await USER.getCondition('id', data.iduser);
@@ -73,17 +74,17 @@ module.exports = {
                     }
                 }
                 const message = {}
-                res.status(200).json({ message: "Thanh toán thành công" });
+                res.status(200).json({ message: "Thanh toán thành công!" });
             }
             catch (err) {
-                console.log(error);
+                console.log(err);
 
-                res.status(501).json({ message: "Lỗi không thể thanh toán" })
+                res.status(501).json({ message: "Lỗi không thể thanh toán!" })
             }
         }
         catch (error) {
             console.log(error);
-            res.status(403).json({ message: "Lỗi không thể decode" })
+            res.status(403).json({ message: "Lỗi không thể decode!" })
         }
 
     },

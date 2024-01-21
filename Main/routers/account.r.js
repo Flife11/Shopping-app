@@ -4,21 +4,18 @@ const passport = require('passport');
 const accountController = require('../controllers/account.c.js');
 const checkLogin = require('../middleware/checkLogin');
 
-//TODO: chuyển tất cả handle login về controller, xóa 2 require ở dưới
+//TODO: chuyển tất cả handle login về controller, xóa 3 require ở dưới
 const jwt = require('jsonwebtoken');
 let secret = process.env.JWT_SECRET;
+const corsHelper = require('../utilities/corsHelper');
 
 // Logout
-router.get('/logout', checkLogin.isLoggedIn, (req, res) => {
+router.get('/logout', checkLogin.isLoggedIn, function (req, res) {
     req.logOut(err => {
         console.log(err);
-        next(err);
     });
-
-    // Back to home page
     res.redirect("/");
 });
-// TODO: Sửa lại UI của user trong header
 
 
 // Free routes
@@ -52,27 +49,31 @@ router.post('/login', (req, res, next) => {
             }
 
             // fetch to /getbalance (Payment server) user.id (by token) and assign to req.session.passport.user.balance
-            let iduser = user.id;
-            let token = jwt.sign({ iduser }, secret, { expiresIn: 24 * 60 * 60 });
-            let data = { token: token };
+            if (user.role == "client") {
+                let iduser = user.id;
+                let token = jwt.sign({ iduser }, secret, { expiresIn: 24 * 60 * 60 });
+                let data = { token: token };
 
-            let PaymentURL = process.env.PAYMENT_URL;
-            let rs = await fetch(PaymentURL + '/getbalance', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
+                let PaymentURL = process.env.PAYMENT_URL;
+                const corsToken = await corsHelper.generateCorsToken(req);
+                let rs = await fetch(PaymentURL + '/getbalance', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': corsToken
+                    },
+                    body: JSON.stringify(data)
+                });
 
-            let rsData = await rs.json();
-            if (!rs.ok){
-                return res.status(501).json({ message: rsData.message })
+                let rsData = await rs.json();
+                if (!rs.ok) {
+                    return res.status(501).json({ message: rsData.message })
+                }
+
+                let balanceToken = rsData.token;
+                let balanceData = jwt.verify(balanceToken, secret);
+                req.session.passport.user.balance = balanceData.balance;
             }
-
-            let balanceToken = rsData.token;
-            let balanceData = jwt.verify(balanceToken, secret);
-            req.session.passport.user.balance = balanceData.balance;
 
 
             // Redirect based on role
@@ -91,31 +92,34 @@ router.get('/google', checkLogin.isNotLoggedIn, accountController.renderGoogleLo
 router.get('/assignpassportGoogle', checkLogin.isNotLoggedIn, passport.authenticate('google', {
     failureRedirect: '/account/login'
 }), async (req, res) => {
-    
+
     // fetch to /getbalance (Payment server) user.id (by token) and assign to req.session.passport.user.balance
-    
-    let iduser = req.session.passport.user.id;
-    let token = jwt.sign({ iduser }, secret, { expiresIn: 24 * 60 * 60 });
-    let data = { token: token };
+    if (req.session.passport.user.role == "client") {
+        let iduser = req.session.passport.user.id;
+        let token = jwt.sign({ iduser }, secret, { expiresIn: 24 * 60 * 60 });
+        let data = { token: token };
 
-    let PaymentURL = process.env.PAYMENT_URL;
-    let rs = await fetch(PaymentURL + '/getbalance', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    });
+        let PaymentURL = process.env.PAYMENT_URL;
+        const corsToken = await corsHelper.generateCorsToken(req);
+        let rs = await fetch(PaymentURL + '/getbalance', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': corsToken
+            },
+            body: JSON.stringify(data)
+        });
 
-    let rsData = await rs.json();
-    if (!rs.ok){
-        return res.status(501).json({ message: rsData.message })
+        let rsData = await rs.json();
+        if (!rs.ok) {
+            return res.status(501).json({ message: rsData.message })
+        }
+
+        let balanceToken = rsData.token;
+        let balanceData = jwt.verify(balanceToken, secret);
+        req.session.passport.user.balance = balanceData.balance;
     }
 
-    let balanceToken = rsData.token;
-    let balanceData = jwt.verify(balanceToken, secret);
-    req.session.passport.user.balance = balanceData.balance;
-    
     res.redirect('/account');
 });
 
@@ -124,16 +128,19 @@ router.get('/assignpassportGoogle', checkLogin.isNotLoggedIn, passport.authentic
 // Phải kiểm tra user đã login mới cho zô đây :0
 // Ví dụ: xem profile, sửa profile, xem orders, chi tiết orders, thanh toán, nạp tiền,...
 
-router.get('/', checkLogin.isClient, (req, res) => {
-    res.send('Trang chu cua account') //xoa cho nay
-});
+router.get('/', checkLogin.isClient, accountController.getAccount);
 
-router.get('/editprofile', checkLogin.isClient,); //them cho nay (Update trong CRUD Tài khoản)
-router.get('/addfund', checkLogin.isClient,); //them cho nay
-router.get('/checkout', checkLogin.isClient,); //them cho nay (thanh toán thì bắt buộc phải login)
+router.get('/editprofile', checkLogin.isClient, accountController.getEditprofile); 
+router.get('/editpassword', checkLogin.isClient, accountController.getEditpassword);
+router.get('/addfund', checkLogin.isClient, accountController.getAddfund); 
+router.get('/checkout', checkLogin.isClient, (req, res) => { res.send('thanh toan') }); //them cho nay (thanh toán thì bắt buộc phải login)
 router.get('/orders/:id', checkLogin.isClient,); //them cho nay
 router.get('/orders', checkLogin.isClient,); //them cho nay
 
+
+router.post('/addfund', accountController.postAddfund)
+router.post('/editprofile', accountController.postEditprofile);
+router.post('/editpassword', accountController.postEditpassword);
 
 
 

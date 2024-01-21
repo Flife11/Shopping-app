@@ -1,5 +1,5 @@
 <style>
-    #addCart {
+    .addCart {
         background-color: #2a6792; 
         position: absolute; 
         bottom: -20px; 
@@ -7,7 +7,7 @@
         width: 55.91px; 
         height: auto;
     }
-    #addCart:hover{
+    .addCart:hover{
         background-color: #61adbc;
     }
     .img-resize{
@@ -45,12 +45,12 @@
 
     {{!-- out of stock --}}
     {{#if this.quantity}}
-    <button id="addCart" class="btn rounded-circle p-3 lh-1" onclick="addCart(event)" type="button" id="{{this.id}}">
+    <button class="btn rounded-circle p-3 lh-1 addCart" onclick="addCart(event, {{this.quantity}})" type="button" id="{{this.id}}">
         <img src="/public/resource/add-to-cart.ico" class="img-fluid">
     </button>
     {{else}}
     <a href="/{{this.id}}" class="card overlay d-flex align-items-center justify-content-center text-decoration-none"
-        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1;">
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1; border-radius:0; border-width:0">
         <strong class="py-3 px-4 text-center"
             style="background-color: red; color: white; font-size:larger; transform: rotate(-30deg);">OUT OF
             STOCK
@@ -65,15 +65,15 @@
     //    localStorage.removeItem('cart');
     //})
 
-    function addCart(event) {
+    function addCart(event,quantity) {
 
         // Get id of product
         let Itemid = event.currentTarget.id;
 
         // If Itemid is empty (error), display error message
         if (!Itemid) {
-            $('#errorNotificationText').text('Lỗi! Không thể thêm sản phẩm vào giỏ hàng! Vui lòng thử lại sau!')
-            $('#errorNotificationModal').css('display', '');
+            $('#failureNotificationText').text('Lỗi! Không thể thêm sản phẩm vào giỏ hàng! Vui lòng thử lại sau!')
+            $('#failureNotificationModal').css('display', '');
             return;
         }
 
@@ -83,9 +83,17 @@
         let isExist = false;
         for (let i = 0; i < cart.length; i++) {
             if (cart[i].id == Itemid) {
-                cart[i].quantity++;
-                isExist = true;
-                break;
+                if ((cart[i].quantity + 1) <= quantity){
+                    cart[i].quantity++;
+                    isExist = true;
+                    break;
+                }
+                else{
+                    $('#failureNotificationText').text('Đã thêm tối đa số lượng sản phẩm vào giỏ hàng cho sản phẩm này!')
+                    $('#failureNotificationModal').css('display', '');
+                    return;
+                }
+                
             }
         }
 
