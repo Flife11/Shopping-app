@@ -55,7 +55,8 @@ module.exports = {
     insert: async (tbName, colName, data) => {
         try {
             const query = pgp.helpers.insert(data, colName, tbName);
-            const d = await db.query(query + 'RETURNING id');
+            // console.log(query);
+            const d = await db.query(query + ' RETURNING id');
             return d;
         } catch (error) {
             throw error

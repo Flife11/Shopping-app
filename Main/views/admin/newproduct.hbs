@@ -1,0 +1,74 @@
+{{> header}}
+<div class="mx-auto rounded" style="max-width: 60rem">
+    <div class="p-3 py-5">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="text-right">Thêm sản phẩm</h4>
+        </div>
+        <div class="p-3 bg-white">
+            <form action="http://localhost:3000/admin/product/new" enctype="multipart/form-data" method="post" name="new-product" id="new-product"
+                class="mt-3">
+                <input type="hidden" name="id" value="">
+                <div class="col-md-12"><label class="p-2 labels font-weight-bold">Tên sản phẩm</label>
+                    <input name="name" id="name" type="text" class="form-control" placeholder="Tên sản phẩm"
+                        value="" required>
+                </div>
+                <div class="col-md-12"><label class="p-2 labels font-weight-bold">Giá</label>
+                    <input name="price" id="price" type="number" class="form-control" placeholder="Giá"
+                        value="" required>
+                </div>
+                <div class="col-md-12"><label class="p-2 labels font-weight-bold">Số lượng</label>
+                    <input name="quantity" id="quantity" type="number" class="form-control" placeholder="Số lượng"
+                        value="" required>
+                </div>
+                <div class="col-md-12"><label class="p-2 labels font-weight-bold">Loại</label>
+                    <select required id="category" name="category" class="form-control form-field" placeholder="">
+                        {{#each categories}}
+                            <option value="{{this.id}}">{{this.name}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+                <div id="subcategory-container" class="col-md-12"><label class="p-2 labels font-weight-bold">Loại con</label>
+                    <select name="subcategory" id="subcategory" class="form-control form-field" placeholder="">
+                        
+                    </select>
+                </div>
+                <div class="col-md-12"><label class="p-2 labels font-weight-bold">Hình ảnh</label>
+                    <input name="image" id="image" type="file" class="form-control" placeholder="Số lượng"
+                        value="" required>
+                </div>
+                <div class="col-md-12"><label class="p-2 labels font-weight-bold">Mô tả ngắn</label>
+                    <textarea name="shortdes" class="form-control" maxlength="490" style="height:100px;"></textarea>
+                </div>
+                <div class="col-md-12"><label class="p-2 labels font-weight-bold">Mô tả đầy đủ</label>
+                    <textarea name="longdes" class="form-control" maxlength="2990" style="height:200px;"></textarea>
+                </div>
+            
+                <div class="mt-5 text-center"><button id="create-button" class="btn btn-primary profile-button" type="submit">Tạo</button></div>
+            </form>
+        </div>
+    </div> 
+</div>
+{{#each subCatList as |sub|}}                        
+    <select style="display: none;" id="sub-{{sub.cat.id}}" class="form-control form-field" placeholder="">
+        {{#each sub.list as |s|}}
+            <option value="{{s.id}}">{{s.name}}</option>
+        {{/each}}
+    </select>
+{{/each}}
+<script>
+    $(() => {
+        let cat = $('#category').val();
+        $('#subcategory').html('');
+        $('#subcategory-container').css({display: ''});
+        $('#subcategory').html($(`#sub-${cat}`).html());
+
+        $('#image').fileinput({'showUpload': false, "previewFileType": 'any', theme: 'fa6'});
+    })
+    $('#category').change(function() {
+        let cat = $('#category').val();
+        $('#subcategory').html('');
+        $('#subcategory-container').css({display: ''});        
+        $('#subcategory').html($(`#sub-${cat}`).html())
+    });
+        
+</script>

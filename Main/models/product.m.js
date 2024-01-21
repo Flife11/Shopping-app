@@ -39,5 +39,13 @@ module.exports = {
 
     delete: async function(listID) {
         db.delete("PRODUCT", listID);
-    }
+    },
+
+    insert: async function(name, price, quantity, catid, subcatid=null, shortdes, longdes) {
+        let id = await db.db.query('SELECT MAX(id) AS m FROM "PRODUCT"')
+        let newid = await db.insert("PRODUCT", ['id', 'name', 'price', 'quantity', 'catid', 'subcatid', 'shortdescription', 'fulldescription'], 
+        [{id: id[0].m+1, name, price, quantity, catid, subcatid, "shortdescription": shortdes, "fulldescription": longdes}]);
+        db.update("PRODUCT", ['image'], [{image: `${newid[0].id}.jpg`}], `WHERE id=${newid[0].id}`);
+        return newid[0].id;
+    },
 }
