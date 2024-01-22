@@ -1,44 +1,70 @@
 {{> header}}
 <div class="content" style="padding: 4vh;">
     <div class="page-heading d-flex justify-content-between align-items-center">
-        <h1 class="page-heading-title">Sản phẩm</h1>
-        <a href="/admin/product/new" class="btn btn-primary">Thêm sản phẩm</a>
+        <h1 class="page-heading-title">{{header}}</h1>
+        <a href="{{newurl}}" class="btn btn-primary">THÊM {{header}}</a>
     </div>
     
-    <div class="card-shadow">
-        <table class="table-listing table">
-            <thead>        
+    <div class="mx-auto d-flex flex-column card-shadow">
+        <table style="width: auto;" class="mx-auto table-listing table">
+            <thead>
                 <th scope="col">
                     <input id="check-all" class="fs-4 form-check-input" type="checkbox" value="0" aria-label="Checkbox for select all">
                 </th>
-                <th scope="col">Mã số</th>
-                <th scope="col">Hình ảnh</th>
+                <th scope="col">MÃ SỐ</th>
+                {{#if imageCol}}
+                <th scope="col">{{imageCol}}</th>
+                {{/if}}
                 <th scope="col">
                     <div class="table-header" style="margin-bottom: 1rem;">
-                            Tên sản phẩm
+                            TÊN {{header}}
                     </div>
                     <div class="header-filter input-group" style="width: 15rem;">
-                        <input value="{{productname}}" name="productName" id="productName" class="product-name form-control" placeholder="Tên sản phẩm" type="text" aria-label="Product name">
+                        <input value="{{name}}" name="name" id="name" class="form-control" placeholder="TÊN {{header}}" type="text">
                     </div>
                 </th>
+                {{#if emailCol}}
                 <th scope="col">
                     <div class="table-header" style="margin-bottom: 1rem;">
-                            Giá
+                            {{emailCol}}
+                    </div>
+                    <div class="header-filter input-group" style="width: 15rem;">
+                        <input value="{{email}}" name="email" id="email" class="form-control" placeholder="Email" type="text">
+                    </div>
+                </th>
+                {{/if}}
+                {{#if addressCol}}
+                <th scope="col">
+                    <div class="table-header" style="margin-bottom: 1rem;">
+                            {{addressCol}}
+                    </div>
+                    <div class="header-filter input-group" style="width: 15rem;">
+                        <input value="{{address}}" name="address" id="address" class="form-control" placeholder="Email" type="text">
+                    </div>
+                </th>
+                {{/if}}
+                {{#if priceCol}}
+                <th scope="col">
+                    <div class="table-header" style="margin-bottom: 1rem;">
+                        {{priceCol}}
                     </div>
                     <div class="input-group d-flex" style="width: 15rem;">                    
                         <input value = "{{minprice}}" name="minprice" id="minprice" placeholder="Min" type="text" class="form-control">
                         <input value = "{{maxprice}}" name="maxprice" id="maxprice" placeholder="Max" type="text" class="form-control">
                     </div>
                 </th>
+                {{/if}}
+                {{#if quantityCol}}
                 <th scope="col">
                     <div class="table-header" style="margin-bottom: 1rem;">
-                            Số lượng
+                        {{quantityCol}}
                     </div>
                     <div class="input-group" style="width: 15rem;">                    
                         <input value="{{minquantity}}" name="minquantity" id="minquantity" placeholder="Min" type="text" class="form-control">
                         <input value="{{maxquantity}}" name="maxquantity" id="maxquantity" placeholder="Max" type="text" class="form-control">
                     </div>
-                </th>            
+                </th>
+                {{/if}}         
             </thead>
             <tbody>
                 <tr id="hidden-row"></tr>
@@ -46,16 +72,22 @@
                     <tr>
                         <td style="vertical-align:middle;"><input id="{{this.id}}" class="fs-4 check form-check-input" type="checkbox" value="0"></td>
                         <td style="vertical-align:middle;">{{this.id}}</td>
+                        {{#if this.image}}
                         <td style="width: 100px;">
                             <img src="../public/image/{{this.image}}" class="img-thumbnail" alt="...">
                         </td>
+                        {{/if}}
                         <td style="vertical-align:middle;">
                             <a href="" style="color: black; text-decoration: none;">{{this.name}}</a>
                         </td>
+                        {{#if this.price}}
                         <td style="vertical-align:middle;">{{this.price}}</td>
+                        {{/if}}
+                        {{#if this.quantity}}
                         <td style="vertical-align:middle;">{{this.quantity}}</td>
+                        {{/if}}
                     </tr>
-                {{/each}}                
+                {{/each}}            
             </tbody>
         </table>
         <div class="d-flex align-items-center justify-content-between">
@@ -94,7 +126,9 @@
     });
 
     function HandleFilter() {
-        let productname = $("#productName").val();
+        let name = $("#name").val();
+        let email = $('#email').val();
+        let address = $('#address').val();
         let minprice = $("#minprice").val();
         let maxprice = $("#maxprice").val();
         let minquantity = $("#minquantity").val();
@@ -108,7 +142,9 @@
         let params = new URLSearchParams(url.search);
 
         //remove the filter parameters
-        params.delete('productname');
+        params.delete('name');
+        params.delete('email');
+        params.delete('address');
         params.delete('minprice');
         params.delete('maxprice');
         params.delete('minquantity');
@@ -117,8 +153,12 @@
         params.delete('limit'); //?
 
         //add the filter parameters
-        if (productname)
-            params.set('productname', productname);
+        if (name)
+            params.set('name', name);
+        if (email)
+            params.set('email', email);
+        if (address)
+            params.set('address', address);
         if (minprice)
             params.set('minprice', minprice);
         if (maxprice)
@@ -160,7 +200,7 @@
     }
 
     document.onkeydown=function(){
-        if(window.event.keyCode=='13'){           
+        if(window.event.keyCode=='13'){ 
             HandleFilter();
         }
     }
@@ -206,7 +246,7 @@
         })
         let dataBody = JSON.stringify({"listID": listID});
         
-        let rs = await fetch('http://localhost:3000/admin/product/delete', {
+        let rs = await fetch('{{deleteurl}}', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
