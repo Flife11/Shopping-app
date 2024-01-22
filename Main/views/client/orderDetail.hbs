@@ -1,0 +1,43 @@
+<style>
+    table {
+        text-align: center;
+    }
+</style>
+
+
+{{> header}}
+
+
+<center style="margin: 3vw;">
+    <H3 style="color: #2a6792; ">Chi tiết đơn hàng</H3>
+    <div>
+        <div style="width: 65%;"class="border-top">
+            <table class="table">
+                <thead>
+                    <tr class="text-center">
+                        <th scope="col" style="width: 20%;">ID</th>
+                        <th scope="col" style="width: 20%;">Product</th>
+                        <th scope="col" style="width: 20%;">Quantity</th>
+                        <th scope="col" style="width: 20%;">Price</th>
+                        <th scope="col" style="width: 20%;">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each orderdetails}}
+                    <tr>
+                        <td>{{this.id}}</td>
+                        <td>{{this.product.name}}</td>
+                        <td>{{this.quantity}}</td>
+                        <td>{{this.price}}</td>
+                        <td>{{this.total}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</center>
+
+
+
+{{> footer}}
