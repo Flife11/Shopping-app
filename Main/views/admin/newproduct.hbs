@@ -7,22 +7,22 @@
         <div class="p-3 bg-white">
             <form action="{{posturl}}" enctype="multipart/form-data" method="post" name="new-product" id="new-product"
                 class="mt-3">
-                <input type="hidden" name="id" value="">
+                <input type="hidden" name="id" value="{{idVal}}">
                 {{#if nameCol}}
                 <div class="col-md-12"><label class="p-2 labels font-weight-bold">{{nameCol}}</label>
-                    <input name="name" id="name" type="text" class="form-control" placeholder="{{nameCol}}"
+                    <input value="{{nameVal}}" name="name" id="name" type="text" class="form-control" placeholder="{{nameCol}}"
                         value="" required>
                 </div>
                 {{/if}}
                 {{#if priceCol}}
                 <div class="col-md-12"><label class="p-2 labels font-weight-bold">{{priceCol}}</label>
-                    <input name="price" id="price" type="number" class="form-control" placeholder="{{priceCol}}"
+                    <input value="{{priceVal}}" name="price" id="price" type="number" class="form-control" placeholder="{{priceCol}}"
                         value="" required>
                 </div>
                 {{/if}}
                 {{#if quantityCol}}
                 <div class="col-md-12"><label class="p-2 labels font-weight-bold">{{quantityCol}}</label>
-                    <input name="quantity" id="quantity" type="number" class="form-control" placeholder="{{quantityCol}}"
+                    <input value="{{quantityVal}}" name="quantity" id="quantity" type="number" class="form-control" placeholder="{{quantityCol}}"
                         value="" required>
                 </div>
                 {{/if}}                
@@ -48,27 +48,43 @@
                         value="" required>
                 </div>
                 {{/if}}
+                {{#if updateimageCol}}
+                <div class="col-md-12"><label class="p-2 labels font-weight-bold">{{updateimageCol}}</label>
+                    <div class="d-flex">
+                        <img src="../../../public/image/{{imageVal}}" style="width: 300px;" alt="">
+                        <input name="image" id="image" type="file" class="form-control"
+                            value="">
+                    </div>
+                </div>
+                {{/if}}
                 {{#if shortdesCol}}
                 <div class="col-md-12"><label class="p-2 labels font-weight-bold">{{shortdesCol}}</label>
-                    <textarea name="shortdes" class="form-control" maxlength="490" style="height:100px;"></textarea>
+                    <textarea value=""  name="shortdes" class="form-control" maxlength="490" style="height:100px;">{{shortdesVal}}</textarea>
                 </div>
                 {{/if}}
 
                 {{#if longdesCol}}
                 <div class="col-md-12"><label class="p-2 labels font-weight-bold">{{longdesCol}}</label>
-                    <textarea name="longdes" class="form-control" maxlength="2990" style="height:200px;"></textarea>
+                    <textarea value="" name="longdes" class="form-control" maxlength="2990" style="height:200px;">{{longdesVal}}</textarea>
                 </div>
-                {{/if}}            
+                {{/if}}
+
+                {{#if subcatCol}}
+                <div class="col-md-12"><label class="p-2 labels font-weight-bold">{{subcatCol}}</label>
+                    {{> listtable}}
+                </div>                    
+                {{/if}}
+                
                 <div style="width: 200px;" class="mx-auto d-flex justify-content-between mt-5 text-center">
-                    <a href="{{cancelurl}}" id="create-button" class="btn btn-danger" type="submit">Hủy bỏ</a>
-                    <button id="cancel-button" class="btn btn-primary" type="submit">Tạo</button>
+                    <a href="{{cancelurl}}" id="cancel-button" class="btn btn-danger" type="submit">Hủy bỏ</a>
+                    <button id="create-button" class="btn btn-primary" type="submit">Xác nhận</button>
                 </div>
             </form>
         </div>
     </div> 
 </div>
 {{#if subCatList}}
-{{#each subCatList as |sub|}}                        
+{{#each subCatList as |sub|}}
     <select style="display: none;" id="sub-{{sub.cat.id}}" class="form-control form-field" placeholder="">
         {{#each sub.list as |s|}}
             <option value="{{s.id}}">{{s.name}}</option>
@@ -78,11 +94,13 @@
 {{/if}}
 <script>
     $(() => {
+        $('#category').prop({ selectedIndex: {{catidVal}} });
         let cat = $('#category').val();
-        console.log(cat);
+        
         $('#subcategory').html('');
         $('#subcategory-container').css({display: ''});
         $('#subcategory').html($(`#sub-${cat}`).html());
+        $('#subcategory').prop({ selectedIndex: {{subcatidVal}} });
 
         $('#image').fileinput({'showUpload': false, "previewFileType": 'any', theme: 'fa6'});
     })
@@ -91,6 +109,5 @@
         $('#subcategory').html('');
         $('#subcategory-container').css({display: ''});        
         $('#subcategory').html($(`#sub-${cat}`).html())
-    });
-        
+    });        
 </script>

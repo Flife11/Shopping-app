@@ -34,10 +34,17 @@ const RenderProduct = async (req, res, next) => {
         
         // console.log(page, perpage);
         data = data.slice((page - 1) * perpage, page * perpage);
+        // Thêm url detail
+        data = data.filter(d => {            
+            d.detailurl = '/admin/product/detail/';
+            return d;
+        })
+        // console.log(data);
+
         res.render('product', {
             title: 'Admin',
             header: 'SẢN PHẨM',
-            newurl: '/admin/product/new',
+            newurl: '/admin/product/new',        
             imageCol: 'HÌNH ẢNH',
             priceCol: 'GIÁ',
             quantityCol: 'SỐ LƯỢNG',
@@ -88,6 +95,7 @@ const NewProduct = async(req, res, next) => {
             header: 'Thêm sản phẩm',
             posturl: 'http://localhost:3000/admin/product/new',
             cancelurl: 'http://localhost:3000/admin/product',
+            // Tên các fields cần điền
             nameCol: 'Tên sản phẩm',
             imageCol: 'Hình ảnh',
             priceCol: 'Giá',
@@ -95,6 +103,10 @@ const NewProduct = async(req, res, next) => {
             catnameCol: 'Loại sản phârm',
             longdesCol: "Mô tả đầy đủ",
             shortdesCol: "Mô tả ngắn",
+            // Giá trị của cá fielfs nếu có thì sẽ là detail không sẽ là create
+            catidVal: 0,
+            subcatidVal: 0,
+            // Dữ liệu
             categories: categories,
             subCatList: subCatList,            
         })
@@ -126,10 +138,87 @@ const CreateProduct = async(req, res, next) => {
 
 const DeatilProduct = async(req, res, next) => {
     try {
-        
+        let id = req.params.id;
+        let product = await Product.getOne(id);
+        let categories = await Categories.getAll();
+        let subcategories = await SubCategories.getAll();
+        let subCatList = [];
+        let catidVal = 0;
+        let subcatidVal = 0;
+
+        // Lấy index của catid và subcatid trong mảng categories và subcategories                
+
+        categories.forEach((cat, index) => {
+            //Lấy index của catid 
+            if (cat.id==product[0].catid) catidVal = index;
+            //Tạo mảng subCatList
+            let tmp = {"cat": cat, list: []};
+            subcategories.forEach(sub => {
+                if (sub.catid==cat.id) tmp.list.push(sub);
+            });
+            subCatList.push(tmp);
+        });
+
+        subCatList[catidVal].list.forEach((sub, index) => {            
+            if (sub.id==product[0].subcatid) subcatidVal = index;
+        });
+        // console.log(catidVal, subcatidVal);
+
+        res.render('newproduct', {
+            title: 'Admin',
+            header: 'Thêm sản phẩm',
+            posturl: 'http://localhost:3000/admin/product/update',
+            cancelurl: 'http://localhost:3000/admin/product',
+            // Tên các fields cần điền
+            nameCol: 'Tên sản phẩm',
+            updateimageCol: 'Hình ảnh',
+            priceCol: 'Giá',
+            quantityCol: 'Số lượng',
+            catnameCol: 'Loại sản phârm',
+            longdesCol: "Mô tả đầy đủ",
+            shortdesCol: "Mô tả ngắn",
+            // Giá trị của cá fielfs nếu có thì sẽ là detail không sẽ là create
+            idVal: product[0].id,
+            nameVal: product[0].name,
+            priceVal: product[0].price,
+            quantityVal: product[0].quantity,
+            imageVal: product[0].image,
+            longdesVal: product[0].fulldescription,
+            shortdesVal: product[0].shortdescription,
+            catidVal,
+            subcatidVal,
+            // Dữ liệu
+            categories: categories,
+            subCatList: subCatList,            
+        })
     } catch (error) {
         next(error);
     }
 }
 
-module.exports = {RenderProduct, DeleteProduct, NewProduct, CreateProduct, DeatilProduct}
+const UpdateProduct = async(req, res, next) => {
+    try {
+        let {id, name, price, quantity, category, subcategory, shortdes, longdes} = req.body;
+        price = parseInt(price);
+        quantity = parseInt(quantity);
+        category = parseInt(category);
+        subcategory = parseInt(subcategory);
+        Product.update(id, name, price, quantity, category, subcategory, shortdes, longdes);
+        // console.log(name, price, quantity, category, subcategory, shortdes, longdes);
+        // console.log(req.file);
+        // console.log(newid, filename);
+        if (req.file!=undefined) {
+            let filename = req.file.filename;
+            fs.unlinkSync(`Main/public/image/${id}.jpg`);
+            fs.renameSync(`Main/public/image/${filename}`, `Main/public/image/${id}.jpg`, function(err) {
+                if ( err ) console.log('ERROR: ' + err);
+            });
+        }
+
+        res.redirect('http://localhost:3000/admin/product');
+    } catch (error) {
+        next(error);
+    }
+}
+
+module.exports = {RenderProduct, DeleteProduct, NewProduct, CreateProduct, DeatilProduct, UpdateProduct}
