@@ -454,17 +454,22 @@ module.exports = {
     },
 
     getOrderDetail: async function (req, res) {
-        //Get necessary data
-        user = req.session.passport.user;
+        // Get necessary data
+        const user = req.session.passport.user;
         const categories = await categoryModel.getAll();
         const subcategories = await subcategoryModel.getAll();
- 
-        //Get order detail
-        const orderdetails = await orderdetailModel.getByOrderID(req.params.id);
-        orderdetails.forEach(async function (orderdetail) {
-            orderdetail.product = await productModel.getProduct(orderdetail.productid);
-        })
 
-        res.render('orderdetail', { title: 'Chi tiết đơn hàng', categories: categories, subcategories: subcategories, isLoggedin: req.isAuthenticated(), user: user, orderdetails: orderdetails });
+        // Get order detail
+        const orderdetails = await orderdetailModel.getByOrderID(req.params.id);
+
+        // Create an array of promises for each order detail
+        const orderDetailPromises = orderdetails.map(async function (orderdetail) {
+            orderdetail.product = await productModel.getProduct(orderdetail.productid);
+        });
+
+        // Wait for all promises to complete
+        await Promise.all(orderDetailPromises)
+
+        res.render('orderdetail', { title: 'Chi tiết đơn hàng', categories: categories, subcategories: subcategories, isLoggedin: req.isAuthenticated(), user, orderdetails, orderid: req.params.id });
     }
 };      
