@@ -5,7 +5,7 @@ const fs = require('fs');
 
 const RenderProduct = async (req, res, next) => {
     try {
-        let productname = req.query.productname || '';
+        let productname = req.query.name || '';
         let page = 1;
         let perpage = 10;
         let maxprice = Number.MAX_SAFE_INTEGER;
@@ -36,6 +36,12 @@ const RenderProduct = async (req, res, next) => {
         data = data.slice((page - 1) * perpage, page * perpage);
         res.render('product', {
             title: 'Admin',
+            header: 'SẢN PHẨM',
+            newurl: '/admin/product/new',
+            imageCol: 'HÌNH ẢNH',
+            priceCol: 'GIÁ',
+            quantityCol: 'SỐ LƯỢNG',
+            name: productname,
             data: data, 
             page: page, 
             perpage: perpage,
@@ -43,7 +49,8 @@ const RenderProduct = async (req, res, next) => {
             minprice: minprice,
             maxquantity: maxquantity,
             minquantity: minquantity,
-            totalpage: Array.from({length: totalPage}, (e, i)=> i+1)
+            totalpage: Array.from({length: totalPage}, (e, i)=> i+1),
+            deleteurl: 'http://localhost:3000/admin/product/delete'
         })
     } catch (error) {
         next(error);
@@ -53,7 +60,7 @@ const RenderProduct = async (req, res, next) => {
 const DeleteProduct = async(req, res, next) => {
     try {
         const { listID } = req.body;
-        console.log(listID);
+        // console.log(listID);
         Product.delete(listID);
         res.status(201).json({url: 'http://localhost:3000/admin/product'});
     } catch (error) {
@@ -78,6 +85,16 @@ const NewProduct = async(req, res, next) => {
         
         res.render('newproduct', {
             title: 'Admin',
+            header: 'Thêm sản phẩm',
+            posturl: 'http://localhost:3000/admin/product/new',
+            cancelurl: 'http://localhost:3000/admin/product',
+            nameCol: 'Tên sản phẩm',
+            imageCol: 'Hình ảnh',
+            priceCol: 'Giá',
+            quantityCol: 'Số lượng',
+            catnameCol: 'Loại sản phârm',
+            longdesCol: "Mô tả đầy đủ",
+            shortdesCol: "Mô tả ngắn",
             categories: categories,
             subCatList: subCatList,            
         })
@@ -97,7 +114,7 @@ const CreateProduct = async(req, res, next) => {
         // console.log(req.file);
         // console.log(newid, filename);
 
-        fs.rename(`./Main/public/image/${filename}`, `./Main/public/image/${newid}.jpg`, function(err) {
+        fs.renameSync(`Main/public/image/${filename}`, `Main/public/image/${newid}.jpg`, function(err) {
             if ( err ) console.log('ERROR: ' + err);
         });
 
@@ -107,4 +124,12 @@ const CreateProduct = async(req, res, next) => {
     }
 }
 
-module.exports = {RenderProduct, DeleteProduct, NewProduct, CreateProduct}
+const DeatilProduct = async(req, res, next) => {
+    try {
+        
+    } catch (error) {
+        next(error);
+    }
+}
+
+module.exports = {RenderProduct, DeleteProduct, NewProduct, CreateProduct, DeatilProduct}
