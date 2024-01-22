@@ -1,18 +1,18 @@
 {{> header}}
-<div class="content">
+<div class="content" style="padding: 4vh;">
     <div class="page-heading d-flex justify-content-between align-items-center">
         <h1 class="page-heading-title">Sản phẩm</h1>
-        <a href="/admin/product/new" class="btn btn-primary"><span>Thêm sản phẩm</span></a>
+        <a href="/admin/product/new" class="btn btn-primary">Thêm sản phẩm</a>
     </div>
     
     <div class="card-shadow">
         <table class="table-listing table">
-            <thead>            
+            <thead>        
                 <th scope="col">
                     <input id="check-all" class="fs-4 form-check-input" type="checkbox" value="0" aria-label="Checkbox for select all">
                 </th>
-                <th scope="col"><span>Mã số</span></th>
-                <th scope="col"><span>Hình ảnh</span></th>
+                <th scope="col">Mã số</th>
+                <th scope="col">Hình ảnh</th>
                 <th scope="col">
                     <div class="table-header" style="margin-bottom: 1rem;">
                             Tên sản phẩm
@@ -87,7 +87,7 @@
 {{> notification_warning}}
 
 <script>
-    $(() => {
+    $(() => {        
         let curpage = {{page}};
         if (curpage==1) $('#previous-button').css({display: "none"});
         if (curpage=={{totalpage.length}}) $('#next-button').css({display: "none"});
@@ -204,7 +204,7 @@
         $('.check').filter((index, d) => {
             if (d.checked==true) return listID.push(d.id);
         })
-        let dataBody = JSON.stringify({"listID": listID});        
+        let dataBody = JSON.stringify({"listID": listID});
         
         let rs = await fetch('http://localhost:3000/admin/product/delete', {
             method: "POST",

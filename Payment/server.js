@@ -4,9 +4,12 @@ const express = require("express");
 const cookieParser = require("cookie-parser"); // necessary?
 const https = require("https");
 const fs = require("fs");
+const jwt = require("jsonwebtoken");
 
 // Require custom modules
 const db = require('./utilities/db');
+const secret = process.env.JWT_SECRET;
+const mainURL = process.env.MAIN_URL;
 
 // Setting up express app
 const app = express();
@@ -16,6 +19,26 @@ app.use(express.json());
 
 app.use(cookieParser()); // necessary?
 
+app.use((req, res, next) => {
+    const token = req.headers['authorization'];
+
+    if(!token) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    try {
+        const decoded = jwt.verify(token, secret);
+        if (decoded.url == mainURL) {
+            // console.log(token);
+            next();
+        }
+        else {
+            return res.status(401).json({ message: 'Forbidden - Invalid server' });
+        }
+    } catch (error) {
+        return res.status(401).json({ message: 'Unauthorized - Invalid token' });
+    }
+});
 
 const credentials = {
     key: fs.readFileSync('./Payment/cert/demo.key'),
@@ -38,8 +61,10 @@ app.use((err, req, res, next) => {
 app.use('/',router);
 // Initialize database and start server
 let server = https.createServer(credentials, app);
+
 db.initDatabase().then(() => {
     server.listen(port, () => console.log(`Server is running at https://${host}:${port}`));
 }).catch(err => {
     console.error(`Failed to initialize database: ${err}`);
+    process.exit(1);
 });

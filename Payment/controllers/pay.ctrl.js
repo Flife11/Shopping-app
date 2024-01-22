@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const USER = require('../models/user.m');
 const TRANSACTION = require('../models/transaction.m');
+const db= require('../utilities/db')
 const secret = process.env.JWT_SECRET;
 module.exports = {
     createUserBalance: async function (req, res) {
@@ -11,6 +12,12 @@ module.exports = {
             var data = jwt.verify(token, secret);
             user['balance'] = 0;
             user['iduser'] = data.iduser;
+            const isValidConnection= await db.isValidConnect();
+            if(!isValidConnection.connected)
+            {
+                res.status(500).json({ message: "Lỗi mất kết nối database" })
+                return;
+            }
             try {
                 await USER.insert(user);
                 res.status(200).json({ message: "tạo user thành công" });
@@ -42,7 +49,15 @@ module.exports = {
 
         const token = req.body.token;
         try {
+            console.log(token);
             var data = jwt.verify(token, secret);
+            const isValidConnection= await db.isValidConnect();
+
+            if(!isValidConnection.connected)
+            {
+                res.status(500).json({ message: "Lỗi mất kết nối database" })
+                return;
+            }
             try {
                 if (data.idorder === null) {
                     var user = await USER.getCondition('id', data.iduser);
@@ -73,23 +88,30 @@ module.exports = {
                     }
                 }
                 const message = {}
-                res.status(200).json({ message: "Thanh toán thành công" });
+                res.status(200).json({ message: "Thanh toán thành công!" });
             }
             catch (err) {
-                console.log(error);
+                console.log(err);
 
-                res.status(501).json({ message: "Lỗi không thể thanh toán" })
+                res.status(501).json({ message: "Lỗi không thể thanh toán!" })
             }
         }
         catch (error) {
             console.log(error);
-            res.status(403).json({ message: "Lỗi không thể decode" })
+            res.status(403).json({ message: "Lỗi không thể decode!" })
         }
 
     },
     historypayment: async function (req, res) {
         const token = req.body.token;
         var user = {};
+        const isValidConnection= await db.isValidConnect();
+
+        if(!isValidConnection.connected)
+            {
+                res.status(500).json({ message: "Lỗi mất kết nối database" })
+                return;
+            }
         try {
             var data = jwt.verify(token, secret);
             const id = data.iduser;
@@ -116,6 +138,13 @@ module.exports = {
     getbalance: async function (req, res) {
 
         const token = req.body.token;
+        const isValidConnection= await db.isValidConnect();
+
+        if(!isValidConnection.connected)
+            {
+                res.status(500).json({ message: "Lỗi mất kết nối database" })
+                return;
+            }
         try {
             var data = jwt.verify(token, secret);
             const id = data.iduser;
