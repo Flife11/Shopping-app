@@ -57,10 +57,12 @@
 
     .outer-sub-cat {
         display: none;
+        /*visibility: hidden;*/
     }
 
     .outer:hover>.outer-sub-cat {
         display: block;
+        /*visibility: visible;*/
     }
 
 </style>
@@ -108,7 +110,7 @@
     </div>
 
     {{!-- pagination --}}
-    {{> pagination}}
+    <div style="color: #2a6792;">{{>pagination}}</div>
 </div>
 
 

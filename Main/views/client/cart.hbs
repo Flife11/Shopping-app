@@ -197,6 +197,9 @@
             $(`#input-${id}`).val(products[index].quantity);
             inputVal = products[index].quantity;
 
+            $('#failureNotificationText').text('Đã đạt số lượng tối đa trong kho!')
+            $('#failureNotificationModal').css('display', '');
+
         }
         else if (inputVal == 0) {
 
