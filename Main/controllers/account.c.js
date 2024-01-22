@@ -441,7 +441,31 @@ module.exports = {
             res.status(500).json({message: rsData.message });
         }
     },
+
     getOrder: async function (req, res) {
-        res.status(500).json({ message: 'Lỗi hệ thống, vui lòng thử lại sau!' });
+        //Get necessary data
+        user = req.session.passport.user;
+        const categories = await categoryModel.getAll();
+        const subcategories = await subcategoryModel.getAll();
+
+        //Get orders
+        const orders = await orderModel.getByUserID(user.id);
+        res.render('order', { title: 'Lịch sử thanh toán', categories: categories, subcategories: subcategories, isLoggedin: req.isAuthenticated(), user: user, orders: orders });
+    },
+
+    getOrderDetail: async function (req, res) {
+        //Get necessary data
+        user = req.session.passport.user;
+        const categories = await categoryModel.getAll();
+        const subcategories = await subcategoryModel.getAll();
+ 
+        //Get order detail
+        const orderdetails = await orderdetailModel.getByOrderID(req.params.id);
+        orderdetails.forEach(async function (orderdetail) {
+            const product = await productModel.getProduct(orderdetail.productid);
+            orderdetail.product = product;
+        })
+
+        res.render('orderdetail', { title: 'Chi tiết đơn hàng', categories: categories, subcategories: subcategories, isLoggedin: req.isAuthenticated(), user: user, orderdetails: orderdetails });
     }
-};
+};      

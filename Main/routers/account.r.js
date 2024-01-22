@@ -134,7 +134,7 @@ router.get('/editprofile', checkLogin.isClient, accountController.getEditprofile
 router.get('/editpassword', checkLogin.isClient, accountController.getEditpassword);
 router.get('/addfund', checkLogin.isClient, accountController.getAddfund); 
 router.get('/checkout', checkLogin.isClient, accountController.getCheckout);
-router.get('/orders/:id', checkLogin.isClient, accountController.getOrder);
+router.get('/orders/:id', checkLogin.isClient, accountController.getOrderDetail);
 router.get('/orders', checkLogin.isClient, accountController.getOrder); 
 
 

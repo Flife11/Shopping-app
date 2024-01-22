@@ -6,4 +6,8 @@ module.exports = {
         const result = await db.db.query(`INSERT INTO "ORDERDETAIL" (orderid, productid, quantity, price, total) VALUES (${orderid}, ${productid}, ${quantity}, ${price}, ${total})`);
         return result;
     },
+    getByOrderID: async function (orderid) {
+        const result = await db.db.query(`SELECT * FROM "ORDERDETAIL" WHERE orderid = ${orderid}`);
+        return result;
+    }
 }
