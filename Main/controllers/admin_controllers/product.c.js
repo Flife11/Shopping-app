@@ -97,7 +97,7 @@ const CreateProduct = async(req, res, next) => {
         // console.log(req.file);
         // console.log(newid, filename);
 
-        fs.rename(`Main/public/image/${filename}`, `Main/public/image/${newid}.jpg`, function(err) {
+        fs.rename(`./Main/public/image/${filename}`, `./Main/public/image/${newid}.jpg`, function(err) {
             if ( err ) console.log('ERROR: ' + err);
         });
 
