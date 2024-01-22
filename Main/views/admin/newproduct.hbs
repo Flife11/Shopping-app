@@ -68,6 +68,13 @@
                     <textarea value="" name="longdes" class="form-control" maxlength="2990" style="height:200px;">{{longdesVal}}</textarea>
                 </div>
                 {{/if}}
+
+                {{#if subcatCol}}
+                <div class="col-md-12"><label class="p-2 labels font-weight-bold">{{subcatCol}}</label>
+                    {{> listtable}}
+                </div>                    
+                {{/if}}
+                
                 <div style="width: 200px;" class="mx-auto d-flex justify-content-between mt-5 text-center">
                     <a href="{{cancelurl}}" id="cancel-button" class="btn btn-danger" type="submit">Hủy bỏ</a>
                     <button id="create-button" class="btn btn-primary" type="submit">Xác nhận</button>
@@ -77,7 +84,7 @@
     </div> 
 </div>
 {{#if subCatList}}
-{{#each subCatList as |sub|}}                        
+{{#each subCatList as |sub|}}
     <select style="display: none;" id="sub-{{sub.cat.id}}" class="form-control form-field" placeholder="">
         {{#each sub.list as |s|}}
             <option value="{{s.id}}">{{s.name}}</option>
@@ -102,6 +109,5 @@
         $('#subcategory').html('');
         $('#subcategory-container').css({display: ''});        
         $('#subcategory').html($(`#sub-${cat}`).html())
-    });
-        
+    });        
 </script>

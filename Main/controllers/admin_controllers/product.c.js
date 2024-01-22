@@ -34,10 +34,17 @@ const RenderProduct = async (req, res, next) => {
         
         // console.log(page, perpage);
         data = data.slice((page - 1) * perpage, page * perpage);
+        // Thêm url detail
+        data = data.filter(d => {            
+            d.detailurl = '/admin/product/detail/';
+            return d;
+        })
+        // console.log(data);
+
         res.render('product', {
             title: 'Admin',
             header: 'SẢN PHẨM',
-            newurl: '/admin/product/new',
+            newurl: '/admin/product/new',        
             imageCol: 'HÌNH ẢNH',
             priceCol: 'GIÁ',
             quantityCol: 'SỐ LƯỢNG',
@@ -139,14 +146,11 @@ const DeatilProduct = async(req, res, next) => {
         let catidVal = 0;
         let subcatidVal = 0;
 
-        // Lấy index của catid và subcatid trong mảng categories và subcategories        
-        subcategories.forEach(sub => {
-            if (sub.id==product.subcatid) subcatidVal = index;
-        });
+        // Lấy index của catid và subcatid trong mảng categories và subcategories                
 
         categories.forEach((cat, index) => {
             //Lấy index của catid 
-            if (cat.id==product.catid) catidVal = index;
+            if (cat.id==product[0].catid) catidVal = index;
             //Tạo mảng subCatList
             let tmp = {"cat": cat, list: []};
             subcategories.forEach(sub => {
@@ -154,7 +158,11 @@ const DeatilProduct = async(req, res, next) => {
             });
             subCatList.push(tmp);
         });
-        // console.log(product);
+
+        subCatList[catidVal].list.forEach((sub, index) => {            
+            if (sub.id==product[0].subcatid) subcatidVal = index;
+        });
+        // console.log(catidVal, subcatidVal);
 
         res.render('newproduct', {
             title: 'Admin',
@@ -193,7 +201,9 @@ const UpdateProduct = async(req, res, next) => {
         let {id, name, price, quantity, category, subcategory, shortdes, longdes} = req.body;
         price = parseInt(price);
         quantity = parseInt(quantity);
-        // let newid = await Product.update(id, name, price, quantity, category, subcategory, shortdes, longdes);
+        category = parseInt(category);
+        subcategory = parseInt(subcategory);
+        Product.update(id, name, price, quantity, category, subcategory, shortdes, longdes);
         // console.log(name, price, quantity, category, subcategory, shortdes, longdes);
         // console.log(req.file);
         // console.log(newid, filename);

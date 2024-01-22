@@ -39,4 +39,9 @@ module.exports = {
         db.insert("CATEGORY", ['id', 'name'], 
         [{id: id[0].m+1, name}]);
     },
+
+    update: async function(id, name) {        
+        db.update("CATEGORY", ['name'], 
+        [{name}], `WHERE id=${id}`);             
+    },
 }
