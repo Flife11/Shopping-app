@@ -462,8 +462,7 @@ module.exports = {
         //Get order detail
         const orderdetails = await orderdetailModel.getByOrderID(req.params.id);
         orderdetails.forEach(async function (orderdetail) {
-            const product = await productModel.getProduct(orderdetail.productid);
-            orderdetail.product = product;
+            orderdetail.product = await productModel.getProduct(orderdetail.productid);
         })
 
         res.render('orderdetail', { title: 'Chi tiết đơn hàng', categories: categories, subcategories: subcategories, isLoggedin: req.isAuthenticated(), user: user, orderdetails: orderdetails });
