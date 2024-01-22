@@ -31,7 +31,7 @@
                             <input style="width: 40%; margin:0px 10px; background-color:transparent; "
                                 class="border rounded-pill text-center" id="amount" value="0"
                                 style="width: auto; margin-left: 10px;">
-                            <div style="width:15%" class="text-center">VNĐ</div>
+                            <div style="width:15%" class="text-center">đ</div>
                         </th>
                     </tr>
                 </thead>
@@ -103,7 +103,7 @@
                                     <br>
                                     <span>Họ tên: {{user.name}}</span>
                                     <br>
-                                    <span>Số dư: {{user.balance}} VNĐ</span>
+                                    <span>Số dư: {{user.balance}} đ</span>
                                 </div>
 
                             </div>
@@ -146,7 +146,7 @@
             return;
         }
 
-        $('#confirmNotificationText').text('Xác nhận giao dịch: Nạp ' + amount + ' VNĐ vào tài khoản?')
+        $('#confirmNotificationText').text('Xác nhận giao dịch: Nạp ' + amount + ' đ vào tài khoản?')
         $('#confirmNotificationModal').css('display', '');
     });
 
@@ -176,14 +176,15 @@
 
         // If success, display success notification
         if (res.ok) {
-            $('#successNotificationtext').text(resData.message + ` Tải lại trang trong... ` + 3); // 3 seconds
+            console.log({{user.balance}})
+            $('#successNotificationtext').text(resData.message + ` Số dư đang được cập nhật... ` + 3); // 3 seconds
             $('#successNotificationModal').css('display', '');
 
             // Wait 3 seconds, reload
             let count = 3;
             let interval = setInterval(() => {
                 count--;
-                $('#successNotificationtext').text(resData.message + ` Tải lại trang trong... ${count}`);
+                $('#successNotificationtext').text(resData.message + ` Số dư đang được cập nhật... ${count}`);
                 if (count === 0) {
                     clearInterval(interval);
                 }
