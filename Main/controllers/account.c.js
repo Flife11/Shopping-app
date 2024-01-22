@@ -5,6 +5,8 @@ const userModel = require('../models/user.m');
 const categoryModel = require('../models/category.m');
 const subcategoryModel = require('../models/subcategory.m');
 const orderModel = require('../models/order.m');
+const orderdetailModel = require('../models/orderdetail.m');
+const productModel = require('../models/product.m');
 const corsHelper = require('../utilities/corsHelper');
 const secret = process.env.JWT_SECRET;
 
@@ -355,5 +357,76 @@ module.exports = {
         const subcategories = await subcategoryModel.getAll();
 
         res.render('checkout', { title: 'Thanh toán', categories: categories, subcategories: subcategories, isLoggedin: req.isAuthenticated(), user: user });
+    },
+
+    postCheckout: async function (req, res) {
+
+        //Get user
+        user = req.session.passport.user;
+        const userData = await userModel.getUser(user.username);
+
+        //Get amount
+        const amount = req.body.amount;
+
+        //Get Date
+        var checkSuccess = true;
+        const timestamp = Date.now();
+        const dateWithoutTimeZone = new Date(timestamp);
+        const year = dateWithoutTimeZone.getFullYear();
+        const month = dateWithoutTimeZone.getMonth() + 1;
+        const day = dateWithoutTimeZone.getDate();
+        const hours = dateWithoutTimeZone.getHours();
+        const minutes = dateWithoutTimeZone.getMinutes();
+        const seconds = dateWithoutTimeZone.getSeconds();
+        const formattedDateWithoutTimeZone = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+
+        // Insert order
+        await orderModel.insert(userData.id, formattedDateWithoutTimeZone, amount);
+        const idorder = await orderModel.getId(userData.id, formattedDateWithoutTimeZone, amount);
+        // Insert order detail
+        const cart = req.body.cart;
+        const products = [];
+        for (let i = 0; i < cart.length; i++) {
+            const product = await productModel.getProduct(cart[i].id);
+            products.push(product);
+            await orderdetailModel.insert(idorder, cart[i].id, cart[i].quantity, products[i].price, cart[i].quantity * products[i].price);
+        }
+
+        //Create Data Send
+        const dataSend = {
+            iduser: userData.id,
+            date: formattedDateWithoutTimeZone,
+            idorder: idorder,
+            amount: amount,
+        }
+        let token = jwt.sign(dataSend, secret, { expiresIn: 24 * 60 * 60 });
+        const dataAddFund = { token: token };
+        let PaymentURL = process.env.PAYMENT_URL;
+
+        // Fetch to Payment server
+        const corsToken = await corsHelper.generateCorsToken(req);
+        let rs = await fetch(PaymentURL + '/payment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': corsToken,
+            },
+            body: JSON.stringify(dataAddFund)
+        })
+        let rsData = await rs.json();
+
+        // insert order if fetch success
+        if (rs.ok) {
+            // Update balance
+            req.session.passport.user.balance = parseFloat(req.session.passport.user.balance) - parseFloat(amount);
+            res.status(200).json({message: rsData.message });
+        }
+        else {
+            res.status(500).json({message: rsData.message });
+        }
+    },
+
+    getOrders: async function (req, res) {
+        res.send('trang orders');
     }
 };

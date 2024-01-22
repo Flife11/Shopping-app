@@ -16,7 +16,7 @@
     .totalTable.disabled #purchase-btn{
         opacity: 0.5;
     }
-    .totalTable.disabled a{
+    .totalTable.disabled button{
         pointer-events: none;
     }
     .totalTable.disabled #balance-warning{
@@ -81,10 +81,9 @@
                 <tbody>
                     <tr>
                         <td id="purchase-btn" class="d-flex justify-content-center">
-                            <a class="btn" href="/account/checkout"
-                                style="background-image:linear-gradient(to right,#91d1de,#2a6792);color:white;width:70%; border-radius: 100px;font-weight:bold;margin:3vh">
+                            <button class="btn" onclick="checkout()" style="background-image:linear-gradient(to right,#91d1de,#2a6792);color:white;width:70%; border-radius: 100px;font-weight:bold;margin:3vh">
                                 Thanh toán
-                            </a>
+                            </button>
                         </td>
                     </tr>
                     <tr id="balance-warning">
@@ -304,6 +303,44 @@
             renderEmptyCart();
         }
 
+    }
+
+    function checkout() {
+        let amount = document.getElementById("total").innerText;
+        let cart = JSON.parse(localStorage.getItem("cart"));
+        $.ajax({
+            url: '/account/checkout',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ 
+                amount, amount,
+                cart: cart
+            }),
+            success: function(response) {
+                // delete cart
+                localStorage.removeItem("cart");
+
+                $('#successNotificationtext').text(response.message + ` Tải lại trang trong... ` + 3); // 3 seconds
+                $('#successNotificationModal').css('display', '');
+
+                // Wait 3 seconds, reload
+                let count = 3;
+                let interval = setInterval(() => {
+                    count--;
+                    $('#successNotificationtext').text(response.message + ` Tải lại trang trong... ${count}`);
+                    if (count === 0) {
+                        clearInterval(interval);
+                    }
+                }, 1000);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
+            },
+            error: function(error) {
+                $('#failureNotificationText').text(error);
+                $('#failureNotificationModal').css('display', '');
+            }
+        });
     }
 
 </script>
