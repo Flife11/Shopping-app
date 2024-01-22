@@ -138,6 +138,7 @@ module.exports = {
     getbalance: async function (req, res) {
 
         const token = req.body.token;
+        console.log(token);
         const isValidConnection= await db.isValidConnect();
 
         if(!isValidConnection.connected)
