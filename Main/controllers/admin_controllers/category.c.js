@@ -24,6 +24,7 @@ const RenderCategory = async(req, res, next) => {
             header: 'LOẠI SẢN PHẨM',
             newurl: '/admin/category/new',                        
             name: categoryname,
+            nameVal: '',            
             data: data,
             page: page,
             perpage: perpage,                        

@@ -48,4 +48,9 @@ module.exports = {
         db.update("PRODUCT", ['image'], [{image: `${newid[0].id}.jpg`}], `WHERE id=${newid[0].id}`);
         return newid[0].id;
     },
+
+    update: async function(id, name, price, quantity, catid, subcatid=null, shortdescription, fulldescription) {        
+        db.update("PRODUCT", ['name', 'price', 'quantity', 'catid', 'subcatid', 'shortdescription', 'fulldescription'], 
+        [{name, price, quantity, catid, subcatid, shortdescription, fulldescription}], `WHERE id=${id}`);             
+    },
 }
