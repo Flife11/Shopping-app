@@ -12,22 +12,32 @@ const connectionString = {
     password: process.env.DB_PW,
 }
 
-const db = pgp(connectionString);
+var db;
+try
+{
+      db = pgp(connectionString);
+}
+catch (error) {
+    console.error('Error checking connection:', error.message);
+
+}
+
 module.exports = {
-    initDatabase: async function(){
+    initDatabase: async function () {
+       
         try {
             // Kiểm tra xem database đã tồn tại chưa    
             const databaseExists = await db.oneOrNone(
                 'SELECT 1 FROM pg_database WHERE datname = $1',
                 process.env.DB_PAYMENTNAME
             );
-    
+
             // Nếu database chưa tồn tại
             if (!databaseExists) {
                 // Tạo mới database
                 await db.none(`CREATE DATABASE ${process.env.DB_PAYMENTNAME}`);
                 console.log(`Database ${process.env.DB_PAYMENTNAME} created.`);
-    
+
                 // Kết nối đến database mới tạo
                 db.$pool.options.database = process.env.DB_PAYMENTNAME;
                 await db.connect();
@@ -68,7 +78,7 @@ module.exports = {
                 console.log(`Data imported into database ${process.env.DB_MAINNAME}.`);
 
             }
-            else{
+            else {
                 //Thông báo database đã tồn tại
                 console.log(`Database ${process.env.DB_PAYMENTNAME} already exists. Cannot create.`);
 
@@ -80,11 +90,25 @@ module.exports = {
                 console.log(`Connected to database ${process.env.DB_PAYMENTNAME}.`);
 
             }
-            
+
         } catch (error) {
             console.log(error);
         }
     },
 
     db: db,
+    isValidConnect:async function (){
+        try {
+            // Thực hiện truy vấn đơn, ví dụ: lấy một dòng từ một bảng có sẵn
+            const result = await db.one('SELECT 1 as result');
+    
+            // Trả về kết quả cho client
+            return { connected: true, result: result.result };
+        } catch (error) {
+            console.error('Error checking connection:', error.message);
+    
+            // Trả về thông báo lỗi cho client
+            return { connected: false, error: error.message };
+        }
+    }
 }

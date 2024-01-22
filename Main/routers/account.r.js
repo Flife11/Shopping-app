@@ -130,7 +130,7 @@ router.get('/assignpassportGoogle', checkLogin.isNotLoggedIn, passport.authentic
 
 router.get('/', checkLogin.isClient, accountController.getAccount);
 
-router.get('/editprofile', checkLogin.isClient, accountController.getEditprofile); 
+router.get('/editprofile', checkLogin.isClient, accountController.getEditprofile);
 router.get('/editpassword', checkLogin.isClient, accountController.getEditpassword);
 router.get('/addfund', checkLogin.isClient, accountController.getAddfund); 
 router.get('/checkout', checkLogin.isClient, accountController.getCheckout);
@@ -141,7 +141,7 @@ router.get('/orders', checkLogin.isClient, accountController.getOrders);
 router.post('/addfund', accountController.postAddfund)
 router.post('/editprofile', accountController.postEditprofile);
 router.post('/editpassword', accountController.postEditpassword);
-router.post('/checkout', accountController.postCheckout); 
+router.post('/checkout', accountController.postCheckout);
 
 
 

@@ -19,6 +19,11 @@ app.use(express.json());
 
 app.use(cookieParser()); // necessary?
 
+// Middleware để xử lý yêu cầu từ Server 1
+app.get('/checkConnection', (req, res) => {
+    res.status(200).send('Connection from Main to Payment is successful!');
+  });
+
 app.use((req, res, next) => {
     const token = req.headers['authorization'];
 
@@ -29,6 +34,7 @@ app.use((req, res, next) => {
     try {
         const decoded = jwt.verify(token, secret);
         if (decoded.url == mainURL) {
+            // console.log(token);
             next();
         }
         else {
@@ -60,8 +66,10 @@ app.use((err, req, res, next) => {
 app.use('/',router);
 // Initialize database and start server
 let server = https.createServer(credentials, app);
+
 db.initDatabase().then(() => {
     server.listen(port, () => console.log(`Server is running at https://${host}:${port}`));
 }).catch(err => {
     console.error(`Failed to initialize database: ${err}`);
+    process.exit(1);
 });
