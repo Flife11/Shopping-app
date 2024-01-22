@@ -32,7 +32,12 @@
                             <td>{{this.id}}</td>
                             <td>{{this.date}}</td>
                             <td>{{this.total}}</td>
-                            <td><a class="btn btn-primary" href='/account/orders/{{this.id}}'>Chi tiết</a></td>
+                            
+                            <td>
+                                <a href='/account/orders/{{this.id}}' class="btn mb-5"style="background-image:linear-gradient(to right,#91d1de,#2a6792);color:white;width:130px;border-radius: 100px">
+                                    <strong>Chi tiết</strong>
+                                </a>
+                            </td>
                         </tr>
                     {{/each}}
                     </tbody>
