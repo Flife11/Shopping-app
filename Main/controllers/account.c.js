@@ -441,10 +441,6 @@ module.exports = {
             res.status(500).json({message: rsData.message });
         }
     },
-
-    getOrders: async function (req, res) {
-        res.send('trang orders');
-    }
     getOrder: async function (req, res) {
         res.status(500).json({ message: 'Lỗi hệ thống, vui lòng thử lại sau!' });
     }
