@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-
+const { checkConnection } = require('../middleware/checkConnect2Server');
 const userModel = require('../models/user.m');
 const categoryModel = require('../models/category.m');
 const subcategoryModel = require('../models/subcategory.m');
@@ -196,6 +196,22 @@ module.exports = {
     },
     postAddfund: async function (req, res) {
 
+        // Code to check `Connection from Server Main to Server Payment
+        // Please add the code below to test the connection before sending any fetch to the Payment Server
+        try {
+            const result = await checkConnection();
+            // console.log(result);
+            // if connection is successful => result = true,  else => result = false;
+            if (!result) {
+                res.status(500).json({ message: "Lỗi không thể kết nối đến Server Payment" });
+                return;
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
+        ///////////////////////////
+
         //Get user from session
         user = req.session.passport.user;
 
@@ -292,14 +308,14 @@ module.exports = {
                 name: name,
                 address: address,
                 email: email
-            }           
+            }
 
             await userModel.editUser(user);
 
             req.session.passport.user.name = name;
             req.session.passport.user.address = address;
             req.session.passport.user.email = email;
-            
+
             res.status(200).json({ message: 'Chỉnh sửa thông tin thành công!' });
         } catch (error) {
             console.log(error);
@@ -330,7 +346,7 @@ module.exports = {
             // Check if password and retypepassword match
             if (password !== retypepassword) {
                 return res.status(402).json({ message: 'Mật khẩu mới không khớp, nhập lại nha!' });
-            }            
+            }
 
             // Update user in database and passport
             let newUser = {
