@@ -8,6 +8,7 @@ const orderModel = require('../models/order.m');
 const orderdetailModel = require('../models/orderdetail.m');
 const productModel = require('../models/product.m');
 const corsHelper = require('../utilities/corsHelper');
+const e = require('express');
 const secret = process.env.JWT_SECRET;
 
 module.exports = {
@@ -63,7 +64,7 @@ module.exports = {
             // Fetch id to Payment server: id = result[0].id to add user in Payment server
             // console log result: [ { id: 4 } ]
 
-            const corsToken = await corsHelper.generateCorsToken(req);
+            const corsToken = await corsHelper.generateCorsToken(req); // token to verify cors
 
             try {
                 let iduser = result[0].id;
@@ -366,6 +367,72 @@ module.exports = {
         }
     },
 
+    getOrders: async function (req, res) {
+        try {
+            //Get necessary data
+            user = req.session.passport.user;
+            const categories = await categoryModel.getAll();
+            const subcategories = await subcategoryModel.getAll();
+
+            // Fetch to /historypayment (Payment server) user.id (by token) to get transaction
+            let corsToken = await corsHelper.generateCorsToken(req); // token to verify cors
+
+            let iduser = user.id;
+            let token = jwt.sign({ iduser }, secret, { expiresIn: 24 * 60 * 60 }); // token include iduser to send to Payment server
+
+            let data = { token: token };
+            let PaymentURL = process.env.PAYMENT_URL;
+            let rs = await fetch(PaymentURL + '/historypayment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': corsToken,
+                },
+                body: JSON.stringify(data)
+            })
+            let rsData = await rs.json();
+            if (!rs.ok) {
+                return res.status(500).json({ message: rsData.message });
+            }
+
+            let returnToken = rsData.token;
+            let returnData = jwt.verify(returnToken, secret);
+
+            let transactions = returnData.history;
+
+            // Sort transaction by date
+            transactions.sort((a, b) => {
+                return new Date(b.date) - new Date(a.date);
+            });
+
+            // Calculate total paid and total deposit
+            let totalpaid = 0.00;
+            let totaldeposit = 0.00;
+
+            for (let i = 0; i < transactions.length; i++) {
+                if (transactions[i].orderid === null) {
+                    totaldeposit += parseFloat(transactions[i].amount);
+                }
+                else {
+                    totalpaid += parseFloat(transactions[i].amount);
+                }
+            }
+
+            // Pagination
+            const page = req.query.page ? parseInt(req.query.page) : 1;
+            const perpage = req.query.perpage ? parseInt(req.query.perpage) : 4;
+            const total_page = Math.ceil(transactions.length / perpage);
+            const pre_page = page - 1 > 0 ? page - 1 : 1;
+            const next_page = page + 1 <= total_page ? page + 1 : total_page;
+            transactions = transactions.slice((page - 1) * perpage, page * perpage);
+
+            res.render('orders', { title: 'Lịch sử thanh toán', categories: categories, subcategories: subcategories, transactions: transactions, totaldeposit: totaldeposit, totalpaid: totalpaid, isLoggedin: req.isAuthenticated(), user: user, total_page: total_page, next_page: next_page, pre_page: pre_page, page: page });
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: error });
+        }
+    },
+  
     getCheckout: async function (req, res) {
         //Get necessary data
         user = req.session.passport.user;

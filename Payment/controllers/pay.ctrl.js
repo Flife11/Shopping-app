@@ -121,7 +121,7 @@ module.exports = {
                     history: history
                 }
                 const accessToken = jwt.sign(dataSend, secret);
-                res.status(200).json({ message: "Lấy thành công Balance", token: accessToken });
+                res.status(200).json({ message: "Lấy thành công History", token: accessToken });
             }
             catch (err) {
                 console.log(err);

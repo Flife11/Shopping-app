@@ -46,7 +46,7 @@
                 <thead>
                     <tr class="text-center">
                         <th>
-                            Tổng tiền: <span id="total" style="color: #2a6792;">0 VNĐ</span>
+                            Tổng tiền: <span id="total" style="color: #2a6792;">0 đ</span>
                         </th>
                     </tr>
                 </thead>
@@ -102,10 +102,10 @@
                     total += element.price * element.amount;
                 });
 
-                $("#total").text(`${total} VNĐ`);
+                $("#total").text(`${total} đ`);
                 $("#cartBox tbody").html(resData.cart.map((element) => {
                     return `
-                    <tr id=${element.id}>
+                    <tr id=${element.id} >
                         <td>
                             <a style="display: flex;color:inherit;text-decoration:none" href="${element.id}">
                                 <img src="/public/image/${element.image}" style="width: 7vw; height: 7vw;">
@@ -113,7 +113,7 @@
                                     <p style="margin-left: 1vw;">
                                         ${element.name}
                                     </p>
-                                    <p style="margin-left: 1vw;color:#2a6792"><strong>${element.price} VNĐ</strong></p>
+                                    <p style="margin-left: 1vw;color:#2a6792"><strong>${element.price} đ</strong></p>
                                 </div>
                             </a>
                         </td>
@@ -125,7 +125,7 @@
                             </div>
                         </td>
                         <td class="text-center" id="total-${element.id}">
-                            <strong>${element.price * element.amount} VNĐ</strong>
+                            <strong>${element.price * element.amount} đ</strong>
                         </td>
                         <td class="text-center">
                             <button class="btn" onclick="HandleRemoveProduct(${element.id})" style="background-color: transparent;"><i class="fa-regular fa-trash-can"></i></button>
@@ -221,14 +221,14 @@
         localStorage.setItem("cart", JSON.stringify(cart));
 
         // update total for this product only
-        $(`#total-${id}`).html(`<strong>${products[index].price * inputVal} VNĐ</strong>`);
+        $(`#total-${id}`).html(`<strong>${products[index].price * inputVal} đ</strong>`);
 
         // update total for all products
         total = 0;
         products.forEach((element) => {
             total += element.price * element.amount;
         });
-        $("#total").text(`${total} VNĐ`);
+        $("#total").text(`${total} đ`);
 
         // remove product if amount = 0
         if (inputVal == 0) {
