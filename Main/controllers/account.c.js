@@ -62,6 +62,7 @@ module.exports = {
 
             // Fetch id to Payment server: id = result[0].id to add user in Payment server
             // console log result: [ { id: 4 } ]
+            
 
             const corsToken = await corsHelper.generateCorsToken(req); // token to verify cors
 
