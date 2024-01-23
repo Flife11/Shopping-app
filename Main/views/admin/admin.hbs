@@ -1,1 +1,92 @@
 {{> header}}
+<style>
+    .list-card {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+    }
+
+    .number {
+        font-size: 35px;
+        font-weight: 500;
+        color: #2a6792;
+    }
+
+    .card-name {
+        color: #888;
+        font-weight: 600;
+    }
+
+    .charts {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        grid-gap: 20px;
+        width: 100%;
+        padding: 20px;
+        padding-top: 5%;
+    }
+
+    .chart {
+        background-color: white !important;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+        width: 100%;
+    }
+</style>
+<div class="content" style="padding: 4vh;">
+    <div class="list-card">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <div class="number" id="total_order">
+                    123
+                </div>
+                <div class="card-name">
+                    Tổng số đơn hàng
+                </div>
+            </div>
+        </div>
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <div class="number" id="total_product">
+                    123
+                </div>
+                <div class="card-name">
+                    Tổng số sản phẩm
+                </div>
+            </div>
+        </div>
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <div class="number" id="total_customer">
+                    123
+                </div>
+                <div class="card-name">
+                    Số lượng khác hàng
+                </div>
+            </div>
+        </div>
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <div class="number" id="total_price">
+                    123
+                </div>
+                <div class="card-name">
+                    Tổng tiền
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="charts">
+        <div class="chart">
+            <h2>Demo1</h2>
+            <canvas id="lineChart"></canvas>
+        </div>
+        <div class="chart">
+            <h2>Demo2</h2>
+            <canvas id="pieChart"></canvas>
+
+        </div>
+    </div>
+</div>
+{{> admin_script}}

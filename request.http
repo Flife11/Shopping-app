@@ -9,9 +9,10 @@ Content-Type: application/json
 
 POST https://localhost:5000/payment
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJodHRwOi8vbG9jYWxob3N0OjMwMDAiLCJpYXQiOjE3MDU4NTc4MDMsImV4cCI6MTcwNTk0NDIwM30.X7tV-dQYVQJDLVwkDPBVB_mtmNX5DqByx5XlCUOMIJA
 
 {
-    "token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZHVzZXIiOjEyMywiZGF0ZSI6IjIwMjQtMDEtMTMiLCJpZG9yZGVyIjoxLCJhbW91bnQiOjE1MDAwMCwiaWF0IjoxNzA1NTcxMzc2fQ.Jg8ewIWNUvqt2AnE1E1ZfXEGBNNrr7KQ3hrxcD2CfRg"
+    "token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZHVzZXIiOjMsImRhdGUiOiIyMDI0LTEtMjIgMDoyNjo1NiIsImlkb3JkZXIiOm51bGwsImFtb3VudCI6MzAwMDAsImlhdCI6MTcwNTg1ODAxNiwiZXhwIjoxNzA1OTQ0NDE2fQ.7iAES0OyvWGqlgdp3GDm7WndqxqyTaXBhkuzeVXPBWs"
 }
 
 
@@ -19,7 +20,8 @@ Content-Type: application/json
 ##########
 POST https://localhost:5000/historypayment
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJodHRwOi8vbG9jYWxob3N0OjMwMDAiLCJpYXQiOjE3MDU4NTc4MDMsImV4cCI6MTcwNTk0NDIwM30.X7tV-dQYVQJDLVwkDPBVB_mtmNX5DqByx5XlCUOMIJA
 
 {
-    "token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZHVzZXIiOjEyMywiaWF0IjoxNzA1NTcxNzk1fQ.TCDByvaTFyJjuT0CnQyIQUTKeCpD1kGV6_oNzWD0eOM"
+    "token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZHVzZXIiOjMsImlhdCI6MTcwNTkzNzI1MCwiZXhwIjoxNzA2MDIzNjUwfQ.cepQMIOUKd7BcpDolsh_esCd_Mc4QFtXaB95MdaNdBM"
 }

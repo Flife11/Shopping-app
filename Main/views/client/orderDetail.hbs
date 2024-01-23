@@ -1,0 +1,57 @@
+<style>
+    table {
+        text-align: center;
+    }
+    .img-resize{
+        width: 60% ;
+        height: auto;
+    }
+</style>
+
+
+{{> header}}
+
+
+<center style="margin: 3vw;">
+    <H3 style="color: #2a6792; ">Chi tiết đơn hàng #{{orderid}}</H3>
+    <div>
+        <div style="width: 75%;"class="border-top">
+            <table class="table">
+                <thead>
+                    <tr class="text-center">
+                        <th scope="col" style="width: 30%;">Picture</th>
+                        <th scope="col" style="width: 40%;">Product</th>
+                        <th scope="col" style="width: 10%;">Quantity</th>
+                        <th scope="col" style="width: 10%;">Price</th>
+                        <th scope="col" style="width: 10%;">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each orderdetails}}
+                    <tr>
+                        <td>
+                            <a href="/{{this.id}}">
+                                <img src="/public/image/{{this.product.image}}" class="img-resize">
+                            </a>
+                        </td>
+                        <td>
+                            <a href="/{{this.id}}" class="text-decoration-none" style="color: black;">
+                                {{this.product.name}}</td>
+                            </a>
+                        <td>{{this.quantity}}</td>
+                        <td>{{this.price}}</td>
+                        <td>{{this.total}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+            <a href="/account/orders" class="btn mb-5" style="background-image:linear-gradient(to right,#91d1de,#2a6792);color:white;width:200px;border-radius: 100px">
+                <strong>Quay lại</strong> 
+            </a>
+        </div>
+    </div>
+</center>
+
+
+
+{{> footer}}

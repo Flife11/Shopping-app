@@ -1,10 +1,12 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-
+const { checkConnection } = require('../middleware/checkConnect2Server');
 const userModel = require('../models/user.m');
 const categoryModel = require('../models/category.m');
 const subcategoryModel = require('../models/subcategory.m');
 const orderModel = require('../models/order.m');
+const orderdetailModel = require('../models/orderdetail.m');
+const productModel = require('../models/product.m');
 const corsHelper = require('../utilities/corsHelper');
 const e = require('express');
 const secret = process.env.JWT_SECRET;
@@ -196,6 +198,22 @@ module.exports = {
         res.render('addfund', { title: 'Nạp tiền', categories: categories, subcategories: subcategories, isLoggedin: req.isAuthenticated(), user: user });
     },
     postAddfund: async function (req, res) {
+
+        // Code to check `Connection from Server Main to Server Payment
+        // Please add the code below to test the connection before sending any fetch to the Payment Server
+        try {
+            const result = await checkConnection();
+            // console.log(result);
+            // if connection is successful => result = true,  else => result = false;
+            if (!result) {
+                res.status(500).json({ message: "Lỗi không thể kết nối đến Server Payment" });
+                return;
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
+        ///////////////////////////
 
         //Get user from session
         user = req.session.passport.user;
@@ -414,4 +432,111 @@ module.exports = {
             res.status(500).json({ message: error });
         }
     },
-};
+  
+    getCheckout: async function (req, res) {
+        //Get necessary data
+        user = req.session.passport.user;
+        const categories = await categoryModel.getAll();
+        const subcategories = await subcategoryModel.getAll();
+
+        res.render('checkout', { title: 'Thanh toán', categories: categories, subcategories: subcategories, isLoggedin: req.isAuthenticated(), user: user });
+    },
+
+    postCheckout: async function (req, res) {
+
+        //Get user
+        user = req.session.passport.user;
+        const userData = await userModel.getUser(user.username);
+
+        //Get amount
+        const amount = req.body.amount;
+
+        //Get Date
+        var checkSuccess = true;
+        const timestamp = Date.now();
+        const dateWithoutTimeZone = new Date(timestamp);
+        const year = dateWithoutTimeZone.getFullYear();
+        const month = dateWithoutTimeZone.getMonth() + 1;
+        const day = dateWithoutTimeZone.getDate();
+        const hours = dateWithoutTimeZone.getHours();
+        const minutes = dateWithoutTimeZone.getMinutes();
+        const seconds = dateWithoutTimeZone.getSeconds();
+        const formattedDateWithoutTimeZone = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+
+        // Insert order
+        await orderModel.insert(userData.id, formattedDateWithoutTimeZone, amount);
+        const idorder = await orderModel.getId(userData.id, formattedDateWithoutTimeZone, amount);
+        // Insert order detail
+        const cart = req.body.cart;
+        const products = [];
+        for (let i = 0; i < cart.length; i++) {
+            const product = await productModel.getProduct(cart[i].id);
+            products.push(product);
+            await orderdetailModel.insert(idorder, cart[i].id, cart[i].quantity, products[i].price, cart[i].quantity * products[i].price);
+        }
+
+        //Create Data Send
+        const dataSend = {
+            iduser: userData.id,
+            date: formattedDateWithoutTimeZone,
+            idorder: idorder,
+            amount: amount,
+        }
+        let token = jwt.sign(dataSend, secret, { expiresIn: 24 * 60 * 60 });
+        const dataAddFund = { token: token };
+        let PaymentURL = process.env.PAYMENT_URL;
+
+        // Fetch to Payment server
+        const corsToken = await corsHelper.generateCorsToken(req);
+        let rs = await fetch(PaymentURL + '/payment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': corsToken,
+            },
+            body: JSON.stringify(dataAddFund)
+        })
+        let rsData = await rs.json();
+
+        // insert order if fetch success
+        if (rs.ok) {
+            // Update balance
+            req.session.passport.user.balance = parseFloat(req.session.passport.user.balance) - parseFloat(amount);
+            res.status(200).json({message: rsData.message });
+        }
+        else {
+            res.status(500).json({message: rsData.message });
+        }
+    },
+
+    getOrder: async function (req, res) {
+        //Get necessary data
+        user = req.session.passport.user;
+        const categories = await categoryModel.getAll();
+        const subcategories = await subcategoryModel.getAll();
+
+        //Get orders
+        const orders = await orderModel.getByUserID(user.id);
+        res.render('order', { title: 'Lịch sử thanh toán', categories: categories, subcategories: subcategories, isLoggedin: req.isAuthenticated(), user: user, orders: orders });
+    },
+
+    getOrderDetail: async function (req, res) {
+        // Get necessary data
+        const user = req.session.passport.user;
+        const categories = await categoryModel.getAll();
+        const subcategories = await subcategoryModel.getAll();
+
+        // Get order detail
+        const orderdetails = await orderdetailModel.getByOrderID(req.params.id);
+
+        // Create an array of promises for each order detail
+        const orderDetailPromises = orderdetails.map(async function (orderdetail) {
+            orderdetail.product = await productModel.getProduct(orderdetail.productid);
+        });
+
+        // Wait for all promises to complete
+        await Promise.all(orderDetailPromises)
+
+        res.render('orderdetail', { title: 'Chi tiết đơn hàng', categories: categories, subcategories: subcategories, isLoggedin: req.isAuthenticated(), user, orderdetails, orderid: req.params.id });
+    }
+};      

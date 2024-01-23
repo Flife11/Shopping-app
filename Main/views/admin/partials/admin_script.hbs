@@ -1,0 +1,127 @@
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    window.onload = function () {
+        const data_order = [{ id: 1, userid: 1, date: '2024/1/10 10:14:22', total: '120000' },
+        { id: 2, userid: 2, date: '2023/2/22 10:14:22', total: '100000' },
+        { id: 3, userid: 3, date: '2023/3/9 10:14:22', total: '140000' },
+        { id: 4, userid: 4, date: '2023/4/10 10:14:22', total: '150000' },
+        { id: 5, userid: 5, date: '2023/5/22 10:14:22', total: '160000' },
+        { id: 6, userid: 6, date: '2023/6/8 10:14:22', total: '170000' },
+        { id: 7, userid: 7, date: '2023/7/22 10:14:22', total: '130000' },
+        { id: 8, userid: 8, date: '2023/8/22 10:14:22', total: '120000' },
+        { id: 9, userid: 9, date: '2023/9/22 10:14:22', total: '110000' },
+        { id: 10, userid: 10, date: '2023/10/22 10:14:22', total: '100000' },
+        { id: 11, userid: 11, date: '2023/11/22 10:14:22', total: '130000' },
+        { id: 12, userid: 3, date: '2023/12/22 10:14:22', total: '140000' },
+        { id: 13, userid: 4, date: '2023/1/22 10:14:22', total: '150000' },
+        { id: 14, userid: 2, date: '2023/4/22 10:14:22', total: '160000' },
+        { id: 15, userid: 7, date: '2023/6/22 10:14:22', total: '160000' },
+        { id: 16, userid: 5, date: '2023/3/22 10:14:22', total: '180000' },
+        { id: 17, userid: 6, date: '2022/9/22 10:14:22', total: '190000' },
+        { id: 18, userid: 9, date: '2022/7/12 10:14:22', total: '190000' },
+        { id: 19, userid: 10, date: '2022/5/22 10:14:22', total: '120000' },
+        { id: 20, userid: 4, date: '2022/3/29 10:14:22', total: '130000' },
+        { id: 21, userid: 6, date: '2022/4/22 10:14:22', total: '130000' },
+        { id: 22, userid: 7, date: '2022/6/22 10:14:22', total: '140000' },
+        { id: 23, userid: 7, date: '2022/7/22 10:14:22', total: '160000' },
+        { id: 24, userid: 8, date: '2022/1/22 10:14:22', total: '170000' },
+        { id: 25, userid: 2, date: '2022/2/22 10:14:22', total: '170000' },
+        { id: 26, userid: 3, date: '2022/8/22 10:14:22', total: '180000' },
+        { id: 27, userid: 1, date: '2022/10/22 10:14:22', total: '140000' },
+        { id: 28, userid: 1, date: '2022/11/22 10:14:22', total: '150000' },
+        { id: 29, userid: 5, date: '2022/12/22 10:14:22', total: '130000' },
+        { id: 30, userid: 7, date: '2022/3/22 10:14:22', total: '120000' },
+        { id: 31, userid: 8, date: '2021/1/22 10:14:22', total: '150000' },
+        { id: 32, userid: 8, date: '2021/2/21 10:14:22', total: '160000' },
+        { id: 33, userid: 9, date: '2021/3/17 10:14:22', total: '170000' },
+        { id: 34, userid: 7, date: '2021/4/22 10:14:22', total: '170000' },
+        { id: 35, userid: 11, date: '2021/5/18 10:14:22', total: '190000' },
+        { id: 36, userid: 10, date: '2021/6/20 10:14:22', total: '190000' },
+        { id: 37, userid: 11, date: '2021/7/22 10:14:22', total: '130000' },
+        { id: 38, userid: 3, date: '2021/8/12 10:14:22', total: '110000' },
+        { id: 39, userid: 2, date: '2021/9/22 10:14:22', total: '110000' },
+        { id: 40, userid: 5, date: '2021/10/22 10:14:22', total: '100000' },
+        { id: 41, userid: 6, date: '2021/11/22 10:14:22', total: '100000' },
+        { id: 42, userid: 7, date: '2021/12/22 10:14:22', total: '140000' },
+        { id: 43, userid: 8, date: '2021/3/22 10:14:22', total: '140000' },
+        { id: 44, userid: 9, date: '2021/5/22 10:14:22', total: '170000' },
+        { id: 45, userid: 3, date: '2021/8/22 10:14:22', total: '170000' },
+        { id: 46, userid: 6, date: '2021/6/22 10:14:22', total: '180000' },
+        { id: 47, userid: 6, date: '2021/2/22 10:14:22', total: '180000' },
+        { id: 48, userid: 2, date: '2020/1/22 10:14:22', total: '130000' },
+        { id: 49, userid: 1, date: '2020/11/22 10:14:22', total: '130000' },
+        { id: 50, userid: 1, date: '2020/12/22 10:14:22', total: '160000' },
+        { id: 51, userid: 2, date: '2020/5/22 10:14:22', total: '160000' },
+        { id: 52, userid: 11, date: '2020/8/22 10:14:22', total: '150000' },
+        { id: 53, userid: 10, date: '2020/2/22 10:14:22', total: '150000' },
+        { id: 54, userid: 8, date: '2020/3/22 10:14:22', total: '130000' },
+        { id: 55, userid: 8, date: '2020/4/22 10:14:22', total: '140000' },
+        { id: 56, userid: 10, date: '2020/6/22 10:14:22', total: '150000' },
+        { id: 57, userid: 11, date: '2020/7/22 10:14:22', total: '110000' },];
+
+        // Get element 
+        const total_order = document.getElementById('total_order');
+        const total_product = document.getElementById('total_product');
+        const total_customer = document.getElementById('total_customer');
+        const total_price = document.getElementById('total_price');
+
+        // calculate total order
+        total_order.textContent = data_order.length;
+
+        //calculate total customer
+        var count_customer = [];
+        for (const order of data_order) {
+            var current_id = order.userid;
+            if (!count_customer.includes(current_id)) {
+                count_customer.push(current_id);
+            }
+        }
+        total_customer.textContent = count_customer.length;
+
+        //calculate total price
+        var price = 0;
+        for (const order of data_order) {
+            price = price + parseFloat(order.total);
+        }
+        total_price.textContent = price + ' VNĐ';
+
+
+        // Draw a line chart  depicting revenue 
+        const lineChart = document.getElementById('lineChart');
+        new Chart(lineChart, {
+            type: 'line',
+            data: {
+                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: 'Earnings ',
+                    data: [12, 19, 3, 5, 2, 3],
+                    borderWidth: 1,
+
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+
+        
+        // Draw a pie chart depicting the type of product purchased
+        const pieChart = document.getElementById('pieChart');
+        new Chart(pieChart, {
+            type: 'bar',
+            data: {
+                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [12, 19, 3, 5, 2, 3],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true
+
+            }
+        });
+    };
+
+</script>

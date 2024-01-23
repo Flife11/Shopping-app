@@ -1,11 +1,39 @@
-<nav class="navbar navbar-expand-lg bg-light">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/admin">Home</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+<style>
+  .sidebar {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    background-color: #2a6792 !important;
+    overflow-x: hidden;
+    padding: 0;
+  }
+  .sidebar ul li{
+    width: 100%;
+    list-style: none;
+  }
+
+   .sidebar ul li a{
+    width: 100% !important;
+    text-decoration: none;
+    color:white !important;
+    display: flex;
+    align-items: center;
+  }
+  
+
+</style>
+
+<nav class="navbar navbar-expand-lg bg-light sidebar">
+  <div class="container-fluid  ">
+    <a class="navbar-brand" style="width:100%;  padding-left: 20px;  color:white;" href="/admin">Home</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    <div class="collapse navbar-collapse " style="width:100%" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 " style="width:100%" >
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/admin/product">Sản phẩm</a>
         </li>

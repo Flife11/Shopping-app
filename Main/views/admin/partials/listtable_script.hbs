@@ -1,0 +1,143 @@
+<script>
+    $(() => {          
+        let curpage = {{page}};
+        if (curpage==1) $('#previous-button').css({display: "none"});
+        if (curpage=={{totalpage.length}}) $('#next-button').css({display: "none"});
+    });
+
+    function HandleFilter() {
+        let name = $("#name").val();
+        let email = $('#email').val();
+        let address = $('#address').val();
+        let minprice = $("#minprice").val();
+        let maxprice = $("#maxprice").val();
+        let minquantity = $("#minquantity").val();
+        let maxquantity = $("#maxquantity").val();
+        let page = $("#page").val();
+        let limit = $("#limit").val();
+        //get current url
+        let url = new URL(window.location.href);
+
+        //get the search parameters from the url
+        let params = new URLSearchParams(url.search);
+
+        //remove the filter parameters
+        params.delete('name');
+        params.delete('email');
+        params.delete('address');
+        params.delete('minprice');
+        params.delete('maxprice');
+        params.delete('minquantity');
+        params.delete('maxquantity');
+        params.delete('page');
+        params.delete('limit'); //?
+
+        //add the filter parameters
+        if (name)
+            params.set('name', name);
+        if (email)
+            params.set('email', email);
+        if (address)
+            params.set('address', address);
+        if (minprice)
+            params.set('minprice', minprice);
+        if (maxprice)
+            params.set('maxprice', maxprice);
+        if (minquantity)
+            params.set('minquantity', minquantity);
+        if (maxquantity)
+            params.set('maxquantity', maxquantity);
+        if (page)
+            params.set('page', page);
+        if (limit)
+            params.set('limit', limit);
+
+        //set the search parameters back to the url
+        url.search = params.toString();
+
+        //navigate to the new url
+        window.location.href = url.toString();
+    }
+        
+    function HandleHiddenRow() {
+        let count = $('.check').filter((index, d) => {            
+            if (d.checked==true) return d;
+        }).length;
+
+        if (count==0) $('#hidden-row').html('')
+        else {
+            $('#hidden-row').html(`
+                <td colspan="100" style="border-top: 0px;">
+                    <button class="btn" disabled>${count} được chọn</button>
+                    <button id="delete-button" class="btn btn-light"><span>Xóa</span></button>
+                </td>
+            `)
+            $('#delete-button').click(function() {
+                $('#WarningNotificationText').text('Hành động xóa sẽ không thể hoàn tác ')
+                $('#WarningNotificationModal').css('display', '');
+            })
+        }        
+    }
+
+    document.onkeydown=function(){
+        if(window.event.keyCode=='13'){ 
+            HandleFilter();
+        }
+    }
+
+    // Paging
+    $('#page').change(function() {
+        HandleFilter();
+    });
+    
+    $('#next-button').click(function() {  
+        let curpage = {{page}};
+        $('#page').val(parseInt(curpage)+1);        
+        $('#page-selected').val(parseInt(curpage)+1);
+        HandleFilter();
+    });
+
+    $('#previous-button').click(function() {
+        let curpage = {{page}};
+        $('#page').val(curpage-1);  
+        $('#page-selected').val(parseInt(curpage)-1);      
+        HandleFilter();
+    });
+    // --------------------------------- //
+
+    // Check for what item will be deleted
+    $('#check-all').change(function() {        
+        $('.check').prop('checked', $('#check-all').prop('checked'))
+        HandleHiddenRow();
+    });
+
+    $('.check').change(function() {
+        HandleHiddenRow();
+    });
+    // -------------------------------- //
+
+    // Delete    
+
+    $('#closeYesWarningModal').click(async function() {
+        $('#WarningNotificationModal').css('display', 'none');
+        let listID = [];
+        $('.check').filter((index, d) => {
+            if (d.checked==true) return listID.push(d.id);
+        })
+        let dataBody = JSON.stringify({"listID": listID});
+        
+        let rs = await fetch('{{deleteurl}}', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: dataBody
+        })    
+        let url = await rs.json();        
+        window.location.href = url.url;
+
+    });
+    // -------------------------------- //
+
+</script>
