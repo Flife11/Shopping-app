@@ -20,7 +20,6 @@ module.exports = {
     },
     getAllDate: async function (dateFrom,dateTo) {
         const result = await db.db.query(`SELECT * FROM "ORDER" WHERE "date" BETWEEN '${dateFrom}' AND '${dateTo}'; `);
-        console.log(`SELECT * FROM "ORDER" WHERE "date" BETWEEN '${dateFrom}' AND '${dateTo}'; `);
         return result;
     }
 }
