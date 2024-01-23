@@ -49,7 +49,7 @@ module.exports = {
 
         const token = req.body.token;
         try {
-            console.log(token);
+            // console.log(token);
             var data = jwt.verify(token, secret);
             const isValidConnection= await db.isValidConnect();
 
