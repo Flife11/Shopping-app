@@ -100,6 +100,12 @@
         </div>
     </div>
 
+    {{!-- go back button --}}
+    <div style="width:100%" class="d-flex justify-content-center">
+        <a href="/cart" class="btn " style="background-image:linear-gradient(to right,#91d1de,#2a6792);color:white;width:200px;border-radius: 100px">
+                    <strong>Quay lại</strong>
+        </a>
+    </div>
 
 </div>
 
@@ -228,6 +234,11 @@
                 // delete cart
                 localStorage.removeItem("cart");
                 let orderid = response.orderid;
+
+                // update render empty cart
+                $('#cartPart').css('display', '');
+                $('#cartPart').css('margin', '1vw 0vw');
+                renderEmptyCart();
 
                 $('#successNotificationtext').text(response.message + ` Chuyển đến đơn hàng trong... ` + 3); // 3 seconds
                 $('#successNotificationModal').css('display', '');
