@@ -112,13 +112,16 @@ module.exports = {
             product[0].subcatid ? product[0].subcatid : -1
         );
 
-        // phân trang
+        // Phân trang
         const page = req.query.page ? parseInt(req.query.page) : 1;
         const perpage = req.query.perpage ? parseInt(req.query.perpage) : 4;
         const total_page = Math.ceil(products.length / perpage);
         const pre_page = page - 1 > 0 ? page - 1 : 1;
         const next_page = page + 1 <= total_page ? page + 1 : total_page;
         suggestProducts = products.slice((page - 1) * perpage, page * perpage);
+
+        // Random suggest products for each load
+        suggestProducts.sort(() => Math.random() - 0.5);
 
         res.render('product_detail', { title: product[0].name, categories: categories, subcategories: subcategories, product: product[0], suggestProducts, isLoggedin: req.isAuthenticated(), user: user, total_page: total_page, next_page: next_page, pre_page: pre_page, page: page });
 

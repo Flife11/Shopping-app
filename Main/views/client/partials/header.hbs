@@ -55,7 +55,7 @@
 
     {{!-- SEARCH --}}
     <form id="searchForm" class="d-flex align-items-center position-relative" style="width: 45%;">
-        <input type="text" class="form-control" placeholder="Tìm kiếm" style="padding-right: 30px;">
+        <input type="text" class="form-control" placeholder="Tìm kiếm" style="padding-right: 30px;" id="search">
         <button type="submit" class="border-0 bg-transparent position-absolute" style="right: 5px; color:inherit">
             <i class="fa fa-search"></i>
         </button>
@@ -75,7 +75,7 @@
         <h5 style="margin-top:3px" id="dropdownMenuButton" data-bs-toggle="dropdownUSER" class="fa-solid fa-user "></h5>
         {{#if isLoggedin}}
         <div class="dropdown-menu dropdown-menu-custom login-dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item dropdown-item-custom" href="/account"><strong>{{user.username}} (Số dư: {{user.balance}} VNĐ)</strong></a>
+            <a class="dropdown-item dropdown-item-custom" href="/account"><strong>{{user.username}} (Số dư: {{user.balance}} đ)</strong></a>
             <a class="dropdown-item dropdown-item-custom" href="/account/editprofile"><strong>Cập nhật thông
                     tin</strong></a>
             <a class="dropdown-item dropdown-item-custom" href="/account/editpassword"><strong>Đổi mật khẩu</strong></a>
@@ -142,9 +142,6 @@
         $('#searchForm').submit(function (e) {
             e.preventDefault();
             var search = $(this).find('input').val();
-            if (search == '') {
-                return;
-            }
             window.location.href = '/-1/-1?search=' + search;
         });
     });

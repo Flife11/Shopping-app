@@ -1,0 +1,150 @@
+{{> header}}
+
+<style>
+    .cartTable tr,
+    .totalTable tr,
+    .cartTable td,
+    .totalTable td,
+    .cartTable th,
+    .totalTable th {
+        background-color: transparent;
+    }
+</style>
+
+
+<div style="margin: 3vw;">
+    {{!-- header --}}
+    <H3 style="color: #2a6792; ">LỊCH SỬ THANH TOÁN</H3>
+
+    {{!-- cart part --}}
+    <div style="width: 100%; display:flex; margin:3vw 0vw" id="cartPart">
+        {{!-- cart --}}
+        <div style="width: 75%;" id="cartBox" class="border-top">
+            <table class="table cartTable">
+                <thead>
+                    <tr class="text-center">
+                        <th scope="col" style="width: 11%;">Mã giao dịch</th>
+                        <th scope="col" style="width: 20%;">Ngày giao dịch</th>
+                        <th scope="col" style="width: 12%;">Mã đơn hàng</th>
+                        <th scope="col" style="width: 15%;">Số tiền nạp/chi</th>
+                        <th scope="col" style="width: 15%;">Số dư</th>
+                        <th scope="col" style="width: 10%;">Thao Tác</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {{!-- if there's no transation --}}
+                    {{#if transactions}}
+                    {{else}}
+                    <tr class="text-center">
+                        <td colspan="6" >
+                            <div class="d-flex justify-content-center" style="width:100%"><img src="/public/resource/empty_cart.png" style="width: 20%;"></div>
+                            <h5 class="text-center mt-4" >Chưa có lịch sử thanh toán!</h5>
+                            <p class="text-center">Chưa có giao dịch nào, tiếp tục thực hiện mua sắm nhé.</p>
+                        </td>
+                    </tr>
+                    {{/if}}
+
+                    {{!-- data start here --}}
+                    {{#each transactions}}
+                    <tr class="text-center">
+                        <td><strong>{{id}}</strong></td>
+                        <td>{{date}}</td>
+                        <td>{{orderid}}</td>
+                        <td>
+                            {{#if orderid}}
+                            <span style="color: red;"><strong>{{amount}} đ</strong></span>
+                            {{else}}
+                            <span style="color: green;"><strong>+{{amount}} đ</strong></span>
+                            {{/if}}
+                        </td>
+                        <td>{{currentbalance}} đ</td>
+                        <td>
+                            {{#if orderid}}
+                            <a class="btn" href="/account/orders/{{orderid}}"
+                                style="background-image:linear-gradient(to right,#91d1de,#2a6792);color:white; border-radius: 100px;font-weight:bold;">
+                                Chi tiết
+                            </a>
+                            {{/if}}
+                        </td>
+                    {{/each}}
+
+
+                </tbody>
+            </table>
+            
+        </div>
+
+        {{!-- space --}}
+        <div style="width: 3%;"></div>
+
+        {{!-- total --}}
+        <div style="width: 22%; height:2vw;" class="border-top">
+            <table class="table totalTable">
+                <thead>
+                    <tr class="text-center">
+                        <th>
+                            Thống kê chi tiêu
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <td class="d-flex">
+                            <div style="width: 50%;">
+                                <strong>Tổng chi: </strong>
+                            </div>
+                            <div style="color: red;">
+                                <strong>{{totalpaid}} đ</strong>
+                            </div>
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td class="d-flex">
+                            <div style="width: 50%; ">
+                                <strong>Tổng nạp: </strong>
+                            </div>
+                            <div style="color: green;">
+                                <strong>{{totaldeposit}} đ</strong>
+                            </div>
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td class="d-flex">
+                            <div style="width: 50%; ">
+                                <strong>Số dư diện tại: </strong>
+                            </div>
+                            <div style="color: black;">
+                                <strong>{{user.balance}} đ</strong>
+                            </div>
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+    
+    {{!-- pagination --}}
+    {{#if transactions}}
+    <div style="color: #2a6792;">{{> pagination}}</div>
+    {{/if}}
+
+</div>
+
+
+{{> notification_failure}}
+{{> notification_success}}
+
+{{> footer}}
+
+<script>
+</script>
