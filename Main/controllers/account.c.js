@@ -448,8 +448,9 @@ module.exports = {
             user = req.session.passport.user;
             const userData = await userModel.getUser(user.username);
 
-            //Get amount
+            //Get amount and userInfor
             const amount = req.body.amount;
+            const userinfo = req.body.user;
 
             //Get Date  
             const timestamp = Date.now();
@@ -463,7 +464,7 @@ module.exports = {
             const formattedDateWithoutTimeZone = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 
             // Insert order
-            await orderModel.insert(userData.id, formattedDateWithoutTimeZone, amount);
+            await orderModel.insert(userData.id, formattedDateWithoutTimeZone, amount, userinfo.name, userinfo.address, userinfo.email);
             const idorder = await orderModel.getId(userData.id, formattedDateWithoutTimeZone, amount);
 
             // Insert order detail

@@ -197,18 +197,32 @@
             $('#cartPart').css('margin', '1vw 0vw');
             renderEmptyCart();
         }
+        
     });
 
     function checkout() {
         let amount = total;
         let cart = JSON.parse(localStorage.getItem("cart"));
+        
+        let name = $('#name').text();
+        let email = $('#email').text();
+        let address = $('#address').text();
+
+        let user = {
+            name: name,
+            email: email,
+            address: address
+        }
+        
         $.ajax({
             url: '/account/checkout',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({ 
-                amount, amount,
-                cart: cart
+                amount: amount,
+                cart: cart,
+                user: user
+
             }),
             success: function(response) {
                 // delete cart
