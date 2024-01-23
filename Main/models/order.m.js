@@ -6,8 +6,8 @@ module.exports = {
         const result = await db.db.query(`SELECT * FROM "ORDER" WHERE userid = ${userid}`);
         return result;
     },
-    insert: async function (userid, date, total) {
-        const result = await db.db.query(`INSERT INTO "ORDER" (userid, date, total) VALUES (${userid}, '${date}', ${total})`);
+    insert: async function (userid, date, total, name, address, email) {
+        const result = await db.db.query(`INSERT INTO "ORDER" (userid, date, total, name, address, email) VALUES (${userid}, '${date}', ${total}, '${name}', '${address}', '${email}')`);
         return result;
     },
     getId: async function (userid, date, total) {
