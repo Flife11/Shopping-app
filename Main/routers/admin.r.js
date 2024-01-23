@@ -7,6 +7,8 @@ const {getOrders,getCategory}= require('../controllers/admin_controllers/home.c'
 const upload = multer({ dest: 'Main/public/image' })
     
 const router = require('express').Router();
+//TODO: bảo vệ các route bên dưới (middleware checkLogin)
+
 // product
 router.get('/', RenderAdmin);
 router.get('/product', RenderProduct);
