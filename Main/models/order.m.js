@@ -18,9 +18,9 @@ module.exports = {
         const result = await db.db.query(`SELECT * FROM "ORDER" WHERE id = ${id}`);
         return result[0];
     },
-    getAllMonthYear: async function () {
-        const result = await db.db.query(`SELECT * FROM "ORDER" WHERE EXTRACT(MONTH FROM "date") = EXTRACT(MONTH FROM CURRENT_DATE)
-        AND EXTRACT(YEAR FROM "date") = EXTRACT(YEAR FROM CURRENT_DATE); `);
+    getAllDate: async function (dateFrom,dateTo) {
+        const result = await db.db.query(`SELECT * FROM "ORDER" WHERE "date" BETWEEN '${dateFrom}' AND '${dateTo}'; `);
+        console.log(`SELECT * FROM "ORDER" WHERE "date" BETWEEN '${dateFrom}' AND '${dateTo}'; `);
         return result;
     }
 }

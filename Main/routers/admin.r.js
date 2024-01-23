@@ -1,9 +1,8 @@
-const { RenderAdmin } = require('../controllers/admin.c');
+const { RenderAdmin, getOrders, getCategory,getTotalHome } = require('../controllers/admin.c');
 const {  RenderCategory, DeleteCategory, NewCategory, CreateCategory, DeatilCategory, UpdateCategory } = require('../controllers/admin_controllers/category.c')
 const { RenderProduct, DeleteProduct, NewProduct, CreateProduct, DeatilProduct, UpdateProduct } = require('../controllers/admin_controllers/product.c');
 const multer  = require('multer');
 const { DeleteSubcategory, DeatilSubCategory } = require('../controllers/admin_controllers/subcategory.c');
-const {getOrders,getCategory}= require('../controllers/admin_controllers/home.c')
 const upload = multer({ dest: 'Main/public/image' })
     
 const router = require('express').Router();
@@ -35,5 +34,6 @@ router.get('/subcategory/detail/:id', upload.none(), DeatilSubCategory);
 //home
 router.post('/getOrders',getOrders);
 router.post('/getCategory',getCategory);
+router.post('/getTotalHome',getTotalHome);
 
 module.exports = router;

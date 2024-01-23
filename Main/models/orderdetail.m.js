@@ -10,12 +10,13 @@ module.exports = {
         const result = await db.db.query(`SELECT * FROM "ORDERDETAIL" WHERE orderid = ${orderid}`);
         return result;
     },
-    getSumProductInOrder: async function()
+    getSumProductInOrder: async function(dateFrom,dateTo)
     {
         const result= await db.db.query(`select "CATEGORY"."name",SUM("ORDERDETAIL"."quantity")  
                                         from "ORDER" JOIN "ORDERDETAIL" on "ORDER"."id"= "ORDERDETAIL"."orderid"
                                         JOIN "PRODUCT" on "ORDERDETAIL"."productid"= "PRODUCT"."id"
                                         JOIN "CATEGORY" on "PRODUCT"."catid"= "CATEGORY"."id"
+                                        WHERE "ORDER"."date" BETWEEN '${dateFrom}' AND '${dateTo}'
                                         GROUP BY "CATEGORY"."name";`);
         return result;
     }
