@@ -6,13 +6,15 @@ const getOrders = async (req, res) => {
     // console.log(req.body);
     const dateFrom = req.body.from;
     const dateTo = req.body.to;
+    var titleX = '';
     // Get current date
     try {
         const data = await Order.getAllDate(dateFrom, dateTo);
         // console.log(data);
         // Trường hợp Biểu đồ theo từng năm
         if (parseInt(dateFrom.split('-')[0], 10) != parseInt(dateTo.split('-')[0], 10)) {
-            console.log("Nam");
+            // console.log("Nam");
+            titleX = "Năm";
             const resultArray = [];
 
             //Lượt bỏ các dòng có ngày trùng nhau
@@ -40,20 +42,21 @@ const getOrders = async (req, res) => {
                 lineLabels.push(order.year.toString());
                 lineData.push((order.total));
             }
-            res.status(200).json({ lineLabels: lineLabels, lineData: lineData });
+            res.status(200).json({ lineLabels: lineLabels, lineData: lineData, titleX: titleX });
             return;
         }
         // Trường hợp Biểu đồ theo từng tháng trong năm
         if (parseInt(dateFrom.split('-')[1], 10) != parseInt(dateTo.split('-')[1], 10)) {
 
 
-            console.log("Thang");
+            // console.log("Thang");
+            titleX = "Tháng";
 
             const resultArray = [];
             //Lượt bỏ các dòng có ngày trùng nhau
             data.forEach(order => {
                 const orderMonth = new Date(order.date).getMonth() + 1;
-                
+
                 const existingDay = resultArray.find(item => item.month === orderMonth);
                 if (existingDay) {
                     // Nếu ngày đã tồn tại, cộng thêm tổng tiền
@@ -73,11 +76,12 @@ const getOrders = async (req, res) => {
                 lineLabels.push(order.month.toString());
                 lineData.push((order.total));
             }
-            res.status(200).json({ lineLabels: lineLabels, lineData: lineData });
+            res.status(200).json({ lineLabels: lineLabels, lineData: lineData, titleX: titleX });
             return;
         }
         // Trường hợp Biểu đồ theo từng ngày trong tháng
-        console.log("Ngay");
+        // console.log("Ngay");
+        titleX = "Ngày";
 
         const resultArray = [];
         //Lượt bỏ các dòng có ngày trùng nhau
@@ -105,7 +109,7 @@ const getOrders = async (req, res) => {
             lineLabels.push(order.date.toString());
             lineData.push((order.total));
         }
-        res.status(200).json({ lineLabels: lineLabels, lineData: lineData });
+        res.status(200).json({ lineLabels: lineLabels, lineData: lineData, titleX: titleX });
         return;
     }
     catch (err) {
@@ -143,9 +147,9 @@ const RenderAdmin = async (req, res, next) => {
     var total_customer = 0;
     var total_price = 0;
     var ngayHienTai = new Date();
-    var ngayChiTiet = ngayHienTai.toISOString().split('T')[0];
+    var ngayChiTiet = FormatDate(ngayHienTai)
     ngayHienTai.setDate(1); // Đặt ngày là 1 để lấy ngày đầu tiên của tháng
-    var ngayDauTienCuaThang = ngayHienTai.toISOString().split('T')[0];
+    var ngayDauTienCuaThang = FormatDate(ngayHienTai);
     try {
         const data = await Order.getAllDate(ngayDauTienCuaThang, ngayChiTiet);
         // console.log(data);
@@ -228,7 +232,6 @@ const getTotalHome = async (req, res, next) => {
             console.log(err);
 
         }
-        var total_product = 0;
         try {
             const data = await OrderDetail.getSumProductInOrder(dateFrom, dateTo);
             for (const category of data) {
@@ -249,5 +252,18 @@ const getTotalHome = async (req, res, next) => {
         console.log(err);
         res.status(500).json({ message: "Lỗi truy vấn" });
     }
+}
+function FormatDate(date) {
+    const dateWithoutTimeZone = new Date(date);
+
+    const year = dateWithoutTimeZone.getFullYear();
+    const month = dateWithoutTimeZone.getMonth() + 1;
+    const day = dateWithoutTimeZone.getDate();
+    const hours = dateWithoutTimeZone.getHours();
+    const minutes = dateWithoutTimeZone.getMinutes();
+    const seconds = dateWithoutTimeZone.getSeconds();
+
+    const formattedDateWithoutTimeZone = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    return formattedDateWithoutTimeZone;
 }
 module.exports = { RenderAdmin, getOrders, getCategory, getTotalHome }
