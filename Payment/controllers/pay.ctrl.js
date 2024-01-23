@@ -62,6 +62,7 @@ module.exports = {
                 if (data.idorder === null) {
                     var user = await USER.getCondition('id', data.iduser);
                     user = user[0];
+
                     user.balance = parseFloat(user.balance) + parseFloat(data.amount);
                     await USER.update('id', user.id, 'balance', user.balance);
                     data['currentbalance'] = user.balance;
@@ -77,17 +78,17 @@ module.exports = {
                     else {
                         user.balance = parseFloat(user.balance) - parseFloat(data.amount);
                         await USER.update('id', user.id, 'balance', user.balance);
-                        data.amount = - parseFloat(data.amount);
+                        data.amount = - parseFloat(data.amount); //set amount thành số âm
                         data['currentbalance'] = user.balance;
                         await TRANSACTION.insert(data);
 
+                        // update balance của user nhận tiền (user 0) theo yêu cầu đề bài
                         var user_receive = await USER.getCondition('id', 0);
                         user_receive = user_receive[0];
                         user_receive.balance = parseFloat(user_receive.balance) - data.amount;
                         await USER.update('id', 0, 'balance', user_receive.balance);
                     }
                 }
-                const message = {}
                 res.status(200).json({ message: "Thanh toán thành công!" });
             }
             catch (err) {
