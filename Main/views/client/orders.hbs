@@ -72,10 +72,7 @@
 
                 </tbody>
             </table>
-            {{!-- pagination --}}
-            {{#if transactions}}
-            <div style="color: #2a6792;">{{> pagination}}</div>
-            {{/if}}
+            
         </div>
 
         {{!-- space --}}
@@ -133,8 +130,13 @@
                 </tbody>
             </table>
         </div>
+        
     </div>
-
+    
+    {{!-- pagination --}}
+    {{#if transactions}}
+    <div style="color: #2a6792;">{{> pagination}}</div>
+    {{/if}}
 
 </div>
 
