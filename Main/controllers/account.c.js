@@ -558,7 +558,8 @@ module.exports = {
         const user = req.session.passport.user;
         const categories = await categoryModel.getAll();
         const subcategories = await subcategoryModel.getAll();
-
+        const order = await orderModel.getByID(req.params.id);
+        
         // Get order detail
         const orderdetails = await orderdetailModel.getByOrderID(req.params.id);
 
@@ -570,6 +571,6 @@ module.exports = {
         // Wait for all promises to complete
         await Promise.all(orderDetailPromises)
 
-        res.render('orderdetail', { title: 'Chi tiết đơn hàng', categories: categories, subcategories: subcategories, isLoggedin: req.isAuthenticated(), user, orderdetails, orderid: req.params.id });
+        res.render('orderdetail', { title: 'Chi tiết đơn hàng', categories: categories, subcategories: subcategories, isLoggedin: req.isAuthenticated(), user, orderdetails, order: order });
     }
 };      

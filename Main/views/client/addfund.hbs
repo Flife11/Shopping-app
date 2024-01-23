@@ -7,6 +7,11 @@
     .addfundTable th {
         background-color: transparent;
     }
+
+    .disabled {
+        pointer-events: none;
+        background: gray !important;
+    }
 </style>
 
 {{> header}}
@@ -176,7 +181,10 @@
 
         // If success, display success notification
         if (res.ok) {
-            console.log({{user.balance}})
+
+            // Disable addfund button
+            $('#addfundButton').addClass('disabled');
+
             $('#successNotificationtext').text(resData.message + ` Số dư đang được cập nhật... ` + 3); // 3 seconds
             $('#successNotificationModal').css('display', '');
 

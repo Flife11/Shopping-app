@@ -1,56 +1,119 @@
 <style>
-    table {
-        text-align: center;
-    }
-    .img-resize{
-        width: 60% ;
-        height: auto;
+    .orderTable tr,
+    .infoTable tr,
+    .orderTable td,
+    .infoTable td,
+    .orderTable th,
+    .infoTable th {
+        background-color: transparent;
     }
 </style>
+
 
 
 {{> header}}
 
 
-<center style="margin: 3vw;">
-    <H3 style="color: #2a6792; ">Chi tiết đơn hàng #{{orderid}}</H3>
-    <div>
-        <div style="width: 75%;"class="border-top">
-            <table class="table">
+<div style="margin: 3vw;">
+    {{!-- header --}}
+    <H3 style="color: #2a6792; ">CHI TIẾT ĐƠN HÀNG #{{order.id}}</H3>
+   
+    {{!-- order part --}}
+    <div style="width: 100%; display:flex; margin:3vw 0vw" id="cartPart">
+        {{!-- cart --}}
+        <div style="width: 65%;" id="cartBox" class="border-top">
+            <table class="table orderTable">
                 <thead>
+                    <tr>
+                        <th scope="col" colspan="4" class="text-center">Danh sách sản phẩm</th>
+                    </tr>
                     <tr class="text-center">
-                        <th scope="col" style="width: 30%;">Picture</th>
-                        <th scope="col" style="width: 40%;">Product</th>
-                        <th scope="col" style="width: 10%;">Quantity</th>
-                        <th scope="col" style="width: 10%;">Price</th>
-                        <th scope="col" style="width: 10%;">Total</th>
+                        <th scope="col" style="width: 40%;">Sản phẩm</th>
+                        <th scope="col" style="width: 20%;">Đơn giá</th>
+                        <th scope="col" style="width: 20%;">Số lượng</th>
+                        <th scope="col" style="width: 20%;">Thành tiền</th>
                     </tr>
                 </thead>
                 <tbody>
                     {{#each orderdetails}}
                     <tr>
                         <td>
-                            <a href="/{{this.id}}">
-                                <img src="/public/image/{{this.product.image}}" class="img-resize">
+                            <a style="display: flex;color:inherit;text-decoration:none" href="/{{this.product.id}}">
+                                <img src="/public/image/{{this.product.image}}" style="width: 7vw; height: 7vw;">
+                                <div style="display: flex; flex-direction: column; justify-content: center;">
+                                    <p style="margin-left: 1vw;">
+                                        {{this.product.name}}
+                                    </p>
+                                </div>
                             </a>
                         </td>
+                        <td class="text-center">
+                           {{this.price}} đ
                         <td>
-                            <a href="/{{this.id}}" class="text-decoration-none" style="color: black;">
-                                {{this.product.name}}</td>
-                            </a>
-                        <td>{{this.quantity}}</td>
-                        <td>{{this.price}}</td>
-                        <td>{{this.total}}</td>
+                            <div class="d-flex justify-content-center align-items-center">
+                                <p class="text-center" style="width: 50%; background-color:transparent">{{this.quantity}}</p>
+                            </div>
+                        </td>
+                        <td class="text-center" style="color: #2a6792;">
+                            <strong>{{this.total}} đ</strong>
+                        </td>
                     </tr>
                     {{/each}}
                 </tbody>
             </table>
-            <a href="/account/orders" class="btn mb-5" style="background-image:linear-gradient(to right,#91d1de,#2a6792);color:white;width:200px;border-radius: 100px">
-                <strong>Quay lại</strong> 
-            </a>
+            
+        </div>
+
+        {{!-- space --}}
+        <div style="width: 3%;"></div>
+
+        {{!-- info --}}
+        <div style="width: 32%;" class="border-top">
+            <table class="table infoTable">
+                <thead>
+                    <tr>
+                        <th class="text-center">Thông tin đơn hàng</th>
+                    </tr>
+
+                    
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Mã đơn hàng:</strong> <span id="id">{{order.id}}</span></td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Ngày đặt:</strong> <span id="date">{{order.date}}</span></td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>Tên người đặt:</strong> <span id="name">{{order.name}}</span></td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Email:</strong> <span id="email">{{order.email}}</span></td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Địa chỉ giao:</strong> <span id="address">{{order.address}}</span></td>
+                    </tr>
+
+                    <tr>
+                        <th>Tổng thanh toán: <span id="total" style="color: #ee4f2e;">{{order.total}} đ</span></th>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
-</center>
+
+    {{!-- go back button --}}
+    <div style="width:100%" class="d-flex justify-content-center">
+        <a href="/account/orders" class="btn " style="background-image:linear-gradient(to right,#91d1de,#2a6792);color:white;width:200px;border-radius: 100px">
+                    <strong>Quay lại</strong>
+        </a>
+    </div>
+    
+</div>
 
 
 
