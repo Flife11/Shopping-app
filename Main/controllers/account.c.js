@@ -450,6 +450,7 @@ module.exports = {
 
         //Get orders
         const orders = await orderModel.getByUserID(user.id);
+        console.log(orders);
         res.render('order', { title: 'Lịch sử thanh toán', categories: categories, subcategories: subcategories, isLoggedin: req.isAuthenticated(), user: user, orders: orders });
     },
 
