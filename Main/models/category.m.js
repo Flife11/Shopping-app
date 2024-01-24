@@ -44,4 +44,24 @@ module.exports = {
         db.update("CATEGORY", ['name'], 
         [{name}], `WHERE id=${id}`);             
     },
+
+    checkExist: async function(name) {
+        try {
+            const sql = `SELECT * FROM "CATEGORY" WHERE name = '${name}'`;
+            const result = await db.db.oneOrNone(sql);
+            return result;
+        } catch (error) {
+            throw(error);
+        }
+    },
+
+    checkChildExist: async function(id) {
+        try {
+            const sql = `SELECT * FROM "SUBCATEGORY" WHERE catid = ${id}`;
+            const result = await db.db.oneOrNone(sql);
+            return result;
+        } catch (error) {
+            throw(error);
+        }
+    }
 }

@@ -4,6 +4,7 @@ const Categories = require('../../models/category.m');
 const RenderSubcategory = async(req, res, next) => {
     try {
         let subcategoryname = req.query.name || '';
+        let catname = req.query.catname || '';
         let page = 1;
         let perpage = 10;
                 
@@ -12,21 +13,30 @@ const RenderSubcategory = async(req, res, next) => {
         if (req.query.limit)
             perpage = parseInt(req.query.limit);
 
-        let data = await SubCategories.getSubcategories(subcategoryname);                
+        let data = await SubCategories.getSubcategories(subcategoryname);   
+        let categories = await Categories.getCategories(null);
         
         const totalItems = data.length;
         const totalPage = (totalItems / perpage) + (totalItems % perpage != 0);
         
-        // console.log(page, perpage);
+        // console.log(page, perpage);        
         data = data.slice((page - 1) * perpage, page * perpage);
-        data = data.filter(d => {            
+        data = data.filter((d) => {
+            let tmp = 'None';
+            categories.forEach(c => {
+                if (c.id==d.catid) tmp = c.name;
+            });
+            d.catname = tmp;
             d.detailurl = '/admin/subcategory/detail/';
             return d;
         })
+        
         res.render('product', {
             title: 'Admin',
             header: 'LOẠI SẢN PHẨM PHỤ',
             newurl: '/admin/category/new',
+            catnameCol: 'TÊN LOẠI SẢN PHẨM CHA',
+            catname,
             name: subcategoryname,            
             data: data,
             page: page,
@@ -54,14 +64,16 @@ const DetailSubCategory = async(req, res, next) => {
     try {
         let id = req.params.id;
         let subcat = await SubCategories.getSubcategory(id);
-        // console.log(cat);             
+        // console.log(cat);
         let categories = await Categories.getAll();        
         let catidVal = 0;
-        let subcatidVal = 0;        
-        
+        let subcatidVal = 0;
+
+        categories = [{id: 0, name: 'Không có'}, ...categories];
         categories.forEach((cat, index) => {
             if (cat.id==subcat.catid) catidVal = index;
-        });                
+        });     
+        // console.log(categories);           
 
         res.render('newproduct', {
             title: 'Admin',
@@ -76,6 +88,7 @@ const DetailSubCategory = async(req, res, next) => {
             nameVal: subcat.name,
             catidVal,
             subcatidVal,
+            notiAppearance: 1,
             // Dữ liệu
             categories,
         })
@@ -86,10 +99,39 @@ const DetailSubCategory = async(req, res, next) => {
 
 const UpdateSubCategory = async(req, res, next) => {
     try {
-        let {id, name} = req.body;
-        // console.log(id, name);
-        SubCategories.update(id, name[0]);
-        res.redirect('http://localhost:3000/admin/subcategory');
+        let {id, name, category} = req.body;
+        // console.log(id, name, category);
+        if (category==0) {
+            let check = await Categories.checkExist(name);            
+            if (!check) {
+                Categories.insert(name);
+                SubCategories.delete([id]);
+                return res.status(201).json({
+                    message: 'Chỉnh sửa loại sản phẩm phụ thành công',
+                    redirecturl: 'http://localhost:3000/admin/category'
+                })
+            }
+            else {
+                return res.status(401).json({
+                    message: 'Tên loại sản phẩm không được trùng',
+                    redirecturl: 'http://localhost:3000/admin/category/new'
+                });
+            }
+        } else {
+            let check = await SubCategories.checkExist(name, category);            
+            if (!check || check.id==id) {
+                SubCategories.update(id, name, parseInt(category));                
+                return res.status(201).json({
+                    message: 'Chỉnh sửa loại sản phẩm phụ thành công',
+                    redirecturl: 'http://localhost:3000/admin/subcategory'
+                })
+            } else {                
+                return res.status(401).json({
+                    message: 'Tên loại sản phẩm phụ không được trùng trong cùng 1 loại sản phẩm',
+                    redirecturl: 'http://localhost:3000/admin/category/new'
+                });
+            }
+        }       
     } catch (error) {
         next(error);
     }

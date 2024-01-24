@@ -40,8 +40,18 @@ module.exports = {
         return result;
     },
 
-    update: async function(id, name) {        
-        db.update("SUBCATEGORY", ['name'], 
-        [{name}], `WHERE id=${id}`);             
+    update: async function(id, name, catid) {        
+        db.update("SUBCATEGORY", ['name', 'catid'], 
+        [{name, catid}], `WHERE id=${id}`);             
     },
+
+    checkExist: async function(name, category) {
+        try {
+            const sql = `SELECT * FROM "SUBCATEGORY" WHERE name = '${name}' and catid=${category}`;
+            const result = await db.db.oneOrNone(sql);
+            return result;
+        } catch (error) {
+            throw(error);
+        }
+    }
 }

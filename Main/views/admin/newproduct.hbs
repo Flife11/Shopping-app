@@ -5,7 +5,7 @@
             <h4 class="text-right">{{header}}</h4>
         </div>
         <div class="p-3 bg-white">
-            <form action="{{posturl}}" enctype="multipart/form-data" method="post" name="new-product" id="new-product"
+            <form action="{{posturl}}" enctype="multipart/form-data" method="post" name="myform" id="myform"
                 class="mt-3">
                 <input type="hidden" name="id" value="{{idVal}}">
                 {{#if nameCol}}
@@ -160,12 +160,14 @@
         }
     }    
 
-    $("#new-product").on("submit", async (e) => {
-        try {        
+    $("#myform").on("submit", async (e) => {
+        try {
             const responseData = await handleFormSubmit(e);               
             $('#successNotificationtext').html(responseData.message)
             $('#successNotificationModal').css('display', '');
-            window.location.href = 'http://localhost:3000/admin/user';
+            $('#closeSuccessModal').click(function() {
+                window.location.href = responseData.redirecturl;
+            })
         }
         catch (error) {
             $('#failureNotificationText').html(error)

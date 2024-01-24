@@ -16,6 +16,17 @@
                         <input value="{{this.name}}" name="name" id="filter-name" class="form-control" placeholder="TÊN" type="text">
                     </div>
                 </th>
+                {{#if catnameCol}}
+                <th scope="col">
+                    <div class="table-header" style="margin-bottom: 1rem;">
+                            {{this.catnameCol}}
+                    </div>
+                    <div class="header-filter input-group" style="width: 15rem;">
+                        <input value="{{this.catname}}" name="catname" id="catname" class="form-control" placeholder="{{this.catnameCol}}
+" type="text">
+                    </div>
+                </th>
+                {{/if}}
                 {{#if usernameCol}}
                 <th scope="col">
                     <div class="table-header" style="margin-bottom: 1rem;">
@@ -94,6 +105,11 @@
                         <td style="vertical-align:middle;">
                             <a href="{{d.detailurl}}{{d.id}}" style="color: black; text-decoration: none;">{{d.name}}</a>
                         </td>
+                        {{#if d.catname}}
+                        <td style="vertical-align:middle;">
+                            {{d.catname}}
+                        </td>
+                        {{/if}}
                         {{#if d.username}}
                         <td style="vertical-align:middle;">
                             {{d.username}}
@@ -160,6 +176,7 @@
 
     function HandleFilter() {
         let name = $("#filter-name").val();
+        let catname = $('#catname').val();
         let username = $('#username').val();
         let password = $('#password').val();
         let email = $('#email').val();
@@ -179,6 +196,7 @@
 
         //remove the filter parameters
         params.delete('name');
+        params.delete('catname');
         params.delete('username');
         params.delete('password');
         params.delete('email');
@@ -194,6 +212,8 @@
         //add the filter parameters
         if (name)
             params.set('name', name);
+        if (catname)
+            params.set('catname', catname);
         if (username)
             params.set('username', username);
         if (password)

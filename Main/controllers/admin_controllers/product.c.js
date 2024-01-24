@@ -35,7 +35,9 @@ const RenderProduct = async (req, res, next) => {
         // console.log(page, perpage);
         data = data.slice((page - 1) * perpage, page * perpage);
         // Thêm url detail
-        data = data.filter(d => {            
+        data = data.filter(d => {
+            d.quantity = `${d.quantity}`;           
+            d.price = `${d.price}`;
             d.detailurl = '/admin/product/detail/';
             return d;
         })
@@ -122,15 +124,16 @@ const CreateProduct = async(req, res, next) => {
         price = parseInt(price);
         quantity = parseInt(quantity);
         let newid = await Product.insert(name, price, quantity, category, subcategory, shortdes, longdes);
-        // console.log(name, price, quantity, category, subcategory, shortdes, longdes);
-        // console.log(req.file);
-        // console.log(newid, filename);
 
         fs.renameSync(`Main/public/image/${filename}`, `Main/public/image/${newid}.jpg`, function(err) {
             if ( err ) console.log('ERROR: ' + err);
         });
 
-        res.redirect('http://localhost:3000/admin/product/new');
+        // res.status(201).json({
+        //     message: 'Tạo tài khoản thành công',
+        //     redirecturl: 'http://localhost:3000/admin/product/new'
+        // });
+        res.redirect('http://localhost:3000/admin/product');
     } catch (error) {
         next(error);
     }
