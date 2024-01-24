@@ -49,9 +49,13 @@ module.exports = {
         return newid[0].id;
     },
 
-    update: async function (id, name, price, quantity, catid, subcatid = null, shortdescription, fulldescription) {
-        db.update("PRODUCT", ['name', 'price', 'quantity', 'catid', 'subcatid', 'shortdescription', 'fulldescription'],
-            [{ name, price, quantity, catid, subcatid, shortdescription, fulldescription }], `WHERE id=${id}`);
+    update: async function(id, name, price, quantity, catid, subcatid=null, shortdescription, fulldescription) {        
+        if (isNaN(subcatid)) {
+            db.update("PRODUCT", ['name', 'price', 'quantity', 'catid', 'shortdescription', 'fulldescription'], 
+            [{name, price, quantity, catid, shortdescription, fulldescription}], `WHERE id=${id}`);             
+        } else {
+            db.update("PRODUCT", ['name', 'price', 'quantity', 'catid', 'subcatid', 'shortdescription', 'fulldescription'], 
+            [{name, price, quantity, catid, subcatid, shortdescription, fulldescription}], `WHERE id=${id}`);             
     },
 
     updateQuantity: async function (id, quantity) {

@@ -16,13 +16,24 @@
                         <input value="{{this.name}}" name="name" id="name" class="form-control" placeholder="TÊN" type="text">
                     </div>
                 </th>
+                {{#if usernameCol}}
+                <th scope="col">
+                    <div class="table-header" style="margin-bottom: 1rem;">
+                            {{this.usernameCol}}
+                    </div>
+                    <div class="header-filter input-group" style="width: 15rem;">
+                        <input value="{{this.username}}" name="username" id="username" class="form-control" placeholder="{{this.usernameCol}}
+" type="text">
+                    </div>
+                </th>
+                {{/if}}
                 {{#if emailCol}}
                 <th scope="col">
                     <div class="table-header" style="margin-bottom: 1rem;">
                             {{this.emailCol}}
                     </div>
                     <div class="header-filter input-group" style="width: 15rem;">
-                        <input value="{{this.email}}" name="email" id="email" class="form-control" placeholder="Email" type="text">
+                        <input value="{{this.email}}" name="email" id="email" class="form-control" placeholder="{{emailCol}}" type="text">
                     </div>
                 </th>
                 {{/if}}
@@ -32,7 +43,7 @@
                             {{this.addressCol}}
                     </div>
                     <div class="header-filter input-group" style="width: 15rem;">
-                        <input value="{{this.address}}" name="address" id="address" class="form-control" placeholder="Email" type="text">
+                        <input value="{{this.address}}" name="address" id="address" class="form-control" placeholder="{{addressCol}}" type="text">
                     </div>
                 </th>
                 {{/if}}
@@ -64,7 +75,7 @@
                 {{#each this.data as |d|}}
                     <tr>
                         <td style="vertical-align:middle;"><input id="{{d.id}}" class="fs-4 check form-check-input" type="checkbox" value="0"></td>
-                        <td style="vertical-align:middle;">{{d.id}}</td>
+                        <td style="vertical-align:middle;">{{d.id}}</td>                        
                         {{#if d.image}}
                         <td style="width: 100px;">
                             <img src="../public/image/{{d.image}}" class="img-thumbnail" alt="...">
@@ -73,6 +84,22 @@
                         <td style="vertical-align:middle;">
                             <a href="{{d.detailurl}}{{d.id}}" style="color: black; text-decoration: none;">{{d.name}}</a>
                         </td>
+                        {{#if d.username}}
+                        <td style="vertical-align:middle;">
+                            {{d.username}}
+                        </td>
+                        {{/if}}
+                        {{#if d.email}}
+                        <td style="vertical-align:middle;">
+                            {{d.email}}
+                        </td>
+                        {{/if}} 
+                        {{#if d.address}}
+                        <td style="vertical-align:middle;">
+                            {{d.address}}
+                        </td>
+                        {{/if}}  
+                                             
                         {{#if d.price}}
                         <td style="vertical-align:middle;">{{d.price}}</td>
                         {{/if}}

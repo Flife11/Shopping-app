@@ -3,6 +3,7 @@ const {  RenderCategory, DeleteCategory, NewCategory, CreateCategory, DeatilCate
 const { RenderProduct, DeleteProduct, NewProduct, CreateProduct, DeatilProduct, UpdateProduct } = require('../controllers/admin_controllers/product.c');
 const multer  = require('multer');
 const { DeleteSubcategory, DeatilSubCategory } = require('../controllers/admin_controllers/subcategory.c');
+const { RenderUser } = require('../controllers/admin_controllers/user.c');
 const upload = multer({ dest: 'Main/public/image' })
     
 const router = require('express').Router();
@@ -28,7 +29,9 @@ router.post('/category/update', upload.none(), UpdateCategory);
 //subcategory
 router.post('/subcategory/delete', DeleteSubcategory);
 router.get('/subcategory/detail/:id', upload.none(), DeatilSubCategory);
+
 //user
+router.get('/user', RenderUser);
 
 
 //home
