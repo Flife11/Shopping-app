@@ -44,7 +44,7 @@
 
 
     {{!-- (right) --}}
-    <div style="width:75%; ">
+    <div style="width:75%; margin-bottom:3vw">
         {{!-- category/sub category name --}}
         {{#if category}}
         <div class="d-flex justify-content-center align-items-center" style="width: 100%;margin-top:2vw;">
@@ -62,13 +62,13 @@
                     Sắp xếp mặc định
                 </button>
                 <ul class="dropdown-menu dropdown-menu-custom" style="14vw;border-radius:20px;border-right:0px">
-                    <li class="dropdown-item dropdown-item-custom" data-value="priceasc" onclick="HandleSort()">Giá tăng
+                    <li class="dropdown-item dropdown-item-custom" data-value="priceasc" id="priceasc" onclick="HandleSort()">Giá tăng
                         dần</li>
-                    <li class="dropdown-item dropdown-item-custom" data-value="pricedesc" onclick="HandleSort()">Giá
+                    <li class="dropdown-item dropdown-item-custom" data-value="pricedesc" id="pricedesc" onclick="HandleSort()">Giá
                         giảm dần</li>
-                    <li class="dropdown-item dropdown-item-custom" data-value="quantityasc" onclick="HandleSort()">Số
+                    <li class="dropdown-item dropdown-item-custom" data-value="quantityasc" id="quantityasc" onclick="HandleSort()">Số
                         lượng tăng dần</li>
-                    <li class="dropdown-item dropdown-item-custom" data-value="quantitydesc" onclick="HandleSort()">Số
+                    <li class="dropdown-item dropdown-item-custom" data-value="quantitydesc" id="quantitydesc" onclick="HandleSort()">Số
                         lượng giảm dần</li>
                 </ul>
             </div>
@@ -99,7 +99,47 @@
 
 <script>
 
-    //TODO: onload, assign value to filter box, sort box, pagination, search box
+    //TODO: onload, assign value to filter box, sort box, search box
+    $(() => {
+        //get current url
+        let url = new URL(window.location.href);
+
+        //get the search parameters from the url
+        let params = new URLSearchParams(url.search);
+
+        //get the filter parameters
+        let minprice = params.get('minprice');
+        let maxprice = params.get('maxprice');
+        let minquantity = params.get('minquantity');
+        let maxquantity = params.get('maxquantity');
+
+        //get the sort parameter
+        let sort = params.get('sort');
+
+        //get the search parameter
+        let search = params.get('search');
+
+        //set the filter parameters
+        if (minprice)
+            $("#minprice").val(minprice);
+        if (maxprice)
+            $("#maxprice").val(maxprice);
+        if (minquantity)
+            $("#minquantity").val(minquantity);
+        if (maxquantity)
+            $("#maxquantity").val(maxquantity);
+
+        //set the sort parameter
+        if (sort){
+            let selectedItem = $('#' + sort);
+            $('.dropdown-toggle').text(selectedItem.text());
+        }
+
+        //set the search parameter
+        if (search)
+            $("#search").val(search);
+    
+    })
 
     // Xử lý url cho filter (button "Lọc sản phẩm")
     function HandleFilter() {

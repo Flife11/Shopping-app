@@ -2,25 +2,25 @@ const db = require('../utilities/db');
 
 module.exports = {
 
-    getProducts : async function (catid, subcatid, search) {
+    getProducts: async function (catid, subcatid, search) {
         let sql = `SELECT * FROM "PRODUCT" WHERE 1=1`;
         if (catid != -1)
             sql += ` AND catid = ${catid}`;
-        if (subcatid != -1) 
-            sql += ` AND subcatid = ${subcatid}`;        
-        if (search) 
+        if (subcatid != -1)
+            sql += ` AND subcatid = ${subcatid}`;
+        if (search)
             sql += ` AND LOWER(name) LIKE '%${search.toLowerCase()}%'`;
-        
+
         const result = await db.db.query(sql);
 
         return result;
     },
 
-    getAll : async function () {
+    getAll: async function () {
         const result = await db.db.query(`SELECT * FROM "PRODUCT"`);
         return result;
     },
-    getProduct : async function (id) {
+    getProduct: async function (id) {
         const result = await db.db.oneOrNone(`SELECT * FROM "PRODUCT" WHERE id = ${id}`);
         return result;
     },
@@ -32,20 +32,20 @@ module.exports = {
     //     return data;
     // },
 
-    getOne : async function(id) {
+    getOne: async function (id) {
         const result = await db.db.query(`SELECT * FROM "PRODUCT" WHERE id = ${id}`);
         return result;
     },
 
-    delete: async function(listID) {
+    delete: async function (listID) {
         db.delete("PRODUCT", listID);
     },
 
-    insert: async function(name, price, quantity, catid, subcatid=null, shortdes, longdes) {
+    insert: async function (name, price, quantity, catid, subcatid = null, shortdes, longdes) {
         let id = await db.db.query('SELECT MAX(id) AS m FROM "PRODUCT"')
-        let newid = await db.insert("PRODUCT", ['id', 'name', 'price', 'quantity', 'catid', 'subcatid', 'shortdescription', 'fulldescription'], 
-        [{id: id[0].m+1, name, price, quantity, catid, subcatid, "shortdescription": shortdes, "fulldescription": longdes}]);
-        db.update("PRODUCT", ['image'], [{image: `${newid[0].id}.jpg`}], `WHERE id=${newid[0].id}`);
+        let newid = await db.insert("PRODUCT", ['id', 'name', 'price', 'quantity', 'catid', 'subcatid', 'shortdescription', 'fulldescription'],
+            [{ id: id[0].m + 1, name, price, quantity, catid, subcatid, "shortdescription": shortdes, "fulldescription": longdes }]);
+        db.update("PRODUCT", ['image'], [{ image: `${newid[0].id}.jpg` }], `WHERE id=${newid[0].id}`);
         return newid[0].id;
     },
 
@@ -56,6 +56,16 @@ module.exports = {
         } else {
             db.update("PRODUCT", ['name', 'price', 'quantity', 'catid', 'subcatid', 'shortdescription', 'fulldescription'], 
             [{name, price, quantity, catid, subcatid, shortdescription, fulldescription}], `WHERE id=${id}`);             
+    },
+
+    updateQuantity: async function (id, quantity) {
+        try {
+            let sql = `UPDATE "PRODUCT" SET quantity = ${quantity} WHERE id = ${id}`;
+            await db.db.query(sql);
+
+        } catch (error) {
+            console.log(error);
+            throw error;
         }
     },
 }

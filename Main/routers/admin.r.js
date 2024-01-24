@@ -1,4 +1,4 @@
-const { RenderAdmin } = require('../controllers/admin.c');
+const { RenderAdmin, getOrders, getCategory,getTotalHome } = require('../controllers/admin.c');
 const {  RenderCategory, DeleteCategory, NewCategory, CreateCategory, DeatilCategory, UpdateCategory } = require('../controllers/admin_controllers/category.c')
 const { RenderProduct, DeleteProduct, NewProduct, CreateProduct, DeatilProduct, UpdateProduct } = require('../controllers/admin_controllers/product.c');
 const multer  = require('multer');
@@ -7,6 +7,8 @@ const { RenderUser } = require('../controllers/admin_controllers/user.c');
 const upload = multer({ dest: 'Main/public/image' })
     
 const router = require('express').Router();
+//TODO: bảo vệ các route bên dưới (middleware checkLogin)
+
 // product
 router.get('/', RenderAdmin);
 router.get('/product', RenderProduct);
@@ -30,5 +32,11 @@ router.get('/subcategory/detail/:id', upload.none(), DeatilSubCategory);
 
 //user
 router.get('/user', RenderUser);
+
+
+//home
+router.post('/getOrders',getOrders);
+router.post('/getCategory',getCategory);
+router.post('/getTotalHome',getTotalHome);
 
 module.exports = router;

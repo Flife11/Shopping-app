@@ -1,0 +1,206 @@
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var pieChartDisplay = '';
+    var lineChartDisplay = '';
+
+    function FormatDate(date) {
+        const dateWithoutTimeZone = new Date(date);
+
+        const year = dateWithoutTimeZone.getFullYear();
+        const month = dateWithoutTimeZone.getMonth() + 1;
+        const day = dateWithoutTimeZone.getDate();
+        const hours = dateWithoutTimeZone.getHours();
+        const minutes = dateWithoutTimeZone.getMinutes();
+        const seconds = dateWithoutTimeZone.getSeconds();
+
+        const formattedDateWithoutTimeZone = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        return formattedDateWithoutTimeZone;
+    }
+    window.onload = async function () {
+        let data_order = [];
+        var ngayHienTai = new Date();
+        var ngayChiTiet = FormatDate(ngayHienTai);
+        ngayHienTai.setDate(1); // Đặt ngày là 1 để lấy ngày đầu tiên của tháng
+
+        var ngayDauTienCuaThang = FormatDate(ngayHienTai);
+        const dataPost = {
+            from: ngayDauTienCuaThang,
+            to: ngayChiTiet
+        }
+        const orders = await fetch('/admin/getOrders', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dataPost)
+        })
+        let rs_order = await orders.json();
+        // insert order if fetch success
+        if (orders.ok) {
+            data_order = rs_order;
+            // Create label and data for pieChart
+            var lineLabels = data_order.lineLabels;
+            var lineData = data_order.lineData;
+            var titleX = data_order.titleX;
+            // Draw a line chart  depicting revenue 
+            const lineChart = document.getElementById('lineChart');
+            lineChartDisplay = new Chart(lineChart, {
+                type: 'line',
+
+                data: {
+                    labels: lineLabels,
+                    datasets: [{
+                        label: `Doanh Thu`,
+                        data: lineData,
+                        borderWidth: 1,
+
+                    }]
+                },
+                options:
+                {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: titleX
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'VNĐ'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        var listCategory = [];
+        // Lấy data category từ server Main
+        let rs = await fetch('/admin/getCategory', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dataPost)
+
+        })
+        let rsData = await rs.json();
+        // insert order if fetch success
+        if (rs.ok) {
+            listCategory = rsData;
+            // Create label and data for pieChart
+            var pieLabels = rsData.pieLabels;
+            var pieData = rsData.pieData;
+            // Draw a pie chart depicting the type of product purchased
+            const pieChart = document.getElementById('pieChart');
+            pieChartDisplay = new Chart(pieChart, {
+                type: 'doughnut',
+                data: {
+                    labels: pieLabels,
+                    datasets: [{
+                        label: 'Số lượng bán',
+                        data: pieData,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true
+                }
+            });
+        }
+    };
+    async function displayChart() {
+        // Get Date From and Date To
+        const inputDateFrom = document.getElementById('dateFrom');
+        const inputDateTo = document.getElementById('dateTo');
+        var dateFrom = '';
+        var dateTo = '';
+        if (inputDateFrom.value === '') {
+            const currentDate = new Date();
+            dateFrom = FormatDate(currentDate);
+        }
+        else {
+            dateFrom = inputDateFrom.value + ' 00:00:00';
+        }
+        if (inputDateTo.value === '') {
+            const currentDate = new Date();
+            dateTo = FormatDate(currentDate);
+        }
+        else {
+            dateTo = inputDateTo.value + ' 23:59:59';
+        }
+        const dataPost = {
+            from: dateFrom,
+            to: dateTo
+        }
+        // Get Total Information 
+        const total_order = document.getElementById('total_order');
+        const total_product = document.getElementById('total_product');
+        const total_customer = document.getElementById('total_customer');
+        const total_price = document.getElementById('total_price');
+        // Send fetch to load data total
+        const totals = await fetch('/admin/getTotalHome', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dataPost)
+        })
+        let rs_total = await totals.json();
+        // insert order if fetch success
+        if (totals.ok) {
+            total_order.textContent = rs_total.total_order;
+            total_product.textContent = rs_total.total_product;
+            total_customer.textContent = rs_total.total_customer;
+            total_price.textContent = rs_total.total_price;
+
+        }
+        else {
+            total_order.textContent = 0;
+            total_product.textContent = 0;
+            total_customer.textContent = 0;
+            total_price.textContent = 0;
+        }
+
+        const orders = await fetch('/admin/getOrders', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dataPost)
+        })
+        let rs_order = await orders.json();
+        // insert order if fetch success
+        if (orders.ok) {
+            data_order = rs_order;
+            // Create label and data for pieChart
+            lineChartDisplay.data.labels = data_order.lineLabels;
+            lineChartDisplay.data.datasets[0].data = data_order.lineData;
+            lineChartDisplay.options.scales.x.title.text = data_order.titleX;
+            lineChartDisplay.update();
+        }
+
+        var listCategory = [];
+        // Lấy data category từ server Main
+        let rs = await fetch('/admin/getCategory', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dataPost)
+
+        })
+        let rsData = await rs.json();
+        // insert order if fetch success
+        if (rs.ok) {
+            listCategory = rsData;
+            // Create label and data for pieChart
+            pieChartDisplay.data.labels = rsData.pieLabels;
+            pieChartDisplay.data.datasets[0].data = rsData.pieData;
+            pieChartDisplay.update();
+        }
+    }
+</script>

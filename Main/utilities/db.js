@@ -169,6 +169,9 @@ module.exports = {
                         userid int NOT NULL,
                         date timestamp,
                         total numeric(15,2),
+                        name varchar(100),
+                        email varchar(100),
+                        address varchar(500),
                         
                         PRIMARY KEY (id),
                         FOREIGN KEY (userid) REFERENCES "USER"(id) ON DELETE CASCADE

@@ -1,1 +1,140 @@
 {{> header}}
+<style>
+    .list-card {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+    }
+
+    .number {
+        font-size: 35px;
+        font-weight: 500;
+        color: #2a6792;
+    }
+
+    .card-name {
+        color: #888;
+        font-weight: 600;
+    }
+
+    .charts {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        grid-gap: 20px;
+        width: 100%;
+        padding: 20px;
+        padding-top: 2%;
+    }
+
+    .chart {
+        background-color: white !important;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+        width: 100%;
+    }
+
+    .nav_search {
+        margin-top: 2%;
+        display: flex;
+        width: 100%;
+    } 
+    #dateFrom ,#dateTo
+    {
+        background-color: #91d1de;
+        padding: 15px;
+        color: white;
+        font-size: 18px;
+        border: none;
+        outline: none;
+        border-radius: 5px;
+    }
+    ::-webkit-calendar-picker-indicator{
+        background-color: white;
+        padding: 5px;
+        cursor: pointer;
+        border-radius: 3px;
+
+    }
+    #buttonDisplay{
+       padding: 10px !important;
+       margin-top: 4px !important;
+
+    }
+
+</style>
+<div class="content" style="padding: 4vh;">
+    <div class="list-card">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <div class="number" id="total_order">
+                    {{total_order}}
+                </div>
+                <div class="card-name">
+                    Tổng số đơn hàng
+                </div>
+            </div>
+        </div>
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <div class="number" id="total_product">
+                    {{total_product}}
+                </div>
+                <div class="card-name">
+                    Tổng số sản phẩm
+                </div>
+            </div>
+        </div>
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <div class="number" id="total_customer">
+                    {{total_customer}}
+                </div>
+                <div class="card-name">
+                    Số lượng khác hàng
+                </div>
+            </div>
+        </div>
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <div class="number" id="total_price">
+                    {{total_price}}
+                </div>
+                <div class="card-name">
+                    Tổng tiền
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="nav_search">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="text-center" >Từ ngày</td>
+                    <td class="text-center" >Đến ngày</td>
+                    <td class="text-center" ></td>
+                    
+                </tr>
+                <tr>
+                    <td class="text-center" ><input type="date" id="dateFrom"></td>
+                    <td class="text-center" ><input type="date" id="dateTo"></td>
+                    <td class="text-center" ><button id="buttonDisplay" class="btn btn-primary" onclick="displayChart()">Xem biểu đồ</button></td>
+
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+    <div class="charts">
+        <div class="chart">
+            <h2>Doanh thu</h2>
+            <canvas id="lineChart"></canvas>
+        </div>
+        <div class="chart">
+            <h2>Mặt hàng</h2>
+            <canvas id="pieChart"></canvas>
+
+        </div>
+    </div>
+</div>
+{{> admin_script}}

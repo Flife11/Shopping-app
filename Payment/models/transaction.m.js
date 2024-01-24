@@ -13,7 +13,7 @@ module.exports = {
     insert:async(transaction)=>{
         try{
             const sql = `INSERT INTO "${tableName}"(userid,date,orderid,amount,currentbalance) VALUES(${transaction.iduser},'${transaction.date}',${transaction.idorder},${transaction.amount},${transaction.currentbalance})`;
-            console.log(sql);
+            // console.log(sql);
             const result = await db.db.query(sql);
         }
         catch (error) {
