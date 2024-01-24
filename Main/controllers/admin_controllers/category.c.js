@@ -87,39 +87,46 @@ const CreateCategory = async(req, res, next) => {
     }
 }
 
-const DeatilCategory = async(req, res, next) => {
+const DetailCategory = async(req, res, next) => {
     try {
         let id = req.params.id;
+        let subcategoryname = req.query.name || '';        
         let cat = await Categories.getCategory(id);
-        // console.log(cat);             
-        let subcategories = await SubCategories.getAll();
+        // console.log(cat);
+        let subcategories = await SubCategories.getSubcategories(subcategoryname);
         let subcatlist = [];
         let catidVal = 0;
         let subcatidVal = 0;
 
         let page = 1;
-        let perpage = 10;        
+        let perpage = 10;
+        if (req.query.page)
+            page = parseInt(req.query.page);
+        if (req.query.limit)
+            perpage = parseInt(req.query.limit);     
         
         subcategories.forEach(sub => {
             if (sub.catid==cat.id) subcatlist.push(sub);
         });
-        subcategories = subcategories.filter(d => {            
+        const totalItems = subcatlist.length;
+        const totalPage = (totalItems / perpage) + (totalItems % perpage != 0);
+        
+        subcatlist = subcatlist.slice((page - 1) * perpage, page * perpage);        
+        subcatlist = subcatlist.filter(d => {            
             d.detailurl = '/admin/subcategory/detail/';
             return d;
         })
-        const totalItems = subcatlist.length;
-        const totalPage = (totalItems / perpage) + (totalItems % perpage != 0);
-        // console.log(catidVal, subcatidVal);
 
         res.render('newproduct', {
             title: 'Admin',
-            header: 'Thêm loại sản phẩm',
+            header: 'Chi tiết loại sản phẩm',
             posturl: 'http://localhost:3000/admin/category/update',
             cancelurl: 'http://localhost:3000/admin/category',
             deleteurl: 'http://localhost:3000/admin/subcategory/delete',
             // Tên các fields cần điền
             nameCol: 'Tên loại sản phẩm',
             subcatCol: 'Loại sản phẩm con',
+            name: subcategoryname,
             // Giá trị của cá fielfs nếu có thì sẽ là detail không sẽ là create
             idVal: cat.id,
             nameVal: cat.name,
@@ -140,11 +147,11 @@ const UpdateCategory = async(req, res, next) => {
     try {
         let {id, name} = req.body;
         // console.log(id, name);
-        Categories.update(id, name[0]);
+        Categories.update(id, name);
         res.redirect('http://localhost:3000/admin/category');
     } catch (error) {
         next(error);
     }
 }
 
-module.exports = {RenderCategory, DeleteCategory, NewCategory, CreateCategory, DeatilCategory, UpdateCategory}
+module.exports = {RenderCategory, DeleteCategory, NewCategory, CreateCategory, DetailCategory, UpdateCategory}

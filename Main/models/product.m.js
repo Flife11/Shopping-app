@@ -56,6 +56,7 @@ module.exports = {
         } else {
             db.update("PRODUCT", ['name', 'price', 'quantity', 'catid', 'subcatid', 'shortdescription', 'fulldescription'], 
             [{name, price, quantity, catid, subcatid, shortdescription, fulldescription}], `WHERE id=${id}`);             
+        }
     },
 
     updateQuantity: async function (id, quantity) {
