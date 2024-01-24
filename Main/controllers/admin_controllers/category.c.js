@@ -63,6 +63,7 @@ const NewCategory = async(req, res, next) => {
             nameCol: 'Tên loại sản phẩm',
             catidVal: 0,
             subcatidVal: 0,
+            notiAppearance: 1,
             catnameCol: 'Loại sản phẩm cha',
             categories: [{id: 0, name: 'Không có'}, ...categories],
         });
@@ -74,14 +75,38 @@ const NewCategory = async(req, res, next) => {
 const CreateCategory = async(req, res, next) => {
     try {
         let {name, category} = req.body;
-        console.log(name, category);
+        // console.log(name, category);        
         if (category==0) {
-            Categories.insert(name);
+            let check = await Categories.checkExist(name);            
+            if (!check) {
+                Categories.insert(name);
+                return res.status(201).json({
+                    message: 'Tạo loại sản phẩm thành công',
+                    redirecturl: 'http://localhost:3000/admin/category'
+                }) 
+            }
+            else {
+                return res.status(401).json({
+                    message: 'Tên loại sản phẩm không được trùng',
+                    redirecturl: 'http://localhost:3000/admin/category/new'
+                });
+            }
         } else {
-            SubCategories.insert(name, category);
-        }
-
-        res.redirect('http://localhost:3000/admin/category/new');
+            let check = await SubCategories.checkExist(name, category);            
+            if (!check) {
+                SubCategories.insert(name, category);
+                return res.status(201).json({
+                    message: 'Tạo loại sản phẩm phụ thành công',
+                    redirecturl: 'http://localhost:3000/admin/category'
+                }) 
+            }
+            else {
+                return res.status(401).json({
+                    message: 'Tên loại sản phẩm phụ không được trùng trong cùng 1 loại sản phẩm',
+                    redirecturl: 'http://localhost:3000/admin/category/new'
+                });
+            }
+        }               
     } catch (error) {
         next(error);
     }
@@ -90,9 +115,17 @@ const CreateCategory = async(req, res, next) => {
 const DetailCategory = async(req, res, next) => {
     try {
         let id = req.params.id;
+        let category = req.params.category;
         let subcategoryname = req.query.name || '';        
         let cat = await Categories.getCategory(id);
         // console.log(cat);
+        let categories = await Categories.getAll();    
+        categories = [{id: 0, name: 'Không có'}, ...categories];
+        categories.forEach((cat, index) => {
+            if (cat.id==category) catidVal = index;
+        });
+        // console.log(categories);
+
         let subcategories = await SubCategories.getSubcategories(subcategoryname);
         let subcatlist = [];
         let catidVal = 0;
@@ -108,6 +141,7 @@ const DetailCategory = async(req, res, next) => {
         subcategories.forEach(sub => {
             if (sub.catid==cat.id) subcatlist.push(sub);
         });
+
         const totalItems = subcatlist.length;
         const totalPage = (totalItems / perpage) + (totalItems % perpage != 0);
         
@@ -132,11 +166,13 @@ const DetailCategory = async(req, res, next) => {
             nameVal: cat.name,
             catidVal,
             subcatidVal,
+            notiAppearance: 1,
             // Dữ liệu            
             data: subcatlist,
             page: page, 
             perpage: perpage,
             totalpage: Array.from({length: totalPage}, (e, i)=> i+1),
+            categories
         })
     } catch (error) {
         next(error);
@@ -145,10 +181,48 @@ const DetailCategory = async(req, res, next) => {
 
 const UpdateCategory = async(req, res, next) => {
     try {
-        let {id, name} = req.body;
+        let {id, name, category} = req.body;
         // console.log(id, name);
-        Categories.update(id, name);
-        res.redirect('http://localhost:3000/admin/category');
+        if (category==0) {
+            let check = await Categories.checkExist(name);            
+            if (!check) {
+                Categories.update(id, name);
+                return res.status(201).json({
+                    message: 'Chỉnh sửa loại sản phẩm thành công',
+                    redirecturl: 'http://localhost:3000/admin/category'
+                })
+            }
+            else {
+                return res.status(401).json({
+                    message: 'Tên loại sản phẩm không được trùng',
+                    redirecturl: 'http://localhost:3000/admin/category/new'
+                });
+            }
+        } else {
+            let checkChild = await Categories.checkChildExist(id);
+            if (!checkChild) {
+                let check = await SubCategories.checkExist(name, category);            
+                if (!check) {
+                    SubCategories.insert(name, category);
+                    Categories.delete([id]);
+                    return res.status(201).json({
+                        message: 'Chỉnh sửa loại sản phẩm phụ thành công',
+                        redirecturl: 'http://localhost:3000/admin/subcategory'
+                    })
+                } else {
+                    return res.status(401).json({
+                        message: 'Tên loại sản phẩm phụ không được trùng trong cùng 1 loại sản phẩm',
+                        redirecturl: 'http://localhost:3000/admin/category/new'
+                    });
+                }
+            }
+            else {
+                return res.status(401).json({
+                    message: 'Loại sản phẩm này có loại sản phẩm phụ nên không thể thay đổi thành loại sản phẩm phụ',
+                    redirecturl: 'http://localhost:3000/admin/category/new'
+                });
+            }
+        }        
     } catch (error) {
         next(error);
     }

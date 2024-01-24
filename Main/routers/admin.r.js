@@ -5,44 +5,46 @@ const multer  = require('multer');
 const { DeleteSubcategory, DetailSubCategory, RenderSubcategory, UpdateSubCategory } = require('../controllers/admin_controllers/subcategory.c');
 const { RenderUser, DeleteUser, NewUser, CreateUser, UpdateUser, DetaiilUser } = require('../controllers/admin_controllers/user.c');
 const upload = multer({ dest: 'Main/public/image' })
-    
+
+const {isAdmin} = require('../middleware/checkLogin');
+
 const router = require('express').Router();
 //TODO: bảo vệ các route bên dưới (middleware checkLogin)
 
 // product
-router.get('/', RenderAdmin);
-router.get('/product', RenderProduct);
-router.post('/product/delete', DeleteProduct);
-router.get('/product/new', NewProduct);
-router.post('/product/new', upload.single('image'), CreateProduct);
-router.get('/product/detail/:id', upload.single('image'), DetailProduct);
-router.post('/product/update', upload.single('image'), UpdateProduct);
+router.get('/',isAdmin, RenderAdmin);
+router.get('/product',isAdmin, RenderProduct);
+router.post('/product/delete',isAdmin, DeleteProduct);
+router.get('/product/new',isAdmin, NewProduct);
+router.post('/product/new',isAdmin, upload.single('image'), CreateProduct);
+router.get('/product/detail/:id',isAdmin, upload.single('image'), DetailProduct);
+router.post('/product/update',isAdmin, upload.single('image'), UpdateProduct);
 
 //category
-router.get('/category', RenderCategory);
-router.post('/category/delete', DeleteCategory);
-router.get('/category/new', NewCategory);
-router.post('/category/new', upload.none(), CreateCategory);
-router.get('/category/detail/:id', upload.none(), DetailCategory);
-router.post('/category/update', upload.none(), UpdateCategory);
+router.get('/category',isAdmin, RenderCategory);
+router.post('/category/delete',isAdmin, DeleteCategory);
+router.get('/category/new',isAdmin, NewCategory);
+router.post('/category/new',isAdmin, upload.none(), CreateCategory);
+router.get('/category/detail/:id',isAdmin, upload.none(), DetailCategory);
+router.post('/category/update',isAdmin, upload.none(), UpdateCategory);
 
 //subcategory
-router.get('/subcategory', RenderSubcategory);
-router.post('/subcategory/delete', DeleteSubcategory);
-router.get('/subcategory/detail/:id', upload.none(), DetailSubCategory);
-router.post('/subcategory/update', upload.none(), UpdateSubCategory);
+router.get('/subcategory',isAdmin, RenderSubcategory);
+router.post('/subcategory/delete',isAdmin, DeleteSubcategory);
+router.get('/subcategory/detail/:id',isAdmin, upload.none(), DetailSubCategory);
+router.post('/subcategory/update',isAdmin, upload.none(), UpdateSubCategory);
 
 //user
-router.get('/user', RenderUser);
-router.post('/user/delete', DeleteUser);
-router.get('/user/new', NewUser);
-router.post('/user/new', upload.none(), CreateUser);
-router.get('/user/detail/:id', upload.none(), DetaiilUser);
-router.post('/user/update', upload.none(), UpdateUser);
+router.get('/user',isAdmin, RenderUser);
+router.post('/user/delete',isAdmin, DeleteUser);
+router.get('/user/new',isAdmin, NewUser);
+router.post('/user/new',isAdmin, upload.none(), CreateUser);
+router.get('/user/detail/:id',isAdmin, upload.none(), DetaiilUser);
+router.post('/user/update',isAdmin, upload.none(), UpdateUser);
 
 
 //home
-router.post('/getOrders',getOrders);
+router.post('/getOrders', getOrders);
 router.post('/getCategory',getCategory);
 router.post('/getTotalHome',getTotalHome);
 
