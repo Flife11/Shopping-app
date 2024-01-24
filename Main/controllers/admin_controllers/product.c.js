@@ -205,7 +205,7 @@ const UpdateProduct = async(req, res, next) => {
         subcategory = parseInt(subcategory);
         Product.update(id, name, price, quantity, category, subcategory, shortdes, longdes);
         // console.log(name, price, quantity, category, subcategory, shortdes, longdes);
-        // console.log(req.file);
+        console.log(subcategory);
         // console.log(newid, filename);
         if (req.file!=undefined) {
             let filename = req.file.filename;

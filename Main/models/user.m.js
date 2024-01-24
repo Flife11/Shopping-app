@@ -12,6 +12,22 @@ module.exports = {
             console.log(error);
         }
     },
+    
+    getUserByName: async (name, username, address, email) => {
+        let sql = `SELECT * FROM "USER" WHERE 1=1`;     
+        if (name) 
+            sql += ` AND LOWER(name) LIKE '%${name.toLowerCase()}%'`;   
+        if (username) 
+            sql += ` AND LOWER(username) LIKE '%${username.toLowerCase()}%'`;
+        if (address) 
+            sql += ` AND LOWER(address) LIKE '%${address.toLowerCase()}%'`;
+        if (email) 
+            sql += ` AND LOWER(email) LIKE '%${email.toLowerCase()}%'`;
+        
+        const result = await db.db.query(sql);
+
+        return result;
+    },
 
     addUser: async (user) => {
         try {
