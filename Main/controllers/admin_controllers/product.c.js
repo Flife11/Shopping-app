@@ -136,7 +136,7 @@ const CreateProduct = async(req, res, next) => {
     }
 }
 
-const DeatilProduct = async(req, res, next) => {
+const DetailProduct = async(req, res, next) => {
     try {
         let id = req.params.id;
         let product = await Product.getOne(id);
@@ -166,7 +166,7 @@ const DeatilProduct = async(req, res, next) => {
 
         res.render('newproduct', {
             title: 'Admin',
-            header: 'Thêm sản phẩm',
+            header: 'Chi tiết sản phẩm',
             posturl: 'http://localhost:3000/admin/product/update',
             cancelurl: 'http://localhost:3000/admin/product',
             // Tên các fields cần điền
@@ -221,4 +221,4 @@ const UpdateProduct = async(req, res, next) => {
     }
 }
 
-module.exports = {RenderProduct, DeleteProduct, NewProduct, CreateProduct, DeatilProduct, UpdateProduct}
+module.exports = {RenderProduct, DeleteProduct, NewProduct, CreateProduct, DetailProduct, UpdateProduct}

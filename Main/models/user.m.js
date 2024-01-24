@@ -13,7 +13,7 @@ module.exports = {
         }
     },
     
-    getUserByName: async (name, username, address, email) => {
+    getUserByName: async (name, username, address, email, role) => {
         let sql = `SELECT * FROM "USER" WHERE 1=1`;     
         if (name) 
             sql += ` AND LOWER(name) LIKE '%${name.toLowerCase()}%'`;   
@@ -23,10 +23,22 @@ module.exports = {
             sql += ` AND LOWER(address) LIKE '%${address.toLowerCase()}%'`;
         if (email) 
             sql += ` AND LOWER(email) LIKE '%${email.toLowerCase()}%'`;
+        if (role) 
+            sql += ` AND LOWER(role) LIKE '%${role.toLowerCase()}%'`;
         
         const result = await db.db.query(sql);
 
         return result;
+    },
+
+    getUserByID: async (id) => {
+        try {
+            const sql = `SELECT * FROM "USER" WHERE id = '${id}'`;
+            const result = await db.db.oneOrNone(sql);
+            return result;
+        } catch (error) {
+            console.log(error);
+        }
     },
 
     addUser: async (user) => {
@@ -77,6 +89,26 @@ module.exports = {
             const result = await db.db.query(sql);
             return result;
 
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    
+    delete: async (listID) => {
+        db.delete("USER", listID);
+    },
+
+    insert: async () => {
+        try {
+            const hashPassword = await bcrypt.hash(user.password, parseInt(process.env.SALT_ROUNDS));
+            user.password = hashPassword;
+
+            const sql = `INSERT INTO "USER" (username, password, name, email, address, role) VALUES ('${user.username}', '${user.password}', '${user.name}', '${user.email}', '${user.address}', '${user.role}') RETURNING id`;
+
+            // Note: execute query that can return insertedId
+
+            const result = await db.db.query(sql);
+            return result;
         } catch (error) {
             console.log(error);
         }

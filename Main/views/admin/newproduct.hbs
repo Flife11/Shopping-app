@@ -9,25 +9,49 @@
                 class="mt-3">
                 <input type="hidden" name="id" value="{{idVal}}">
                 {{#if nameCol}}
-                <div class="col-md-12"><label class="p-2 labels font-weight-bold">{{nameCol}}</label>
+                <div class="col-md-12"><label class="p-2 labels fw-bold">{{nameCol}}</label>
                     <input value="{{nameVal}}" name="name" id="name" type="text" class="form-control" placeholder="{{nameCol}}"
-                        value="" required>
+                        required>
+                </div>
+                {{/if}}
+                {{#if usernameCol}}
+                <div class="col-md-12"><label class="p-2 labels fw-bold">{{usernameCol}}</label>
+                    <input value="{{usernameVal}}" name="username" id="username" type="text" class="form-control" placeholder="{{usernameCol}}"
+                        required>
+                </div>
+                {{/if}}
+                {{#if passwordCol}}
+                <div class="col-md-12"><label class="p-2 labels fw-bold">{{passwordCol}}</label>
+                    <input value="{{passwordVal}}" name="password" id="password" type="password" class="form-control" placeholder="{{passwordCol}}"
+                        required>
+                </div>
+                {{/if}}
+                {{#if addressCol}}
+                <div class="col-md-12"><label class="p-2 labels fw-bold">{{addressCol}}</label>
+                    <input value="{{addressVal}}" name="address" id="address" type="text" class="form-control" placeholder="{{addressCol}}"
+                        >
+                </div>
+                {{/if}}
+                {{#if emailCol}}
+                <div class="col-md-12"><label class="p-2 labels fw-bold">{{emailCol}}</label>
+                    <input value="{{emailVal}}" name="email" id="email" type="text" class="form-control" placeholder="{{emailCol}}"
+                        >
                 </div>
                 {{/if}}
                 {{#if priceCol}}
-                <div class="col-md-12"><label class="p-2 labels font-weight-bold">{{priceCol}}</label>
+                <div class="col-md-12"><label class="p-2 labels fw-bold">{{priceCol}}</label>
                     <input value="{{priceVal}}" name="price" id="price" type="number" class="form-control" placeholder="{{priceCol}}"
-                        value="" required>
+                        required>
                 </div>
                 {{/if}}
                 {{#if quantityCol}}
-                <div class="col-md-12"><label class="p-2 labels font-weight-bold">{{quantityCol}}</label>
+                <div class="col-md-12"><label class="p-2 labels fw-bold">{{quantityCol}}</label>
                     <input value="{{quantityVal}}" name="quantity" id="quantity" type="number" class="form-control" placeholder="{{quantityCol}}"
-                        value="" required>
+                        required>
                 </div>
                 {{/if}}                
                 {{#if categories}}
-                <div class="col-md-12"><label class="p-2 labels font-weight-bold">{{catnameCol}}</label>
+                <div class="col-md-12"><label class="p-2 labels fw-bold">{{catnameCol}}</label>
                     <select required id="category" name="category" class="form-control form-field" placeholder="">
                         {{#each categories}}
                             <option value="{{this.id}}">{{this.name}}</option>
@@ -35,7 +59,7 @@
                     </select>
                 </div>
                 {{#if subCatList}}
-                <div id="subcategory-container" class="col-md-12"><label class="p-2 labels font-weight-bold">Loại sản phẩm con</label>
+                <div id="subcategory-container" class="col-md-12"><label class="p-2 labels fw-bold">Loại sản phẩm con</label>
                     <select name="subcategory" id="subcategory" class="form-control form-field" placeholder="">
                         
                     </select>
@@ -43,13 +67,13 @@
                 {{/if}}
                 {{/if}}
                 {{#if imageCol}}
-                <div class="col-md-12"><label class="p-2 labels font-weight-bold">{{imageCol}}</label>
+                <div class="col-md-12"><label class="p-2 labels fw-bold">{{imageCol}}</label>
                     <input name="image" id="image" type="file" class="form-control"
-                        value="" required>
+                        required>
                 </div>
                 {{/if}}
                 {{#if updateimageCol}}
-                <div class="col-md-12"><label class="p-2 labels font-weight-bold">{{updateimageCol}}</label>
+                <div class="col-md-12"><label class="p-2 labels fw-bold">{{updateimageCol}}</label>
                     <div class="d-flex">
                         <img src="../../../public/image/{{imageVal}}" style="width: 300px;" alt="">
                         <input name="image" id="image" type="file" class="form-control"
@@ -58,25 +82,19 @@
                 </div>
                 {{/if}}
                 {{#if shortdesCol}}
-                <div class="col-md-12"><label class="p-2 labels font-weight-bold">{{shortdesCol}}</label>
-                    <textarea value=""  name="shortdes" class="form-control" maxlength="490" style="height:100px;">{{shortdesVal}}</textarea>
+                <div class="col-md-12"><label class="p-2 labels fw-bold">{{shortdesCol}}</label>
+                    <textarea  name="shortdes" class="form-control" maxlength="490" style="height:100px;">{{shortdesVal}}</textarea>
                 </div>
                 {{/if}}
 
                 {{#if longdesCol}}
-                <div class="col-md-12"><label class="p-2 labels font-weight-bold">{{longdesCol}}</label>
-                    <textarea value="" name="longdes" class="form-control" maxlength="2990" style="height:200px;">{{longdesVal}}</textarea>
+                <div class="col-md-12"><label class="p-2 labels fw-bold">{{longdesCol}}</label>
+                    <textarea name="longdes" class="form-control" maxlength="2990" style="height:200px;">{{longdesVal}}</textarea>
                 </div>
-                {{/if}}
-
-                {{#if subcatCol}}
-                <div class="col-md-12"><label class="p-2 labels font-weight-bold">{{subcatCol}}</label>
-                    {{> listtable}}
-                </div>                    
-                {{/if}}
+                {{/if}}                
                 
                 <div style="width: 200px;" class="mx-auto d-flex justify-content-between mt-5 text-center">
-                    <a href="{{cancelurl}}" id="cancel-button" class="btn btn-danger" type="submit">Hủy bỏ</a>
+                    <a onclick="history.back();" id="cancel-button" class="btn btn-danger" type="submit">Hủy bỏ</a>
                     <button id="create-button" class="btn btn-primary" type="submit">Xác nhận</button>
                 </div>
             </form>
@@ -91,6 +109,70 @@
         {{/each}}
     </select>
 {{/each}}
+{{/if}}
+
+{{#if subcatCol}}
+    <div class="col-md-12"><label class="p-2 labels fw-bold">{{subcatCol}}</label>
+        {{> listtable}}
+    </div>                    
+{{/if}}
+
+{{> notification_failure}}
+{{> notification_success}}
+{{#if notiAppearance}}
+<script>
+    async function postFormDataAsJson({ url, formData }) {
+        const plainFormData = Object.fromEntries(formData.entries());
+        const formDataJsonString = JSON.stringify(plainFormData);
+
+        const fetchOptions = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+            body: formDataJsonString,
+        };
+
+        const response = await fetch(url, fetchOptions);
+
+        if (!response.ok) {
+            const errorMessage = await response.json();
+            console.log(errorMessage);
+            throw new Error(errorMessage.message);
+        }
+
+        return response.json();
+    }
+
+    async function handleFormSubmit(event) {        
+        event.preventDefault();
+        const form = event.currentTarget;
+        const url = form.action;
+
+        try {
+            const formData = new FormData(form);
+            const responseData = await postFormDataAsJson({ url, formData });            
+            return responseData;
+        }
+        catch (error) {            
+            throw(error);
+        }
+    }    
+
+    $("#new-product").on("submit", async (e) => {
+        try {        
+            const responseData = await handleFormSubmit(e);               
+            $('#successNotificationtext').html(responseData.message)
+            $('#successNotificationModal').css('display', '');
+            window.location.href = 'http://localhost:3000/admin/user';
+        }
+        catch (error) {
+            $('#failureNotificationText').html(error)
+            $('#failureNotificationModal').css('display', '');
+        }        
+    });
+</script>
 {{/if}}
 <script>
     $(() => {

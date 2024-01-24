@@ -44,7 +44,7 @@ module.exports = {
                 return res.status(403).json({ message: 'Email không hợp lệ!' });
             }
 
-
+            console.log(retypepassword);
             // Check if password and retypepassword match
             if (password !== retypepassword) {
                 return res.status(402).json({ message: 'Mật khẩu không khớp, nhập lại nha!' });

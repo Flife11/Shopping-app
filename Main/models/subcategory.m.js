@@ -29,4 +29,19 @@ module.exports = {
         db.insert("SUBCATEGORY", ['id', 'name', 'catid'], 
         [{id: id[0].m+1, name, catid}]);            
     },
+
+    getSubcategories : async function (search) {
+        let sql = `SELECT * FROM "SUBCATEGORY" WHERE 1=1`;        
+        if (search) 
+            sql += ` AND LOWER(name) LIKE '%${search.toLowerCase()}%'`;
+        
+        const result = await db.db.query(sql);
+
+        return result;
+    },
+
+    update: async function(id, name) {        
+        db.update("SUBCATEGORY", ['name'], 
+        [{name}], `WHERE id=${id}`);             
+    },
 }

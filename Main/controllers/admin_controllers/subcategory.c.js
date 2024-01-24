@@ -1,6 +1,44 @@
 const SubCategories = require('../../models/subcategory.m');
 const Categories = require('../../models/category.m');
 
+const RenderSubcategory = async(req, res, next) => {
+    try {
+        let subcategoryname = req.query.name || '';
+        let page = 1;
+        let perpage = 10;
+                
+        if (req.query.page)
+            page = parseInt(req.query.page);
+        if (req.query.limit)
+            perpage = parseInt(req.query.limit);
+
+        let data = await SubCategories.getSubcategories(subcategoryname);                
+        
+        const totalItems = data.length;
+        const totalPage = (totalItems / perpage) + (totalItems % perpage != 0);
+        
+        // console.log(page, perpage);
+        data = data.slice((page - 1) * perpage, page * perpage);
+        data = data.filter(d => {            
+            d.detailurl = '/admin/subcategory/detail/';
+            return d;
+        })
+        res.render('product', {
+            title: 'Admin',
+            header: 'LOẠI SẢN PHẨM PHỤ',
+            newurl: '/admin/category/new',
+            name: subcategoryname,            
+            data: data,
+            page: page,
+            perpage: perpage,                        
+            totalpage: Array.from({length: totalPage}, (e, i)=> i+1),
+            deleteurl: 'http://localhost:3000/admin/subcategory/delete'
+        })
+    } catch (error) {
+        next(error);
+    }
+}
+
 const DeleteSubcategory = async(req, res, next) => {
     try {
         const { listID } = req.body;
@@ -12,7 +50,7 @@ const DeleteSubcategory = async(req, res, next) => {
     }
 }
 
-const DeatilSubCategory = async(req, res, next) => {
+const DetailSubCategory = async(req, res, next) => {
     try {
         let id = req.params.id;
         let subcat = await SubCategories.getSubcategory(id);
@@ -46,4 +84,15 @@ const DeatilSubCategory = async(req, res, next) => {
     }
 }
 
-module.exports = {DeleteSubcategory, DeatilSubCategory}
+const UpdateSubCategory = async(req, res, next) => {
+    try {
+        let {id, name} = req.body;
+        // console.log(id, name);
+        SubCategories.update(id, name[0]);
+        res.redirect('http://localhost:3000/admin/subcategory');
+    } catch (error) {
+        next(error);
+    }
+}
+
+module.exports = {RenderSubcategory, DeleteSubcategory, DetailSubCategory, UpdateSubCategory}

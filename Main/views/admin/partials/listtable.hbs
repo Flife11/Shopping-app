@@ -13,7 +13,7 @@
                             TÊN
                     </div>
                     <div class="header-filter input-group" style="width: 15rem;">
-                        <input value="{{this.name}}" name="name" id="name" class="form-control" placeholder="TÊN" type="text">
+                        <input value="{{this.name}}" name="name" id="filter-name" class="form-control" placeholder="TÊN" type="text">
                     </div>
                 </th>
                 {{#if usernameCol}}
@@ -44,6 +44,16 @@
                     </div>
                     <div class="header-filter input-group" style="width: 15rem;">
                         <input value="{{this.address}}" name="address" id="address" class="form-control" placeholder="{{addressCol}}" type="text">
+                    </div>
+                </th>
+                {{/if}}
+                {{#if roleCol}}
+                <th scope="col">
+                    <div class="table-header" style="margin-bottom: 1rem;">
+                            {{this.roleCol}}
+                    </div>
+                    <div class="header-filter input-group" style="width: 10rem;">
+                        <input value="{{this.role}}" name="role" id="role" class="form-control" placeholder="{{roleCol}}" type="text">
                     </div>
                 </th>
                 {{/if}}
@@ -99,6 +109,11 @@
                             {{d.address}}
                         </td>
                         {{/if}}  
+                        {{#if d.role}}
+                        <td style="vertical-align:middle;">
+                            {{d.role}}
+                        </td>
+                        {{/if}} 
                                              
                         {{#if d.price}}
                         <td style="vertical-align:middle;">{{d.price}}</td>
@@ -144,9 +159,12 @@
     });
 
     function HandleFilter() {
-        let name = $("#name").val();
+        let name = $("#filter-name").val();
+        let username = $('#username').val();
+        let password = $('#password').val();
         let email = $('#email').val();
         let address = $('#address').val();
+        let role = $('#role').val();
         let minprice = $("#minprice").val();
         let maxprice = $("#maxprice").val();
         let minquantity = $("#minquantity").val();
@@ -154,15 +172,18 @@
         let page = $("#page").val();
         let limit = $("#limit").val();
         //get current url
-        let url = new URL(window.location.href);
+        let url = new URL(window.location.href);    
 
         //get the search parameters from the url
         let params = new URLSearchParams(url.search);
 
         //remove the filter parameters
         params.delete('name');
+        params.delete('username');
+        params.delete('password');
         params.delete('email');
         params.delete('address');
+        params.delete('role');
         params.delete('minprice');
         params.delete('maxprice');
         params.delete('minquantity');
@@ -173,10 +194,16 @@
         //add the filter parameters
         if (name)
             params.set('name', name);
+        if (username)
+            params.set('username', username);
+        if (password)
+            params.set('password', password);
         if (email)
             params.set('email', email);
         if (address)
             params.set('address', address);
+        if (role)
+            params.set('role', role);
         if (minprice)
             params.set('minprice', minprice);
         if (maxprice)
