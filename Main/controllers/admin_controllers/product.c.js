@@ -102,7 +102,7 @@ const NewProduct = async(req, res, next) => {
             imageCol: 'Hình ảnh',
             priceCol: 'Giá',
             quantityCol: 'Số lượng',
-            catnameCol: 'Loại sản phârm',
+            catnameCol: 'Loại sản phẩm',
             longdesCol: "Mô tả đầy đủ",
             shortdesCol: "Mô tả ngắn",
             // Giá trị của cá fielfs nếu có thì sẽ là detail không sẽ là create
@@ -177,7 +177,7 @@ const DetailProduct = async(req, res, next) => {
             updateimageCol: 'Hình ảnh',
             priceCol: 'Giá',
             quantityCol: 'Số lượng',
-            catnameCol: 'Loại sản phârm',
+            catnameCol: 'Loại sản phẩm',
             longdesCol: "Mô tả đầy đủ",
             shortdesCol: "Mô tả ngắn",
             // Giá trị của cá fielfs nếu có thì sẽ là detail không sẽ là create
