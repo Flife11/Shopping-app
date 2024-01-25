@@ -54,6 +54,21 @@ router.post('/login', (req, res, next) => {
                 let token = jwt.sign({ iduser }, secret, { expiresIn: 24 * 60 * 60 });
                 let data = { token: token };
 
+                // Code to check `Connection from Server Main to Server Payment
+                // Please add the code below to test the connection before sending any fetch to the Payment Server
+                try {
+                    const result = await checkConnection();
+                    // console.log(result);
+                    // if connection is successful => result = true,  else => result = false;
+                    if (!result) {
+                        res.status(500).json({ message: "Lỗi không thể kết nối đến Server Payment" });
+                        return;
+                    }
+                }
+                catch (error) {
+                    console.log(error);
+                }
+                ///////////////////////////
                 let PaymentURL = process.env.PAYMENT_URL;
                 const corsToken = await corsHelper.generateCorsToken(req);
                 let rs = await fetch(PaymentURL + '/getbalance', {
@@ -99,6 +114,21 @@ router.get('/assignpassportGoogle', checkLogin.isNotLoggedIn, passport.authentic
         let token = jwt.sign({ iduser }, secret, { expiresIn: 24 * 60 * 60 });
         let data = { token: token };
 
+        // Code to check `Connection from Server Main to Server Payment
+        // Please add the code below to test the connection before sending any fetch to the Payment Server
+        try {
+            const result = await checkConnection();
+            // console.log(result);
+            // if connection is successful => result = true,  else => result = false;
+            if (!result) {
+                res.status(500).json({ message: "Lỗi không thể kết nối đến Server Payment" });
+                return;
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
+        ///////////////////////////
         let PaymentURL = process.env.PAYMENT_URL;
         const corsToken = await corsHelper.generateCorsToken(req);
         let rs = await fetch(PaymentURL + '/getbalance', {
@@ -132,10 +162,10 @@ router.get('/', checkLogin.isClient, accountController.getAccount);
 
 router.get('/editprofile', checkLogin.isClient, accountController.getEditprofile);
 router.get('/editpassword', checkLogin.isClient, accountController.getEditpassword);
-router.get('/addfund', checkLogin.isClient, accountController.getAddfund); 
+router.get('/addfund', checkLogin.isClient, accountController.getAddfund);
 router.get('/checkout', checkLogin.isClient, accountController.getCheckout);
 router.get('/orders/:id', checkLogin.isClient, accountController.getOrderDetail);
-router.get('/orders', checkLogin.isClient, accountController.getOrders); 
+router.get('/orders', checkLogin.isClient, accountController.getOrders);
 
 
 router.post('/addfund', accountController.postAddfund)

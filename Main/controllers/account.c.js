@@ -62,6 +62,21 @@ module.exports = {
 
             // Fetch id to Payment server: id = result[0].id to add user in Payment server
             // console log result: [ { id: 4 } ]
+            // Code to check `Connection from Server Main to Server Payment
+            // Please add the code below to test the connection before sending any fetch to the Payment Server
+            try {
+                const result = await checkConnection();
+                // console.log(result);
+                // if connection is successful => result = true,  else => result = false;
+                if (!result) {
+                    res.status(500).json({ message: "Lỗi không thể kết nối đến Server Payment" });
+                    return;
+                }
+            }
+            catch (error) {
+                console.log(error);
+            }
+            ///////////////////////////
 
             const corsToken = await corsHelper.generateCorsToken(req); // token to verify cors
 
@@ -165,6 +180,22 @@ module.exports = {
             let token = jwt.sign({ iduser }, secret, { expiresIn: 24 * 60 * 60 });
             let data = { token: token };
             let PaymentURL = process.env.PAYMENT_URL;
+
+            // Code to check `Connection from Server Main to Server Payment
+            // Please add the code below to test the connection before sending any fetch to the Payment Server
+            try {
+                const result = await checkConnection();
+                // console.log(result);
+                // if connection is successful => result = true,  else => result = false;
+                if (!result) {
+                    res.status(500).json({ message: "Lỗi không thể kết nối đến Server Payment" });
+                    return;
+                }
+            }
+            catch (error) {
+                console.log(error);
+            }
+            ///////////////////////////
             const corsToken = await corsHelper.generateCorsToken(req);
             let rs = await fetch(PaymentURL + '/createuser', {
                 method: 'POST',
@@ -249,6 +280,21 @@ module.exports = {
         const dataAddFund = { token: token };
         let PaymentURL = process.env.PAYMENT_URL;
 
+        // Code to check `Connection from Server Main to Server Payment
+        // Please add the code below to test the connection before sending any fetch to the Payment Server
+        try {
+            const result = await checkConnection();
+            // console.log(result);
+            // if connection is successful => result = true,  else => result = false;
+            if (!result) {
+                res.status(500).json({ message: "Lỗi không thể kết nối đến Server Payment" });
+                return;
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
+        ///////////////////////////
         const corsToken = await corsHelper.generateCorsToken(req);
         let rs = await fetch(PaymentURL + '/payment', {
             method: 'POST',
@@ -374,6 +420,22 @@ module.exports = {
             const subcategories = await subcategoryModel.getAll();
 
             // Fetch to /historypayment (Payment server) user.id (by token) to get transaction
+
+            // Code to check `Connection from Server Main to Server Payment
+            // Please add the code below to test the connection before sending any fetch to the Payment Server
+            try {
+                const result = await checkConnection();
+                // console.log(result);
+                // if connection is successful => result = true,  else => result = false;
+                if (!result) {
+                    res.status(500).json({ message: "Lỗi không thể kết nối đến Server Payment" });
+                    return;
+                }
+            }
+            catch (error) {
+                console.log(error);
+            }
+            ///////////////////////////
             let corsToken = await corsHelper.generateCorsToken(req); // token to verify cors
 
             let iduser = user.id;
@@ -494,6 +556,21 @@ module.exports = {
             let PaymentURL = process.env.PAYMENT_URL;
 
             // Fetch to Payment server to pay at Payment server
+            // Code to check `Connection from Server Main to Server Payment
+            // Please add the code below to test the connection before sending any fetch to the Payment Server
+            try {
+                const result = await checkConnection();
+                // console.log(result);
+                // if connection is successful => result = true,  else => result = false;
+                if (!result) {
+                    res.status(500).json({ message: "Lỗi không thể kết nối đến Server Payment" });
+                    return;
+                }
+            }
+            catch (error) {
+                console.log(error);
+            }
+            ///////////////////////////
             const corsToken = await corsHelper.generateCorsToken(req);
             let rs = await fetch(PaymentURL + '/payment', {
                 method: 'POST',
@@ -513,6 +590,21 @@ module.exports = {
                 let data = { token: token };
 
                 let PaymentURL = process.env.PAYMENT_URL;
+                // Code to check `Connection from Server Main to Server Payment
+                // Please add the code below to test the connection before sending any fetch to the Payment Server
+                try {
+                    const result = await checkConnection();
+                    // console.log(result);
+                    // if connection is successful => result = true,  else => result = false;
+                    if (!result) {
+                        res.status(500).json({ message: "Lỗi không thể kết nối đến Server Payment" });
+                        return;
+                    }
+                }
+                catch (error) {
+                    console.log(error);
+                }
+                ///////////////////////////
                 const corsToken = await corsHelper.generateCorsToken(req);
                 let rs = await fetch(PaymentURL + '/getbalance', {
                     method: 'POST',
@@ -559,7 +651,7 @@ module.exports = {
         const categories = await categoryModel.getAll();
         const subcategories = await subcategoryModel.getAll();
         const order = await orderModel.getByID(req.params.id);
-        
+
         // Get order detail
         const orderdetails = await orderdetailModel.getByOrderID(req.params.id);
 
