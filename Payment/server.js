@@ -20,9 +20,6 @@ app.use(express.json());
 app.use(cookieParser()); // necessary?
 
 // Middleware để xử lý yêu cầu từ Server 1
-app.get('/checkConnection', (req, res) => {
-    res.status(200).send('Connection from Main to Payment is successful!');
-  });
 
 app.use((req, res, next) => {
     const token = req.headers['authorization'];
@@ -44,6 +41,10 @@ app.use((req, res, next) => {
         return res.status(401).json({ message: 'Unauthorized - Invalid token' });
     }
 });
+
+app.get('/checkConnection', (req, res) => {
+    res.status(200).send('Connection from Main to Payment is successful!');
+  });
 
 const credentials = {
     key: fs.readFileSync('./Payment/cert/demo.key'),

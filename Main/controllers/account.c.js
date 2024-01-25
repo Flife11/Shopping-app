@@ -44,7 +44,6 @@ module.exports = {
                 return res.status(403).json({ message: 'Email không hợp lệ!' });
             }
 
-            console.log(retypepassword);
             // Check if password and retypepassword match
             if (password !== retypepassword) {
                 return res.status(402).json({ message: 'Mật khẩu không khớp, nhập lại nha!' });
@@ -65,7 +64,7 @@ module.exports = {
             // Code to check `Connection from Server Main to Server Payment
             // Please add the code below to test the connection before sending any fetch to the Payment Server
             try {
-                const result = await checkConnection();
+                const result = await checkConnection(req);
                 // console.log(result);
                 // if connection is successful => result = true,  else => result = false;
                 if (!result) {
@@ -184,7 +183,7 @@ module.exports = {
             // Code to check `Connection from Server Main to Server Payment
             // Please add the code below to test the connection before sending any fetch to the Payment Server
             try {
-                const result = await checkConnection();
+                const result = await checkConnection(req);
                 // console.log(result);
                 // if connection is successful => result = true,  else => result = false;
                 if (!result) {
@@ -229,22 +228,6 @@ module.exports = {
     },
     postAddfund: async function (req, res) {
 
-        // Code to check `Connection from Server Main to Server Payment
-        // Please add the code below to test the connection before sending any fetch to the Payment Server
-        try {
-            const result = await checkConnection();
-            // console.log(result);
-            // if connection is successful => result = true,  else => result = false;
-            if (!result) {
-                res.status(500).json({ message: "Lỗi không thể kết nối đến Server Payment" });
-                return;
-            }
-        }
-        catch (error) {
-            console.log(error);
-        }
-        ///////////////////////////
-
         //Get user from session
         user = req.session.passport.user;
 
@@ -283,7 +266,7 @@ module.exports = {
         // Code to check `Connection from Server Main to Server Payment
         // Please add the code below to test the connection before sending any fetch to the Payment Server
         try {
-            const result = await checkConnection();
+            const result = await checkConnection(req);
             // console.log(result);
             // if connection is successful => result = true,  else => result = false;
             if (!result) {
@@ -424,7 +407,7 @@ module.exports = {
             // Code to check `Connection from Server Main to Server Payment
             // Please add the code below to test the connection before sending any fetch to the Payment Server
             try {
-                const result = await checkConnection();
+                const result = await checkConnection(req);
                 // console.log(result);
                 // if connection is successful => result = true,  else => result = false;
                 if (!result) {
@@ -559,7 +542,7 @@ module.exports = {
             // Code to check `Connection from Server Main to Server Payment
             // Please add the code below to test the connection before sending any fetch to the Payment Server
             try {
-                const result = await checkConnection();
+                const result = await checkConnection(req);
                 // console.log(result);
                 // if connection is successful => result = true,  else => result = false;
                 if (!result) {
@@ -593,7 +576,7 @@ module.exports = {
                 // Code to check `Connection from Server Main to Server Payment
                 // Please add the code below to test the connection before sending any fetch to the Payment Server
                 try {
-                    const result = await checkConnection();
+                    const result = await checkConnection(req);
                     // console.log(result);
                     // if connection is successful => result = true,  else => result = false;
                     if (!result) {

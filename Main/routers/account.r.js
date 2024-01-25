@@ -3,6 +3,7 @@ const passport = require('passport');
 
 const accountController = require('../controllers/account.c.js');
 const checkLogin = require('../middleware/checkLogin');
+const {checkConnection} = require('../middleware/checkConnect2Server');
 
 //TODO: chuyển tất cả handle login về controller, xóa 3 require ở dưới
 const jwt = require('jsonwebtoken');
@@ -57,7 +58,7 @@ router.post('/login', (req, res, next) => {
                 // Code to check `Connection from Server Main to Server Payment
                 // Please add the code below to test the connection before sending any fetch to the Payment Server
                 try {
-                    const result = await checkConnection();
+                    const result = await checkConnection(req);
                     // console.log(result);
                     // if connection is successful => result = true,  else => result = false;
                     if (!result) {
@@ -117,7 +118,7 @@ router.get('/assignpassportGoogle', checkLogin.isNotLoggedIn, passport.authentic
         // Code to check `Connection from Server Main to Server Payment
         // Please add the code below to test the connection before sending any fetch to the Payment Server
         try {
-            const result = await checkConnection();
+            const result = await checkConnection(req);
             // console.log(result);
             // if connection is successful => result = true,  else => result = false;
             if (!result) {
