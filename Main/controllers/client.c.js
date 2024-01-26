@@ -10,7 +10,14 @@ module.exports = {
     getHome: async function (req, res) { //Sẽ thay đổi sau
 
 
-        const categories = await categoryModel.getAll();
+        let categories = await categoryModel.getAll();
+
+        // If categories > 7, only get 7 categories first
+        if (categories.length > 7) {
+        
+            categories = categories.slice(0, 7);
+        }
+
         const subcategories = await subcategoryModel.getAll();
         let user = null;
         if (req.isAuthenticated()) {

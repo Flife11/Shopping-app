@@ -4,9 +4,24 @@
                 <th scope="col">
                     <input id="check-all" class="fs-4 form-check-input" type="checkbox" value="0" aria-label="Checkbox for select all">
                 </th>
-                <th scope="col">MÃ SỐ</th>
+                <th scope="col">
+                    <div class="table-header" style="margin-bottom: 1rem;">
+                            MÃ SỐ
+                    </div>
+                    <div class="header-filter input-group" style="width: 1vw;">
+                        <input class="form-control" style="visibility: hidden;">
+                    </div>
+                </th>
+                
                 {{#if imageCol}}
-                <th scope="col">{{this.imageCol}}</th>
+                <th scope="col">
+                    <div class="table-header" style="margin-bottom: 1rem;">
+                            {{this.imageCol}}
+                    </div>
+                    <div class="header-filter input-group" style="width: 1vw;">
+                        <input class="form-control" style="visibility: hidden;">
+                    </div>
+                </th>
                 {{/if}}
                 <th scope="col">
                     <div class="table-header" style="margin-bottom: 1rem;">

@@ -56,12 +56,12 @@
     }
 
     .outer-sub-cat {
-        display: none;
+        /*display: none;*/
         /*visibility: hidden;*/
     }
 
     .outer:hover>.outer-sub-cat {
-        display: block;
+        /*display: block;*/
         /*visibility: visible;*/
     }
 
@@ -75,9 +75,9 @@
 
     {{!-- categories --}}
     <center>
-        <h3 style="margin-bottom:0px">Bạn muốn mua gì á?</h3>
+        <h3 style="margin-bottom:0px">Tham khảo một số loại sản phẩm nè~</h3>
     </center>
-    <center id="container">
+    <center id="container" class="d-flex flex-wrap">
         {{#each categories}}
         <div class="outer">
             <a class="cat" href="/{{this.id}}/-1">
