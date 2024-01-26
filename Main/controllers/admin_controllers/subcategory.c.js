@@ -52,9 +52,9 @@ const RenderSubcategory = async(req, res, next) => {
 const DeleteSubcategory = async(req, res, next) => {
     try {
         const { listID } = req.body;
-        console.log(listID);
+        // console.log(listID);
         SubCategories.delete(listID);
-        // res.status(201).json({url: 'http://localhost:3000/admin/category'});
+        res.status(201).json({url: 'http://localhost:3000/admin/subcategory'});
     } catch (error) {
         next(error);
     }

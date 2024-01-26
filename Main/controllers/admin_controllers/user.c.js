@@ -31,7 +31,7 @@ const RenderUser = async (req, res, next) => {
             d.detailurl = '/admin/user/detail/';
             return d;
         })
-        console.log(data);
+        // console.log(data);
 
         res.render('product', {
             title: 'Admin',
