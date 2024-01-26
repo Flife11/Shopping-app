@@ -175,6 +175,35 @@ module.exports = {
             res.status(403).json({ message: "Lỗi không thể decode" })
         }
     },
+    deleteUser: async function (req, res) {
+
+        const token = req.body.token;
+        // console.log(token);
+        const isValidConnection= await db.isValidConnect();
+
+        if(!isValidConnection.connected)
+            {
+                res.status(500).json({ message: "Lỗi mất kết nối database" })
+                return;
+            }
+        try {
+            var data = jwt.verify(token, secret);
+            // console.log(data);
+            const listID = data.listID;
+            try {
+                USER.delete(listID);
+                res.status(200).json({ message: "Xóa thành công"});
+            }
+            catch (err) {
+                console.log(error);
+                res.status(501).json({ message: "Lỗi không thể xóa user" });
+            }
+        }
+        catch (error) {
+            console.log(error);
+            res.status(403).json({ message: "Lỗi không thể decode" })
+        }
+    },
 }
 // const user={
 //     iduser: 123,
