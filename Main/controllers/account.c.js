@@ -103,7 +103,7 @@ module.exports = {
 
             // Return result
             if (result) {
-                res.status(200).json({ message: 'Đăng ký thành công!' });
+                res.status(200).json({ message: 'Đăng ký thành công!', redirecturl: "http://localhost:3000/admin/user" });
             }
             else {
                 res.status(400).json({ message: 'Đăng ký thất bại, thử lại sau nha!' });

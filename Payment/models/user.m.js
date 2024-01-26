@@ -38,4 +38,16 @@ module.exports = {
             console.log(error);
         }
     },
+
+    delete: async (listID) => {
+        try {
+            if (listID || listID!=undefined) {
+                const query = `DELETE FROM "USER" WHERE id IN (${listID.join()})`;
+                const data = await db.db.any(query);
+                return data;
+            }
+        } catch (error) {
+            throw error
+        }
+    },
 }

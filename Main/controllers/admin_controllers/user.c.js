@@ -1,7 +1,8 @@
 const User = require('../../models/user.m');
+const secret = process.env.JWT_SECRET;
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const corsHelper = require('../../utilities/corsHelper');
-const secret = process.env.JWT_SECRET;
 
 const RenderUser = async (req, res, next) => {
     try {
@@ -57,12 +58,51 @@ const RenderUser = async (req, res, next) => {
     }
 }
 
+const {checkConnection} = require('../../middleware/checkConnect2Server');
+
 const DeleteUser = async(req, res, next) => {
     try {
         const { listID } = req.body;
-        // console.log(listID);
-        User.delete(listID);
-        res.status(201).json({url: 'http://localhost:3000/admin/user'});
+        // Code to check `Connection from Server Main to Server Payment
+        try {
+            const result = await checkConnection(req);
+            // console.log(result);
+            // if connection is successful => result = true,  else => result = false;
+            if (!result) {
+                res.status(500).json({ message: "Lỗi không thể kết nối đến Server Payment" });
+                return;
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
+        // console.log(listID);        
+        const corsToken = await corsHelper.generateCorsToken(req); // token to verify cors
+
+        try {
+            let token = jwt.sign({ listID }, secret, { expiresIn: 24 * 60 * 60 });
+            let data = { token: token };
+            let PaymentURL = process.env.PAYMENT_URL;
+            let rs = await fetch(PaymentURL + '/deleteuser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': corsToken,
+                },
+                body: JSON.stringify(data)
+            })
+            let rsData = await rs.json();
+            if (!rs.ok) {                
+                return res.status(500).json({ message: rsData.message });
+            } else {
+                User.delete(listID);
+                return res.status(201).json({url: 'http://localhost:3000/admin/user'});
+            }
+            return res.status(401).json({ message: "Không thể xóa tài khoản" });
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ message: error });
+        }        
     } catch (error) {
         next(error);
     }
@@ -100,8 +140,11 @@ const CreateUser = async(req, res, next) => {
         let {name, address, username, password, email, category} = req.body;
         if (category==0) {
             category = 'admin';
-            User.insert({name, address, username, password, email, role: category});            
-            res.redirect('http://localhost:3000/admin/user/new');
+            User.insert({name, address, username, password, email, role: category});
+            return res.status(201).json({
+                message: "Tạo tài khoản thành công",
+                redirecturl: "http://localhost:3000/admin/user"
+            })
         }
         else {
             category = 'client';
@@ -154,8 +197,10 @@ const UpdateUser = async(req, res, next) => {
     try {
         let {name, address, username, password, email, category} = req.body;
         User.editUser({name, address, username, password, email, category});            
-
-        res.redirect('http://localhost:3000/admin/user');
+        return res.status(201).json({
+            message: "CHỉnh sửa tài khoản thành công",
+            redirecturl: "http://localhost:3000/admin/user"
+        });
     } catch (error) {
         next(error);
     }
