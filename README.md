@@ -27,3 +27,6 @@
   + admin
 
 - req.session.passport.user
+
+- Database:
+![database](https://github.com/Flife11/Shopping-app/blob/main/%5BSYSTEM%20DESIGN%5D/ERD.jpeg)
