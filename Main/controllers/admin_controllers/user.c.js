@@ -180,6 +180,7 @@ const DetaiilUser = async(req, res, next) => {
             passwordCol: 'Mật khẩu mới',
             catnameCol: 'Phân quyền',
             // Giá trị của cá fielfs nếu có thì sẽ là detail không sẽ là create
+            idVal: user.id,
             nameVal: user.name,
             addressVal: user.address,
             usernameVal: user.username,
@@ -199,7 +200,7 @@ const UpdateUser = async(req, res, next) => {
     try {
         let {id, name, address, username, password, email, category} = req.body;
         console.log(id, name, address, username, password, email, category);
-        // User.editUser({id, name, address, username, password, email, category});            
+        User.editUser({id, name, address, username, password, email, category});            
         return res.status(201).json({
             message: "Chỉnh sửa tài khoản thành công",
             redirecturl: "http://localhost:3000/admin/user"
