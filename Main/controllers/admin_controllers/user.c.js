@@ -127,7 +127,7 @@ const NewUser = async(req, res, next) => {
             catidVal: 0,
             subcatidVal: 0,
             // Dữ liệu
-            categories: [{id: 1, name: "admin"}, {id: 2, name: "client"}],
+            categories: [{id: 0, name: "admin"}, {id: 1, name: "client"}],
         })
     } catch (error) {
         next(error);
@@ -138,6 +138,7 @@ const { postRegister } = require('../account.c');
 const CreateUser = async(req, res, next) => {
     try {
         let {name, address, username, password, email, category} = req.body;
+        console.log(name, address, username, password, email, category);
         if (category==0) {
             category = 'admin';
             User.insert({name, address, username, password, email, role: category});
@@ -185,8 +186,9 @@ const DetaiilUser = async(req, res, next) => {
             emailVal: user.email,
             catidVal,
             subcatidVal,
+            notiAppearance: 1,
             // Dữ liệu
-            categories: [{id: 1, name: "admin"}, {id: 2, name: "client"}],
+            categories: [{id: 0, name: "admin"}, {id: 1, name: "client"}],
         })
     } catch (error) {
         next(error);
@@ -195,10 +197,11 @@ const DetaiilUser = async(req, res, next) => {
 
 const UpdateUser = async(req, res, next) => {
     try {
-        let {name, address, username, password, email, category} = req.body;
-        User.editUser({name, address, username, password, email, category});            
+        let {id, name, address, username, password, email, category} = req.body;
+        console.log(id, name, address, username, password, email, category);
+        // User.editUser({id, name, address, username, password, email, category});            
         return res.status(201).json({
-            message: "CHỉnh sửa tài khoản thành công",
+            message: "Chỉnh sửa tài khoản thành công",
             redirecturl: "http://localhost:3000/admin/user"
         });
     } catch (error) {

@@ -98,7 +98,7 @@ module.exports = {
         db.delete("USER", listID);
     },
 
-    insert: async () => {
+    insert: async (user) => {
         try {
             const hashPassword = await bcrypt.hash(user.password, parseInt(process.env.SALT_ROUNDS));
             user.password = hashPassword;
